@@ -27,10 +27,10 @@ $("#submit").on("click", function () {
 				//"#location" - a placeholder id for whatever our text field is//
 	locationValue = $("#location").val().trim().toLowerCase();
 	location = locationValue.replace(new RegExp(" ", "g"), '+');
-
+				//"#dates" - a placeholder id for whatever gives us dates//
 	dateRangeValue = $("#dates").val().trim();
 	dateRange = dateRangeValue.replace(new RegExp(" ", "g"), '+');
-
+				//"#miles" - a placeholder id for whatever gives us the miles range//
 	milesOf = $("#miles").val();
 	
 	$.ajax({
