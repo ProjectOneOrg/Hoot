@@ -44,13 +44,13 @@ $("#submit-btn").on("click", function(event) {
 
 		for (var i = 0; i < pageSize; i++) {
 
-		artist = response.events.event[i].title;
-		venueLocation = response.events.event[i].venue_address;
-		venueName = response.events.event[i].venue_name;
-		venueZip = response.events.event[i].postal_code;
-		eventUrl = response.events.event[i].url;
-		eventStart = response.events.event[i].start_time;
-		eventDescription = response.events.event[i].description;
+		// artist = response.events.event[i].title;
+		// venueLocation = response.events.event[i].venue_address;
+		// venueName = response.events.event[i].venue_name;
+		// venueZip = response.events.event[i].postal_code;
+		// eventUrl = response.events.event[i].url;
+		// eventStart = response.events.event[i].start_time;
+		// eventDescription = response.events.event[i].description;
 
 		console.log("Artist: " + artist);
 		console.log("Venue Location:  " + venueLocation);
@@ -59,6 +59,7 @@ $("#submit-btn").on("click", function(event) {
 		console.log("Event URL:  " + eventUrl);
 		console.log("Event Start Time & Date:  " + eventStart);
 		console.log("Event Description:  " + eventDescription);
+		console.log("----New Item" + "------");
 
 		}
 	});
