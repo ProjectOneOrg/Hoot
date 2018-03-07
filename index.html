@@ -65,31 +65,34 @@
                   
                     <div class="input-group">
                       <span class="input-group-addon" id="basic-addon1">Location</span>
-                      <input type="text" class="form-control" placeholder="City or Zip Code" aria-describedby="basic-addon1">
+                      <input type="text" class="form-control" placeholder="City or Zip Code" aria-describedby="basic-addon1" id="location">
                     </div>
                   </div>
                 <div class="row">
                   <div class="input-group">
                         <span class="input-group-addon" id="basic-addon1">Radius</span>
-                        <input type="text" class="form-control" placeholder="in miles" aria-describedby="basic-addon1">
+                        <input type="text" class="form-control" placeholder="in miles" aria-describedby="basic-addon1" id="miles">
                       </div>
                 </div>
                 <div class="row">
                       <div class="input-group">
                         <span class="input-group-addon" id="basic-addon1">Dates</span>
-                        <input type="text" class="form-control" placeholder="" aria-describedby="basic-addon1">
+                        <input type="text" class="form-control" placeholder="For now:  'DD Month YYYY' " aria-describedby="basic-addon1" id="dates">
                       </div>
                 </div>
         
                 <div class="btn-group" role="group" aria-label="...">
-                  <button type="button" class="btn btn-default">Search</button>
+                  <button type="button" class="btn btn-default" id="submit-btn">Search</button>
                 </div>
           </div>
       </div>
       </div>
       </div>
-        
+
       <script src="assets/javascript/javascript.js"></script>
+
+<script src="eventful_api.js"></script>
+
 </body>
 
 </html>
