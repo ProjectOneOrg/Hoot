@@ -4,9 +4,9 @@
 	//What happens when a search field is left blank, and therefore doesn't contribute a value to the queryURL?  
 	//Can I write code to delete a selection of the queryURL accordingly?//
 
-
+alert("working");
 //API-specific variables//
-var appKey = hqWvGHfDvqhZ62Bm;
+
 var queryBase = "http://api.eventful.com/json/events/search?app_key=hqWvGHfDvqhZ62Bm&q=music&l=";
 
 //Info from search input//
@@ -24,6 +24,7 @@ var eventUrl;
 var eventStart;
 var eventDescription;
 $("#submit").on("click", function () {
+	event.preventDefault();
 				//"#location" - a placeholder id for whatever our text field is//
 	locationValue = $("#location").val().trim().toLowerCase();
 	location = locationValue.replace(new RegExp(" ", "g"), '+');
@@ -47,6 +48,14 @@ $("#submit").on("click", function () {
 		eventUrl = response.events.event[i].url;
 		eventStart = response.events.event[i].start_time;
 		eventDescription = response.events.event[i].description;
+
+		console.log("Artist: " + artist);
+		console.log("Venue Location:  " + venueLocation);
+		console.log("Venue Name:  " + venueName);
+		console.log("Venue Zip Code:  " + venueZip);
+		console.log("Event URL:  " + eventUrl);
+		console.log("Event Start Time & Date:  " + eventStart);
+		console.log("Event Description:  " + eventDescription);
 
 		}
 	});
