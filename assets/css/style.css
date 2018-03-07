@@ -1,0 +1,16 @@
+.page-header{
+    text-align:center;
+}
+
+.carousel-inner{
+    text-align:center;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 90%;
+}
+
+.first-input{
+    text-align:center;
+    
+}
