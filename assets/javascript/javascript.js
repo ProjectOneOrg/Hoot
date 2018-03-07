@@ -34,12 +34,12 @@ console.log(response);
 
 myBarQuery = response.results;
 
-console.log(myRestaurantQuery);
+console.log(myBarQuery);
 
 
 for (i=0; i<20; i++) {
-    var barname = myRestaurantQuery[i].name;
-    barNames.push(restname);
+    var barname = myBarQuery[i].name;
+    barNames.push(barname);
  }
 
 console.log(barNames);
