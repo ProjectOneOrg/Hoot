@@ -1,0 +1,26 @@
+Eventful API Auth. Key:  hqWvGHfDvqhZ62Bm.  Add to query link with "app_key=hqWvGHfDvqhZ62Bm"
+
+Base Query Link:  http://api.eventful.com/json/events/search?app_key=hqWvGHfDvqhZ62Bm
+
+
+Location Query Link Example:  http://eventful.com/events?q=music&l=27601&within=10&units=miles - 
+								l - location search method.  l=a zip code in this instance.  within-10 of units.  units=miles in this case
+							  http://eventful.com/events?q=music&l=Chapel+Hill
+							  	l - location search method, in this case Chapel Hill
+
+Add Date Parameters to Query:  http://eventful.com/events?q=music&l=Raleigh&t=This+Weekend (searches by this weekend, where t = 'when')
+								http://eventful.com/events?q=music&l=Raleigh&t=9+March+2018 (searches by a specific date)
+
+JSON return structure - 
+	-response.events.event[x].desired data
+
+Notable Keys in each JSON object returned:
+	-title - The title of the event.  Most likely the headlining band
+	-venue_name - The name of the venue
+	-venue_address - The address of the venue.  Usually just a street address (224 South Blount St) without City/State
+	-postal_code - The zip code of the venue
+	-url - the eventful page of the event
+	-start_time - the date & time of the event, formatted like so:  "YYYY-MM-DD HH:MM:SS" (military time)
+	-description - A short description of the venue
+
+
