@@ -1,5 +1,5 @@
 //Using jQuery!!!//
-//rest of queryBase = + "&within=" + milesOf + "&units=miles&t=" + dateRange + "&page_size=" + pageSize,
+// rest of queryBase = + "&within=" + milesOf + "&units=miles&t=" + dateRange + "&page_size=" + pageSize,
 
 //Possible issues://
 	//What happens when a search field is left blank, and therefore doesn't contribute a value to the queryURL?  
@@ -14,14 +14,15 @@ var queryBase = "http://api.eventful.com/json/events/search?app_key=hqWvGHfDvqhZ
 
 //Info from search input//
 var location;
-var milesOf = 0;
+var milesOf = 0;  
 var dateRange;
-var pageSize = 10;
+var pageSize = 10; //Setting to 10 for testing purposes.
 
 //Info generated from AJAX call//
 var artist;
 var venueLocation;
 var venueName;
+var venueCity;
 var venueZip;
 var eventUrl;
 var eventStart;
@@ -36,15 +37,17 @@ $("#submit-btn").on("click", function(event) {
 				//"#dates" - a placeholder id for whatever gives us dates//
 	dateRangeValue = $("#dates").val().trim();
 	dateRange = dateRangeValue.replace(new RegExp(" ", "g"), '+');
+	console.log(dateRange);
 				//"#miles" - a placeholder id for whatever gives us the miles range//
 	milesOf = $("#miles").val();
+	console.log(milesOf);
 	
 	var locationURL = queryBase + place;
 	console.log(locationURL);
 
 	//"fetch" is a method David recommended to me.  No idea how it works, but it seems to.  And running an AJAX call was giving me fits
 	//I'm leaving the AJAX stuff commented out for now.
-	fetch('https://cors-anywhere.herokuapp.com/http://api.eventful.com/json/events/search?app_key=hqWvGHfDvqhZ62Bm&q=music&l=' + place)
+	fetch('https://cors-anywhere.herokuapp.com/http://api.eventful.com/json/events/search?app_key=hqWvGHfDvqhZ62Bm&q=music&l=' + place + '&within=' + milesOf + '&units=miles&page_size=' + pageSize)
 		.then(response => response.json())
 		.then(data => {
 			// Here's a list of repos!
@@ -54,6 +57,7 @@ $("#submit-btn").on("click", function(event) {
 				artist = data.events.event[i].title;
 				venueLocation = data.events.event[i].venue_address;
 				venueName = data.events.event[i].venue_name;
+				venueCity = data.events.event[i].city_name;
 				venueZip = data.events.event[i].postal_code;
 				eventUrl = data.events.event[i].url;
 				eventStart = data.events.event[i].start_time;
@@ -62,10 +66,12 @@ $("#submit-btn").on("click", function(event) {
 				console.log("Artist:  " + artist);
 				console.log("Venue Location:  " + venueLocation);
 				console.log("Venue Name:  " + venueName);
+				console.log("Venue City:  " + venueCity);
 				console.log("Venue Zip Code:  " + venueZip);
 				console.log("Event Webpage:  " + eventUrl);
 				console.log("Event Starts At:  " + eventStart);
 				console.log("Event Description:  " + eventDescription);
+				console.log("-------------------------Next Array--------------------");
 
 			}
 		});
