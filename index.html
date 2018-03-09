@@ -9,109 +9,113 @@
     src="https://code.jquery.com/jquery-3.3.1.min.js"
     integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
     crossorigin="anonymous"></script>
+
+    <script type="text/javascript" src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
+
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
     <link rel="stylesheet" type="text/css" href="assets/css/style.css">
   
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/js/bootstrap-datepicker.min.js"></script>
+    <link rel="styl esheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/css/bootstrap-datepicker3.css"/>
   </head>
 <body>
 
-    <div class="container">
-      <div class="page-header">
-          <h1>Night-Out!</h1><h2>Plan Your Night!</h2>
-      </div>
+  <div class="container">
+    <div class="page-header">
+      <h1>Night-Out!</h1><h2>Plan Your Night!</h2>
+    </div>
 
-      <div id="myCarousel" class="carousel slide" data-ride="carousel">
-          <!-- Indicators -->
-          <ol class="carousel-indicators">
-            <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
-            <li data-target="#myCarousel" data-slide-to="1"></li>
-            <li data-target="#myCarousel" data-slide-to="2"></li>
-          </ol>
-        
-          <!-- Wrapper for slides -->
-          <div class="carousel-inner">
-            <div class="item active">
-              <img src="assets/images/carousel-slide-1.jpg" alt="Slide 1">
-            </div>
-        
-            <div class="item">
-              <img src="assets/images/carousel-slide-2.jpg" alt="Slide 2">
-            </div>
-        
-            <div class="item">
-              <img src="assets/images/carousel-slide-3.jpg" alt="Slide 3">
-            </div>
-          </div>
-        
-          <!-- Left and right controls -->
-          <a class="left carousel-control" href="#myCarousel" data-slide="prev">
-            <span class="glyphicon glyphicon-chevron-left"></span>
-            <span class="sr-only">Previous</span>
-          </a>
-          <a class="right carousel-control" href="#myCarousel" data-slide="next">
-            <span class="glyphicon glyphicon-chevron-right"></span>
-            <span class="sr-only">Next</span>
-          </a>
-      </div>
-
-      <div class="row">
-        <div class="col-md-6 col-md-offset-3">
-          <div class="panel panel-default first-input">
-            <div class="panel-heading">
-              <h3 class="panel-title">Let's Get Started</h3>
-            </div>
-            <div class="panel-body">
-              <div class="row">
-                <div class="input-group">
-                  <span class="input-group-addon" id="basic-addon1">Location</span>
-                  <input type="text" class="form-control" placeholder="City or Zip Code" aria-describedby="basic-addon1" id="location">
-                </div>
-              </div>
-
-              <div class="row">
-                <div class="input-group">
-                    <span class="input-group-addon" id="basic-addon1">Radius</span>
-                    <input type="text" class="form-control" placeholder="in miles" aria-describedby="basic-addon1" id="miles">
-                </div>
-
-              </div>
-
-              <div class="row">
-                <div class="input-group">
-                  <span class="input-group-addon" id="basic-addon1">Dates</span>
-                  <input type="text" class="form-control" placeholder="For now:  'DD Month YYYY' " aria-describedby="basic-addon1" id="dates">
-
-                </div>
-              </div>
-              <div class="row">
-                <div class="input-group">
-                  <span class="input-group-addon" id="basic-addon1">Items to Display</span>
-                  <input type="text" class="form-control" placeholder="1 - 10" aria-describedby="basic-addon1" id="pageSize">
-
-                </div>
-              </div>
-
-              <div class="btn-group" role="group" aria-label="...">
-                <button type="button" class="btn btn-default" id="submit-btn">Search</button>
-              </div>
-            </div>
+    <div id="myCarousel" class="carousel slide" data-ride="carousel">
+      <!-- Indicators -->
+      <ol class="carousel-indicators">
+        <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+        <li data-target="#myCarousel" data-slide-to="1"></li>
+        <li data-target="#myCarousel" data-slide-to="2"></li>
+      </ol>
+      
+      <!-- Wrapper for slides -->
+      <div class="carousel-inner">
+        <div class="item active">
+          <img src="assets/images/carousel-slide-1.jpg" alt="Slide 1">
+        </div>
+    
+        <div class="item">
+          <img src="assets/images/carousel-slide-2.jpg" alt="Slide 2">
+        </div>
+    
+        <div class="item">
+          <img src="assets/images/carousel-slide-3.jpg" alt="Slide 3">
         </div>
       </div>
+      
+      <!-- Left and right controls -->
+      <a class="left carousel-control" href="#myCarousel" data-slide="prev">
+        <span class="glyphicon glyphicon-chevron-left"></span>
+        <span class="sr-only">Previous</span>
+      </a>
+      <a class="right carousel-control" href="#myCarousel" data-slide="next">
+        <span class="glyphicon glyphicon-chevron-right"></span>
+        <span class="sr-only">Next</span>
+      </a>
     </div>
+    <!--Initial User Input -->
     <div class="row">
-      <div id="events-div"></div>
+      <div class="col-md-6 col-md-offset-3">
+        <div class="panel panel-default first-input">
+          <div class="panel-heading">
+            <h3 class="panel-title">Let's Get Started</h3>
+          </div>
+          <div class="panel-body">
+            <div class="row">
+              <div class="input-group">
+                <span class="input-group-addon" id="basic-addon1">Location</span>
+                <input type="text" class="form-control" placeholder="City or Zip Code" aria-describedby="basic-addon1" id="location">
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="input-group">
+                  <span class="input-group-addon" id="basic-addon1">Radius</span>
+                  <input type="text" class="form-control" placeholder="in miles" aria-describedby="basic-addon1" id="miles">
+              </div>
+
+            </div>
+
+            <div class="row">
+              
+              <form method="post" class="input-group">
+                  <span class="input-group-addon" id="basic-addon1">Date</span>
+                  <div class="form-group"> <!-- Date input -->
+                    <input class="form-control" id="dates" name="date" placeholder="MM/DD/YYY" type="text"/>
+                  </div>
+              </form>
+            </div>
+
+            <div class="row">
+              <div class="input-group">
+                <span class="input-group-addon" id="basic-addon1">Items to Display</span>
+                <input type="text" class="form-control" placeholder="1 - 10" aria-describedby="basic-addon1" id="pageSize">
+              </div>
+            </div>
+
+            <div class="btn-group" role="group" aria-label="...">
+              <button type="button" class="btn btn-default" id="submit-btn">Search for Events!</button>
+            </div>  
+          </div>
+      </div>
     </div>
-    <div id="events-div"></div>
-
-
-      <script src="assets/javascript/javascript.js"></script>
-
-
-
-<!-- <script src="assets/javascript/spotifyapi.js"></script> -->
-
-<!-- <script src="eventful_api.js"></script> -->
+  </div>
+  <!-- Events will be appended to this div -->
+<div class="row">
+  <div id="events-div"></div>
+</div>
+<div class="row">
+  <div id="places-div"></div>
+</div>
+<div class="row">
+  <div id="map-output"></div>
+</div>
 
 <script src="assets/javascript/app.js"></script>
 
