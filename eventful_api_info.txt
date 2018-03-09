@@ -23,4 +23,10 @@ Notable Keys in each JSON object returned:
 	-start_time - the date & time of the event, formatted like so:  "YYYY-MM-DD HH:MM:SS" (military time)
 	-description - A short description of the venue
 
+Storing Search Results to LocalStorage:
+	1)  Group all iterations of for-loop as an object
+	2)  Group all JSON objects as singular JSON object
+	3)  Send that JSON object to local storage
+	4)  When recalled, print all objects
+
 
