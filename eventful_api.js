@@ -16,7 +16,8 @@ var queryBase = "http://api.eventful.com/json/events/search?app_key=hqWvGHfDvqhZ
 var location;
 var milesOf = 0;  
 var dateRange;
-var pageSize = 10; //Setting to 10 for testing purposes.
+var pageSize = 0; 
+var localStorageCount = 0;
 
 //Info generated from AJAX call//
 var artist;
@@ -45,8 +46,7 @@ $("#submit-btn").on("click", function(event) {
 	pageSize = $("#pageSize").val().trim();
 	console.log("Number of Items desired:  " + pageSize);
 	
-	var locationURL = queryBase + place;
-	console.log(locationURL);
+
 
 	//"fetch" is a method David recommended to me.  No idea how it works, but it seems to.  And running an AJAX call was giving me fits
 	//I'm leaving the AJAX stuff commented out for now.
@@ -61,36 +61,36 @@ $("#submit-btn").on("click", function(event) {
 				venueLocation = data.events.event[i].venue_address;
 				venueCity = data.events.event[i].city_name;
 				venueZip = data.events.event[i].postal_code;
+				venueLatitude = data.events.event[i].latitude;
+				venueLongitude = data.events.event[i].longitude;
 				eventUrl = data.events.event[i].url;
 				eventStart = data.events.event[i].start_time;
 				eventDescription = data.events.event[i].description;
 
-			var eventObject = {
-				"title": title,
-				"venueName": venueName,
-				"venueLocation": venueLocation,
-				"venueCity": venueCity,
-				"venueZip": venueZip,
-				"eventUrl": eventUrl,
-				"eventStart": eventStart,
-				"eventDescription": eventDescription
+
+			var savedSearch = {
+				"location": place,
+				"radius": milesOf,
+				"date": dateRange,
+				"pageSize": pageSize	
 
 			};
 
-			console.log(eventObject);
+			var localStorageKey = "savedSearch" + localStorageCount;
+			localStorage.setItem(localStorageKey, JSON.stringify(savedSearch));
 
-			localStorage.setItem("eventObject", JSON.stringify(eventObject));
-
-			//Got the Eventful API to return the following data
-				// console.log("Event Title:  " + title);
-				// console.log("Venue Location:  " + venueLocation);
-				// console.log("Venue Name:  " + venueName);
-				// console.log("Venue City:  " + venueCity);
-				// console.log("Venue Zip Code:  " + venueZip);
-				// console.log("Event Webpage:  " + eventUrl);
-				// console.log("Event Starts At:  " + eventStart);
-				// console.log("Event Description:  " + eventDescription);
-				// console.log("-------------------------Next Array--------------------");
+			// Got the Eventful API to return the following data
+				console.log("Event Title:  " + title);
+				console.log("Venue Location:  " + venueLocation);
+				console.log("Venue Name:  " + venueName);
+				console.log("Venue City:  " + venueCity);
+				console.log("Venue Zip Code:  " + venueZip);
+				console.log("Venue Latitude:  " + venueLatitude);
+				console.log("Venue Longitude:  " + venueLongitude);
+				console.log("Event Webpage:  " + eventUrl);
+				console.log("Event Starts At:  " + eventStart);
+				console.log("Event Description:  " + eventDescription);
+				console.log("-------------------------Next Array--------------------");
 			//Local Storage code below//
 				// localStorage.setItem("title", title);
 				// localStorage.setItem("venueName", venueName);
@@ -101,6 +101,11 @@ $("#submit-btn").on("click", function(event) {
 				// localStorage.setItem("eventStart", eventStart);
 				// localStorage.setItem("eventDescription", eventDescription);
 			}
+			localStorageCount++;
+
+			var oldSearch = localStorage.getItem(localStorageKey);
+			var recalSearch = JSON.parse(oldSearch);
+			console.log(recalSearch);
 		});
 	// $.ajax({
 	// 	url: "https://cors-anywhere.herokuapp.com/http://api.eventful.com/json/events/search?app_key=hqWvGHfDvqhZ62Bm&q=music&l=" + place,
@@ -130,3 +135,12 @@ $("#submit-btn").on("click", function(event) {
 
 })
 
+
+
+
+			// console.log(eventObject);
+
+			// localStorage.setItem("eventObject", JSON.stringify(eventObject));
+
+			// var getEventObject = localStorage.getItem("eventObject");
+			// console.log("getEventObject:  ", JSON.parse(getEventObject));
