@@ -11,6 +11,14 @@
 }
 
 .first-input{
-    text-align:center;
+    margin-top: 20px;
+    margin-bottom:20px    
     
+}
+
+.input-group-addon {
+    min-width:100px;// if you want width please write here //
+    text-align:left;
+    margin-top:10px;
+    margin-bottom:10px;
 }
