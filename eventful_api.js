@@ -33,14 +33,17 @@ $("#submit-btn").on("click", function(event) {
 				//"#location" - a placeholder id for whatever our text field is//
 	locationValue = $("#location").val().trim().toLowerCase();
 	var place = locationValue.replace(new RegExp(" ", "g"), '+');
-	console.log(place);
+	console.log("Location:  " + place);
 				//"#dates" - a placeholder id for whatever gives us dates//
 	dateRangeValue = $("#dates").val().trim();
 	dateRange = dateRangeValue.replace(new RegExp(" ", "g"), '+');
-	console.log(dateRange);
+	console.log("Date entered:  " + dateRange);
 				//"#miles" - a placeholder id for whatever gives us the miles range//
-	milesOf = $("#miles").val();
-	console.log(milesOf);
+	milesOf = $("#miles").val().trim();
+	console.log("Radius:  " + milesOf);
+
+	pageSize = $("#pageSize").val().trim();
+	console.log("Number of Items desired:  " + pageSize);
 	
 	var locationURL = queryBase + place;
 	console.log(locationURL);
@@ -51,28 +54,52 @@ $("#submit-btn").on("click", function(event) {
 		.then(response => response.json())
 		.then(data => {
 			// Here's a list of repos!
-			console.log(data.events.event[0].title)
 			for (var i = 0; i < pageSize; i++) {
 
-				artist = data.events.event[i].title;
-				venueLocation = data.events.event[i].venue_address;
+				title = data.events.event[i].title;
 				venueName = data.events.event[i].venue_name;
+				venueLocation = data.events.event[i].venue_address;
 				venueCity = data.events.event[i].city_name;
 				venueZip = data.events.event[i].postal_code;
 				eventUrl = data.events.event[i].url;
 				eventStart = data.events.event[i].start_time;
 				eventDescription = data.events.event[i].description;
-			//Got the Eventful API to return the following data
-				console.log("Artist:  " + artist);
-				console.log("Venue Location:  " + venueLocation);
-				console.log("Venue Name:  " + venueName);
-				console.log("Venue City:  " + venueCity);
-				console.log("Venue Zip Code:  " + venueZip);
-				console.log("Event Webpage:  " + eventUrl);
-				console.log("Event Starts At:  " + eventStart);
-				console.log("Event Description:  " + eventDescription);
-				console.log("-------------------------Next Array--------------------");
 
+			var eventObject = {
+				"title": title,
+				"venueName": venueName,
+				"venueLocation": venueLocation,
+				"venueCity": venueCity,
+				"venueZip": venueZip,
+				"eventUrl": eventUrl,
+				"eventStart": eventStart,
+				"eventDescription": eventDescription
+
+			};
+
+			console.log(eventObject);
+
+			localStorage.setItem("eventObject", JSON.stringify(eventObject));
+
+			//Got the Eventful API to return the following data
+				// console.log("Event Title:  " + title);
+				// console.log("Venue Location:  " + venueLocation);
+				// console.log("Venue Name:  " + venueName);
+				// console.log("Venue City:  " + venueCity);
+				// console.log("Venue Zip Code:  " + venueZip);
+				// console.log("Event Webpage:  " + eventUrl);
+				// console.log("Event Starts At:  " + eventStart);
+				// console.log("Event Description:  " + eventDescription);
+				// console.log("-------------------------Next Array--------------------");
+			//Local Storage code below//
+				// localStorage.setItem("title", title);
+				// localStorage.setItem("venueName", venueName);
+				// localStorage.setItem("venueLocation", venueLocation);
+				// localStorage.setItem("venueCity", venueCity);
+				// localStorage.setItem("venueZip", venueZip);
+				// localStorage.setItem("eventUrl", eventUrl);
+				// localStorage.setItem("eventStart", eventStart);
+				// localStorage.setItem("eventDescription", eventDescription);
 			}
 		});
 	// $.ajax({
