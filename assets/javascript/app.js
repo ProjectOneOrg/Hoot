@@ -27,6 +27,9 @@ $(document).ready(function(){
 
     var selectedEventVal;
     var selectedPlacesVal;
+
+    //clearing localStorage on page load//
+    localStorage.clear();
     //When the submit button is clicked with search parameters
     $("#submit-btn").on("click", function() {
         event.preventDefault();
@@ -65,21 +68,28 @@ $(document).ready(function(){
                eventStart = data.events.event[i].start_time;
                eventDescription = data.events.event[i].description;
 
-                //setting search parameters to an object for localStorage//
-                var savedSearch = {
-                    "location": place,
-                    "radius": radius,
-                    "date": dateRange,
-                    "pageSize": eventsLength
+                //setting data to an object for localStorage//
+                var searchResult = {
+                    "title": title,
+                    "venueName": venueName,
+                    "venueLocation": venueLocation,
+                    "venueCity": venueCity,
+                    "venueZip": venueZip,
+                    "venueLatitude": venueLatitude,
+                    "venueLongitude": venueLongitude,
+                    "eventUrl": eventUrl,
+                    "eventStart": eventStart,
+                    "eventDescription": eventDescription
                 };
 
-                //storing search parameters to localStorage//
-                var localStorageKey = "savedSearch" + localStorageCount;
-                localStorage.setItem(localStorageKey, JSON.stringify(savedSearch));
+                //storing search data object to localStorage//
+                var localStorageKey = "searchResult" + localStorageCount;
+                localStorage.setItem(localStorageKey, JSON.stringify(searchResult));
 
 
-                var well = $("<div>").attr("class", "well well-lg event-well").attr("data-event-num", i);
+                var well = $("<div>").attr("class", "well well-lg event-well").attr("data-event-num", i).attr("id", localStorageKey);
 
+                localStorageCount++;
                 //creating div w/ event title//
                 var eventTitleDiv = $("<div>").attr("id", title.replace( new RegExp(" ", "g"), "-"));
                 eventTitleDiv.append("<h3>" + title + "</h3>");
@@ -99,10 +109,6 @@ $(document).ready(function(){
                 allEventPanel.append(eventPanelBody);
             }
 
-        localStorageCount++;
-
-        var oldSearch = localStorage.getItem(localStorageKey);
-        var recalSearch = JSON.parse(oldSearch);
 
         $("#events-div").html(allEventPanel);
         });
@@ -116,9 +122,15 @@ $(document).ready(function(){
         $("#event-output").empty();
         $("#events-title").text("The event you are attending");
 
-        var selectedEventInfo = $("<div>");
-        selectedEventInfo.append("<h3>" + title + "</h3>");
+        //getting the localStorage key specific for the clicked item//
+        var selectedResult = localStorage.getItem($(this).attr("id"));
+        //turning it back into a JSON object
+        var recalSearch = JSON.parse(selectedResult);
 
+        var selectedEventInfo = $("<div>");
+        //appending the title retrieved from localStorage//
+        selectedEventInfo.append("<h3>" + recalSearch.title + "</h3>");
+        selectedEventInfo.append("<h5>" + recalSearch.venueName + ", " + recalSearch.venueLocation + ", " + recalSearch.venueCity + ", " + recalSearch.venueZip + "</h5>");
         var selectedEvent = $("<div>").attr("class", "well well-lg event-well");
         selectedEvent.append(selectedEventInfo);
 
