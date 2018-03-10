@@ -52,7 +52,7 @@ function getPlacesData() {
         //         };
         //     }
     
-        })
+        // });
 
     ).then(function() {
 

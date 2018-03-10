@@ -1,7 +1,5 @@
 var queryBase = "http://api.eventful.com/json/events/search?app_key=hqWvGHfDvqhZ62Bm&q=music&l=";
 var localStorageCount = 0;
-var foodDrinkQueryURL = "https://cors-anywhere.herokuapp.com/https://maps.googleapis.com/maps/api/place/nearbysearch/json?" + 
-"location=" + venueLatitude,venueLongitude + "&radius=500&type=restaurant|bar&key=AIzaSyB2Ys8ExJDWr3CF94ia0_Oyxm8gBM87udY";
 
 var title
 var venueName
@@ -67,15 +65,14 @@ $(document).ready(function(){
                eventStart = data.events.event[i].start_time;
                eventDescription = data.events.event[i].description;
 
+               getPlacesData();
+
                 //setting search parameters to an object for localStorage//
                 var savedSearch = {
                     "location": place,
                     "radius": radius,
                     "date": dateRange,
                     "pageSize": eventsLength
-
-                getPlacesData();
-
                 };
 
                 //storing search parameters to localStorage//
@@ -173,7 +170,8 @@ $(document).ready(function(){
 function getPlacesData() {
 
     var foodDrinkQueryURL = "https://cors-anywhere.herokuapp.com/https://maps.googleapis.com/maps/api/place/nearbysearch/json?" + 
-    "location=" + venueLatitude,venueLongitude + "&radius=500&type=restaurant|bar&key=AIzaSyB2Ys8ExJDWr3CF94ia0_Oyxm8gBM87udY";
+    "location=" + venueLatitude + "," + venueLongitude + "&radius=500&type=restaurant|bar&key=AIzaSyB2Ys8ExJDWr3CF94ia0_Oyxm8gBM87udY";
+    
     var foodDrinkID = [];
     // var barID = [];
     var myFoodDrinkQuery;
