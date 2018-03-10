@@ -11,12 +11,12 @@ $(document).ready(function(){
     };
     date_input.datepicker(options);
 
-
     var selectedEventVal;
     var selectedPlacesVal;
     //When the submit button is clicked with search parameters
     $("#submit-btn").on("click", function() {
         event.preventDefault();
+        
         var location = $("#location").val().trim();
         var radius = $("#miles").val().trim();
         var date = $("#dates").val().trim();
