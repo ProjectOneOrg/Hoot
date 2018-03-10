@@ -117,13 +117,12 @@ $(document).ready(function(){
         $("#event-output").empty();
         $("#events-title").text("The event you are attending");
 
-        // var selectedEventInfo = $("<div>")
-        // var selectedTitle = $("<h3>" + title "</h3>");
-        // selectedEventInfo.append(selectedTitle);
+        var selectedEventInfo = $("<div>");
+        selectedEventInfo.append("<h3>" + title + "</h3>");
 
         var selectedEvent = $("<div>").attr("class", "well well-lg event-well");
-        // selectedEvent.append(selectedEventInfo);
-        
+        selectedEvent.append(selectedEventInfo);
+
         $("#event-output").append(selectedEvent);
         
         //Creating the Google Places Panel
