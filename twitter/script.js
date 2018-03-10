@@ -27,7 +27,9 @@ $.ajax({
    for (var i = 0; i < results.length; i++) {
      console.log(results);
      //$('<div class="tweet"></div>').appendTo('#twitterbox');
-     $('#twitterbox').append('<div class="tweet"><p>' + results[i].text + '</p><img src="' + results[i].user.profile_image_url + '"></div>' );
+     //$('#twitterbox').append('<div class="tweet"><p>' + results[i].text + '</p><img src="' + results[i].user.profile_image_url + '"></div>' );
+     $('#twitterbox').append('<div class="tweet"><img src="' + results[i].user.profile_image_url + '"><p>' + results[i].text + '</p></div>' );
+
    }
 })
 })
