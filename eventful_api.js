@@ -91,16 +91,8 @@ $("#submit-btn").on("click", function(event) {
 				console.log("Event Starts At:  " + eventStart);
 				console.log("Event Description:  " + eventDescription);
 				console.log("-------------------------Next Array--------------------");
-			//Local Storage code below//
-				// localStorage.setItem("title", title);
-				// localStorage.setItem("venueName", venueName);
-				// localStorage.setItem("venueLocation", venueLocation);
-				// localStorage.setItem("venueCity", venueCity);
-				// localStorage.setItem("venueZip", venueZip);
-				// localStorage.setItem("eventUrl", eventUrl);
-				// localStorage.setItem("eventStart", eventStart);
-				// localStorage.setItem("eventDescription", eventDescription);
 			}
+
 			localStorageCount++;
 
 			var oldSearch = localStorage.getItem(localStorageKey);
