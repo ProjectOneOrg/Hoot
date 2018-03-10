@@ -12,6 +12,8 @@ var eventUrl
 var eventStart
 var eventDescription
 
+var eventsLength = 5;
+
 $(document).ready(function(){
 
     //DatePicker functionality
@@ -43,6 +45,9 @@ $(document).ready(function(){
         var dateRange = date.replace(new RegExp("/", "g"), "+");
         //gets number of results desired//
         eventsLength = $("#pageSize").val().trim();
+        if(eventsLength === "") {
+            eventsLength = 5;
+        }
 
         var allEventPanel = $("<div>").attr("class", "panel panel-default").append($("<div>").attr("class", "panel-heading").attr("id", "events-title").text("Select an Event!"));
         var eventPanelBody = $("<div>").attr("class", "panel-body").attr("id","event-output");
