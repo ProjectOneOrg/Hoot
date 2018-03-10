@@ -25,13 +25,12 @@ $(document).ready(function(){
     };
     date_input.datepicker(options);
 
-
     var selectedEventVal;
     var selectedPlacesVal;
     //When the submit button is clicked with search parameters
     $("#submit-btn").on("click", function() {
         event.preventDefault();
-        //gets location value//
+
         var location = $("#location").val().trim();
         var place = location.replace(new RegExp(" ", "g"), '+');
         //gets area within location value//
