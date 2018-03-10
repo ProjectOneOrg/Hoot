@@ -1,3 +1,6 @@
+var queryBase = "http://api.eventful.com/json/events/search?app_key=hqWvGHfDvqhZ62Bm&q=music&l=";
+var localStorageCount = 0;
+
 $(document).ready(function(){
 
     //DatePicker functionality
@@ -17,22 +20,78 @@ $(document).ready(function(){
     //When the submit button is clicked with search parameters
     $("#submit-btn").on("click", function() {
         event.preventDefault();
+        //gets location value//
         var location = $("#location").val().trim();
+        var place = location.replace(new RegExp(" ", "g"), '+');
+        //gets area within location value//
         var radius = $("#miles").val().trim();
+        //gets date value//
         var date = $("#dates").val().trim();
-        
-        eventsLength = 10;
+        var dateRange = date.replace(new RegExp("/", "g"), "+");
+        //gets number of results desired//
+        eventsLength = $("#pageSize").val().trim();
+
         var allEventPanel = $("<div>").attr("class", "panel panel-default").append($("<div>").attr("class", "panel-heading").attr("id", "events-title").text("Select an Event!"));
         var eventPanelBody = $("<div>").attr("class", "panel-body").attr("id","event-output");
         allEventPanel.append(eventPanelBody);
-        for(var i = 0; i < eventsLength; i++ ) {
-            var well = $("<div>").attr("class", "well well-lg event-well").attr("data-event-num", i);
-            selectedEventVal = i;
-            well.text("Event #" + i);
-            eventPanelBody.append(well);
-            allEventPanel.append(eventPanelBody);
-        }
+
+        //The Eventful API call//
+        fetch('https://cors-anywhere.herokuapp.com/http://api.eventful.com/json/events/search?app_key=hqWvGHfDvqhZ62Bm&q=music&l=' + place + 
+        '&within=' + radius + '&units=miles&page_size=' + eventsLength + '&t=' + dateRange)
+        .then(response => response.json())
+        .then(data => {
+
+            for(var i = 0; i < eventsLength; i++) {
+
+                //getting values from the API for our use//
+               var title = data.events.event[i].title;
+               var venueName = data.events.event[i].venue_name;
+               var venueLocation = data.events.event[i].venue_address;
+               var venueCity = data.events.event[i].city_name;
+               var venueZip = data.events.event[i].postal_code;
+               var venueLatitude = data.events.event[i].latitude;
+               var venueLongitude = data.events.event[i].longitude;
+               var eventUrl = data.events.event[i].url;
+               var eventStart = data.events.event[i].start_time;
+               var eventDescription = data.events.event[i].description;
+
+                //setting search parameters to an object for localStorage//
+                var savedSearch = {
+                    "location": place,
+                    "radius": radius,
+                    "date": dateRange,
+                    "pageSize": eventsLength
+                };
+
+                //storing search parameters to localStorage//
+                var localStorageKey = "savedSearch" + localStorageCount;
+                localStorage.setItem(localStorageKey, JSON.stringify(savedSearch));
+
+
+                var well = $("<div>").attr("class", "well well-lg event-well").attr("data-event-num", i);
+
+                var eventTitleDiv = $("<div>").attr("id", title.replace( new RegExp(" ", "g"), "-"));
+                eventTitleDiv.append("<h3>" + title + "</h3>");
+
+                var venueTitleDiv = $("<div>").attr("id", venueName.replace(new RegExp(" ", "g"), "-"));
+                venueTitleDiv.append("<h5>" + venueName + "</h5>");
+
+                eventTitleDiv.append(venueTitleDiv);
+                well.append(eventTitleDiv);
+
+                selectedEventVal = i;
+                // well.text("Event #" + i);
+                eventPanelBody.append(well);
+                allEventPanel.append(eventPanelBody);
+            }
+
+        localStorageCount++;
+
+        var oldSearch = localStorage.getItem(localStorageKey);
+        var recalSearch = JSON.parse(oldSearch);
+
         $("#events-div").html(allEventPanel);
+        });
     })
 
     //When an event well is clicked...
