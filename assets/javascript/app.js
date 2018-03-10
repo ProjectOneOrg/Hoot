@@ -1,6 +1,17 @@
 var queryBase = "http://api.eventful.com/json/events/search?app_key=hqWvGHfDvqhZ62Bm&q=music&l=";
 var localStorageCount = 0;
 
+var title
+var venueName
+var venueLocation
+var venueCity
+var venueZip
+var venueLatitude
+var venueLongitude
+var eventUrl
+var eventStart
+var eventDescription
+
 $(document).ready(function(){
 
     //DatePicker functionality
@@ -44,16 +55,16 @@ $(document).ready(function(){
             for(var i = 0; i < eventsLength; i++) {
 
                 //getting values from the API for our use//
-               var title = data.events.event[i].title;
-               var venueName = data.events.event[i].venue_name;
-               var venueLocation = data.events.event[i].venue_address;
-               var venueCity = data.events.event[i].city_name;
-               var venueZip = data.events.event[i].postal_code;
-               var venueLatitude = data.events.event[i].latitude;
-               var venueLongitude = data.events.event[i].longitude;
-               var eventUrl = data.events.event[i].url;
-               var eventStart = data.events.event[i].start_time;
-               var eventDescription = data.events.event[i].description;
+               title = data.events.event[i].title;
+               venueName = data.events.event[i].venue_name;
+               venueLocation = data.events.event[i].venue_address;
+               venueCity = data.events.event[i].city_name;
+               venueZip = data.events.event[i].postal_code;
+               venueLatitude = data.events.event[i].latitude;
+               venueLongitude = data.events.event[i].longitude;
+               eventUrl = data.events.event[i].url;
+               eventStart = data.events.event[i].start_time;
+               eventDescription = data.events.event[i].description;
 
                 //setting search parameters to an object for localStorage//
                 var savedSearch = {
@@ -70,13 +81,17 @@ $(document).ready(function(){
 
                 var well = $("<div>").attr("class", "well well-lg event-well").attr("data-event-num", i);
 
+                //creating div w/ event title//
                 var eventTitleDiv = $("<div>").attr("id", title.replace( new RegExp(" ", "g"), "-"));
                 eventTitleDiv.append("<h3>" + title + "</h3>");
 
+                //creating div w/ venue name//
                 var venueTitleDiv = $("<div>").attr("id", venueName.replace(new RegExp(" ", "g"), "-"));
                 venueTitleDiv.append("<h5>" + venueName + "</h5>");
 
+                //appending venue name to event title divs//
                 eventTitleDiv.append(venueTitleDiv);
+                //appending all that to well//
                 well.append(eventTitleDiv);
 
                 selectedEventVal = i;
@@ -101,7 +116,14 @@ $(document).ready(function(){
         selectedEventVal = $(this).attr("data-event-num");
         $("#event-output").empty();
         $("#events-title").text("The event you are attending");
-        var selectedEvent = $("<div>").attr("class", "well well-lg event-well").text("Event #" + selectedEventVal);
+
+        // var selectedEventInfo = $("<div>")
+        // var selectedTitle = $("<h3>" + title "</h3>");
+        // selectedEventInfo.append(selectedTitle);
+
+        var selectedEvent = $("<div>").attr("class", "well well-lg event-well");
+        // selectedEvent.append(selectedEventInfo);
+        
         $("#event-output").append(selectedEvent);
         
         //Creating the Google Places Panel
