@@ -1,63 +1,62 @@
-var queryURL = "https://cors-anywhere.herokuapp.com/https://maps.googleapis.com/maps/api/place/textsearch/json?query=restaurants+in+raleigh&key= AIzaSyB2Ys8ExJDWr3CF94ia0_Oyxm8gBM87udY&type=restaurant";
-var queryURLB = "https://cors-anywhere.herokuapp.com/https://maps.googleapis.com/maps/api/place/textsearch/json?query=bars+in+raleigh&key= AIzaSyB2Ys8ExJDWr3CF94ia0_Oyxm8gBM87udY&type=bar";
+// var queryURL = "https://cors-anywhere.herokuapp.com/https://maps.googleapis.com/maps/api/place/textsearch/json?query=restaurants+in+raleigh&key= AIzaSyB2Ys8ExJDWr3CF94ia0_Oyxm8gBM87udY&type=restaurant";
+// var queryURLB = "https://cors-anywhere.herokuapp.com/https://maps.googleapis.com/maps/api/place/textsearch/json?query=bars+in+raleigh&key= AIzaSyB2Ys8ExJDWr3CF94ia0_Oyxm8gBM87udY&type=bar";
 
 
 function getPlacesData() {
 
-    var restaurantID = [];
-    var barID = [];
-    var myRestaurantQuery;
-    var myBarQuery;
+    var foodDrinkQueryURL = "https://cors-anywhere.herokuapp.com/https://maps.googleapis.com/maps/api/place/nearbysearch/json?" + 
+    "location=" + venueLatitude,venueLongitude + "&radius=500&type=restaurant|bar&key=AIzaSyB2Ys8ExJDWr3CF94ia0_Oyxm8gBM87udY";
+    var foodDrinkID = [];
+    // var barID = [];
+    var myFoodDrinkQuery;
+    // var myBarQuery;
 
     $.when(
 
         $.ajax({
-            url: queryURL,
+            url: foodDrinkQueryURL,
             method: "GET"
         }).then(function(response) {
     
-        myRestaurantQuery = response.results;
+        myFoodDrinkQuery = response.results;
     
-        for (i=0; i<myRestaurantQuery.length; i++) {
-            var  rplaceID = myRestaurantQuery[i].place_id;
-            var rplaceLat = myRestaurantQuery[i].geometry.location.lat;
-            var rplaceLng = myRestaurantQuery[i].geometry.location.lng;
-            restaurantID[i] = {
-                place: rplaceID,
-                lat: rplaceLat,
-                lng: rplaceLng
+        for (i=0; i<myFoodDrinkQuery.length; i++) {
+            var  fdplaceID = myFoodDrinkQuery[i].place_id;
+            var fdlaceLat = myFoodDrinkQuery[i].geometry.location.lat;
+            var fdlaceLng = myFoodDrinkQuery[i].geometry.location.lng;
+            foodDrinkID[i] = {
+                place: fdplaceID,
+                lat: fdlaceLat,
+                lng: fdlaceLng
             };
         }
     
         }),
 
 
-        $.ajax({
-            url: queryURLB,
-            method: "GET"
-        }).then(function(response) {
+        // $.ajax({
+        //     url: queryURLB,
+        //     method: "GET"
+        // }).then(function(response) {
     
-        myBarQuery = response.results;    
+        // myBarQuery = response.results;    
     
-            for (i=0; i<myBarQuery.length; i++) {
-                var bplaceID = myBarQuery[i].place_id;
-                var bplaceLat = myBarQuery[i].geometry.location.lat;
-                var bplaceLng = myBarQuery[i].geometry.location.lng;
-                barID[i] = {
-                    place: bplaceID,
-                    lat: bplaceLat,
-                    lng: bplaceLng
-                };
-            }
+        //     for (i=0; i<myBarQuery.length; i++) {
+        //         var bplaceID = myBarQuery[i].place_id;
+        //         var bplaceLat = myBarQuery[i].geometry.location.lat;
+        //         var bplaceLng = myBarQuery[i].geometry.location.lng;
+        //         barID[i] = {
+        //             place: bplaceID,
+        //             lat: bplaceLat,
+        //             lng: bplaceLng
+        //         };
+        //     }
     
         })
 
     ).then(function() {
 
-        var places = {
-            restaurants: restaurantID, 
-            bars: barID
-        };
+        var places = foodDrinkID;
        
         initMap(places);
 
@@ -67,35 +66,30 @@ function getPlacesData() {
 
 function initMap(foodDrinkPlaces) {
 
-    var placeLat = 35.7781944;
-    var placeLng = -78.6404271;
-
-    var geo = {lat: placeLat, lng: placeLng};
-    var restaurantID = foodDrinkPlaces.restaurants;
-    var barID = foodDrinkPlaces.bars;
+    var geo = {lat: venueLatitude, lng: venueLongitude};
 
     var map = new google.maps.Map(document.getElementById('map'), {
     zoom: 14,
     center: geo
     });
     
-    restaurant(map, restaurantID, barID);
+    restaurant(foodDrinkPlaces);
 
 }
 
 
-function restaurant(map, restaurantID, barID) {
+function restaurant(foodDrinkID) {
 
-    console.log(restaurantID, barID);
+    console.log(foodDrinkID);
   
     var infowindow = new google.maps.InfoWindow();
     var service = new google.maps.places.PlacesService(map);
 
-    for (i = 0; i < restaurantID.length; i++) {  
+    for (i = 0; i < foodDrinkID.length; i++) {  
 
-        var placeID = restaurantID[i].place;
-        var placeLat = restaurantID[i].lat;
-        var placeLng = restaurantID[i].lng;
+        var placeID = foodDrinkID[i].place;
+        var placeLat = foodDrinkID[i].lat;
+        var placeLng = foodDrinkID[i].lng;
 
         var position = {lat: placeLat, lng: placeLng};
 
@@ -104,7 +98,7 @@ function restaurant(map, restaurantID, barID) {
           map: map
         });
 
-        var placeID = restaurantID[i].place;
+        var placeID = foodDrinkID[i].place;
 
         service.getDetails({
             placeId: placeID
