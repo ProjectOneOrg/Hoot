@@ -1,5 +1,6 @@
 var queryBase = "http://api.eventful.com/json/events/search?app_key=hqWvGHfDvqhZ62Bm&q=music&l=";
 var localStorageCount = 0;
+var placesLocalStorageCount = 0;
 
 var title
 var venueName
@@ -32,6 +33,7 @@ $(document).ready(function(){
 
     //clearing localStorage on page load//
     localStorage.clear();
+
     //When the submit button is clicked with search parameters
     $("#submit-btn").on("click", function() {
         event.preventDefault();
@@ -73,10 +75,6 @@ $(document).ready(function(){
                eventUrl = data.events.event[i].url;
                eventStart = data.events.event[i].start_time;
                eventDescription = data.events.event[i].description;
-
-
-               getPlacesData();
-
 
                 //setting data to an object for localStorage//
                 var searchResult = {
@@ -159,20 +157,9 @@ $(document).ready(function(){
         selectedEvent.append(selectedEventInfo);
 
         $("#event-output").append(selectedEvent);
-        
-        //Creating the Google Places Panel
-        var allPlacesPanel = $("<div>").attr("class", "panel panel-default").append($("<div>").attr("class", "panel-heading").attr("id", "places-title").text("Select an Resturant!"));
-        var placesPanelBody = $("<div>").attr("class", "panel-body").attr("id","places-output");
 
-        var placesLength = 10;
-        for(var i = 0; i < placesLength; i++ ) {
-            var well = $("<div>").attr("class", "well well-lg places-well").attr("data-places-num", i);
-            selectedEventVal = i;
-            well.text("Google Places #" + i);
-            placesPanelBody.append(well);
-            allPlacesPanel.append(placesPanelBody);
-        }
-        $("#places-div").html(allPlacesPanel);
+        getPlacesData();
+        
     })
 
     //When a google places well is clicked
@@ -182,34 +169,61 @@ $(document).ready(function(){
         selectedPlacesVal = $(this).attr("data-places-num");
         $("#places-output").empty();
         $("#places-title").text("After the event you are going to");
-        var selectedPlace = $("<div>").attr("class", "well well-lg places-well").text("Google Places #" + selectedPlacesVal);
+
+        //getting the localStorage key specific for the clicked item//
+        var selectedPlaceResult = localStorage.getItem($(this).attr("id"));
+        console.log(selectedPlaceResult);
+        //turning it back into a JSON object
+        var recalPlaceSearch = JSON.parse(selectedPlaceResult);
+        console.log(recalPlaceSearch);
+
+        var selectedPlaceInfo = $("<div>");
+        //appending the title retrieved from localStorage//
+        selectedPlaceInfo.append("<h3>" + recalPlaceSearch.name + "</h3>");
+
+       //appending the rating and price from localStorage//
+        var placeInfo = $("<div><span id='rating'>Rating: " + recalPlaceSearch.rating + "</span><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Price: " + 
+        recalPlaceSearch.price + "</span></div>");
+
+        selectedPlaceInfo.append(placeInfo);
+
+        //creating div w/ place address//
+        var placeAddressDiv = $("<div><span>" + recalPlaceSearch.address + "</span><div>");
+
+        var selectedPlace = $("<div>").attr("class", "well well-lg event-well");
+        selectedPlace.append(selectedPlaceInfo);
+
         $("#places-output").append(selectedPlace);
 
         //Google Maps Output
+        var lat = parseFloat(venueLatitude);
+        var lng = parseFloat(venueLongitude);
         var apiKey = "AIzaSyDolYU_CqdXxvNhxq04-ZjcxoiwhV6RiBg";
-        var start = "15 E. Peace St, Raleigh, NC";
-        var destination = "ChIJiyUL2y58hYARe1aYhSjzbrU";
+        var start = lat,lng;
+        var destination = recalPlaceSearch.place;
         var directionsURL = "https://www.google.com/maps/embed/v1/directions?key=" + apiKey + "&origin=" + start + "&destination=place_id:" + destination + "&avoid=tolls|highways";
 
         var map = $("<iframe>").attr("width", "900").attr("height", "500").attr("frameborder","0").attr("style", "border:0").attr("src", directionsURL);
         $("#map-output").append(map);
 
     });
-
-
-
-
 })
 
 function getPlacesData() {
 
+    //Creating the Google Places Panel
+    var allPlacesPanel = $("<div>").attr("class", "panel panel-default").append($("<div>").attr("class", "panel-heading").attr("id", "places-title").text("Select an Resturant!"));
+    var placesPanelBody = $("<div>").attr("class", "panel-body").attr("id","places-output");
+    allPlacesPanel.append(placesPanelBody);
+
+    var lat = parseFloat(venueLatitude);
+    var lng = parseFloat(venueLongitude);
+
     var foodDrinkQueryURL = "https://cors-anywhere.herokuapp.com/https://maps.googleapis.com/maps/api/place/nearbysearch/json?" + 
-    "location=" + venueLatitude + "," + venueLongitude + "&radius=500&type=restaurant|bar&key=AIzaSyB2Ys8ExJDWr3CF94ia0_Oyxm8gBM87udY";
+    "location=" + lat + "," + lng + "&radius=500&type=restaurant&key=AIzaSyB2Ys8ExJDWr3CF94ia0_Oyxm8gBM87udY";
     
     var foodDrinkID = [];
-    // var barID = [];
     var myFoodDrinkQuery;
-    // var myBarQuery;
 
     $.when(
 
@@ -218,105 +232,149 @@ function getPlacesData() {
             method: "GET"
         }).then(function(response) {
     
-        myFoodDrinkQuery = response.results;
-    
-        for (i=0; i<myFoodDrinkQuery.length; i++) {
-            var  fdplaceID = myFoodDrinkQuery[i].place_id;
-            var fdlaceLat = myFoodDrinkQuery[i].geometry.location.lat;
-            var fdlaceLng = myFoodDrinkQuery[i].geometry.location.lng;
-            foodDrinkID[i] = {
-                place: fdplaceID,
-                lat: fdlaceLat,
-                lng: fdlaceLng
-            };
-        }
-    
+            myFoodDrinkQuery = response.results;
+            console.log(myFoodDrinkQuery);
+        
+            for (i=0; i<myFoodDrinkQuery.length; i++) {
+                var  fdplaceID = myFoodDrinkQuery[i].place_id;
+                var fdlaceLat = myFoodDrinkQuery[i].geometry.location.lat;
+                var fdlaceLng = myFoodDrinkQuery[i].geometry.location.lng;
+                var fdplaceName = myFoodDrinkQuery[i].name;
+                var fdplaceRating = myFoodDrinkQuery[i].rating;
+                var fdplacePrice = myFoodDrinkQuery[i].price_level;
+                var fdplaceAddress = myFoodDrinkQuery[i].vicinity;
+
+                var priceLevel;
+
+                if (fdplacePrice == 1) {
+                    priceLevel = "$";
+                } else if (fdplacePrice == 2) {
+                    priceLevel = "$$";
+                } else if (fdplacePrice == 3) {
+                    priceLevel = "$$$";
+                } else if (fdplacePrice == 4) {
+                    priceLevel = "$$$$";
+                } else if (fdplacePrice == 5) {
+                    priceLevel = "$$$$$";
+                }
+
+                foodDrinkID[i] = {
+                    name: fdplaceName,
+                    rating: fdplaceRating,
+                    address: fdplaceAddress,
+                    price: priceLevel,
+                    place: fdplaceID,
+                    lat: fdlaceLat,
+                    lng: fdlaceLng
+                };
+            }
         }),
 
-
-        // $.ajax({
-        //     url: queryURLB,
-        //     method: "GET"
-        // }).then(function(response) {
-    
-        // myBarQuery = response.results;    
-    
-        //     for (i=0; i<myBarQuery.length; i++) {
-        //         var bplaceID = myBarQuery[i].place_id;
-        //         var bplaceLat = myBarQuery[i].geometry.location.lat;
-        //         var bplaceLng = myBarQuery[i].geometry.location.lng;
-        //         barID[i] = {
-        //             place: bplaceID,
-        //             lat: bplaceLat,
-        //             lng: bplaceLng
-        //         };
-        //     }
-    
-        // });
 
     ).then(function() {
 
         var places = foodDrinkID;
+        console.log(places);
        
-        initMap(places);
+        // initMap(places);
+
+        var placesLength = 20;
+        for(var i = 0; i < placesLength; i++ ) {
+
+            //storing search data object to localStorage//
+            var placesLocalStorageKey = "placesSearchResult" + placesLocalStorageCount;
+            localStorage.setItem(placesLocalStorageKey, JSON.stringify(places[i]));
+
+            placesLocalStorageCount++;
+
+            var well = $("<div>").attr("class", "well well-lg places-well").attr("data-places-num", i).attr("id", placesLocalStorageKey);
+
+            //creating div w/ place name//
+            var placeTitleDiv = $("<div>").attr("id", places.name);
+            placeTitleDiv.append("<h3>" + places[i].name + "</h3>");
+
+            //dreating div w/ placee info//
+            var placeInfoDiv = $("<div><span id='rating'>Rating: " + places[i].rating + "</span><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Price: " + 
+            places[i].price + "</span></div>");
+
+            //creating div w/ place address//
+            var placeAddressDiv = $("<div><span>" + places[i].address + "</span><div>");
+
+            //appending place info to place title div//
+            placeTitleDiv.append(placeInfoDiv);
+
+            //appending place address div to place title div//
+            placeTitleDiv.append(placeAddressDiv);
+
+            //appending all that to well//
+            well.append(placeTitleDiv);
+
+            selectedPlacesVal = i;
+            placesPanelBody.append(well);
+            allPlacesPanel.append(placesPanelBody);
+            
+        }
+        $("#places-div").html(allPlacesPanel);
 
     });
 }
 
 
-function initMap(foodDrinkPlaces) {
+// function initMap(foodDrinkPlaces) {
+//     // console.log (venueLatitude, venueLongitude);
 
-    var geo = {lat: venueLatitude, lng: venueLongitude};
+//     // var lat = parseFloat(venueLatitude);
+//     // var lng = parseFloat(venueLongitude);
 
-    var map = new google.maps.Map(document.getElementById('map'), {
-    zoom: 14,
-    center: geo
-    });
+//     var map = new google.maps.Map($('#foodDrinkMap'), {
+//     center: {lat: 35.993248 , lng: -78.9021923},
+//     zoom: 14,
+//     });
     
-    restaurant(foodDrinkPlaces);
+//     // restaurant(map, foodDrinkPlaces);
 
-}
+// }
 
 
-function restaurant(foodDrinkID) {
+// function restaurant(map, foodDrinkID) {
 
-    console.log(foodDrinkID);
+//     console.log(foodDrinkID);
   
-    var infowindow = new google.maps.InfoWindow();
-    var service = new google.maps.places.PlacesService(map);
+//     var infowindow = new google.maps.InfoWindow();
+//     var service = new google.maps.places.PlacesService(map);
 
-    for (i = 0; i < foodDrinkID.length; i++) {  
+//     for (i = 0; i < foodDrinkID.length; i++) {  
 
-        var placeID = foodDrinkID[i].place;
-        var placeLat = foodDrinkID[i].lat;
-        var placeLng = foodDrinkID[i].lng;
+//         var placeID = foodDrinkID[i].place;
+//         var placeLat = foodDrinkID[i].lat;
+//         var placeLng = foodDrinkID[i].lng;
 
-        var position = {lat: placeLat, lng: placeLng};
+//         var position = {lat: placeLat, lng: placeLng};
 
-        marker = new google.maps.Marker({
-          position: position,
-          map: map
-        });
+//         marker = new google.maps.Marker({
+//           position: position,
+//           map: map
+//         });
 
-        var placeID = foodDrinkID[i].place;
+//         var placeID = foodDrinkID[i].place;
 
-        service.getDetails({
-            placeId: placeID
-        }, function(place, status) {
+//         service.getDetails({
+//             placeId: placeID
+//         }, function(place, status) {
 
-            if (status === google.maps.places.PlacesServiceStatus.OK) {
+//             if (status === google.maps.places.PlacesServiceStatus.OK) {
 
-                console.log(place);
+//                 console.log(place);
 
-                google.maps.event.addListener(marker, 'click', (function(marker, i) {
-                    return function() {
-                    infowindow.setContent('<div><strong>' + place.name + '</strong><br>' +
-                    'Place ID: ' + place.place_id + '<br>' +
-                    place.formatted_address + '</div>');
-                    infowindow.open(map, marker);
-                    }
-                })(marker, i));
-            }
-        });
-    }
-}
+//                 google.maps.event.addListener(marker, 'click', (function(marker, i) {
+//                     return function() {
+//                     infowindow.setContent('<div><strong>' + place.name + '</strong><br>' +
+//                     'Place ID: ' + place.place_id + '<br>' +
+//                     place.formatted_address + '</div>');
+//                     infowindow.open(map, marker);
+//                     }
+//                 })(marker, i));
+//             }
+//         });
+//     }
+// }
