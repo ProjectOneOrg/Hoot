@@ -1,3 +1,4 @@
+var placeDetails = [];
 var queryBase = "http://api.eventful.com/json/events/search?app_key=hqWvGHfDvqhZ62Bm&q=music&l=";
 var localStorageCount = 0;
 var placesLocalStorageCount = 0;
@@ -149,7 +150,7 @@ $(document).ready(function(){
         
     })
 
-    //When a google places well is clicked
+    When a google places well is clicked
     $("#places-div").on("click", ".places-well", function(){
         event.preventDefault();
         //Empty out the events div
@@ -183,6 +184,7 @@ $(document).ready(function(){
         $("#places-output").append(selectedPlace);
 
         //Google Maps Output
+        
         var lat = parseFloat(venueLatitude);
         var lng = parseFloat(venueLongitude);
         var apiKey = "AIzaSyDolYU_CqdXxvNhxq04-ZjcxoiwhV6RiBg";
@@ -198,110 +200,206 @@ $(document).ready(function(){
 
 function getPlacesData() {
 
-    //Creating the Google Places Panel
+    var lat = parseFloat(venueLatitude);
+    var lng = parseFloat(venueLongitude);
+
+    // var lat = 35.993248;
+    // var lng = -78.9021923;
+
+    //define query URL for ajax call to Google Places API//
+    var foodDrinkQueryURL = "https://cors-anywhere.herokuapp.com/https://maps.googleapis.com/maps/api/place/nearbysearch/json?" + 
+    "location=" + lat + "," + lng + "&radius=500&type=restaurant&key=AIzaSyB2Ys8ExJDWr3CF94ia0_Oyxm8gBM87udY";
+    
+    //create variable to store Place IDs//
+    var foodDrinkID = [];
+
+    //ajax call to Google Places API//
+    $.ajax({
+        url: foodDrinkQueryURL,
+        method: "GET"
+    }).then(function(response) {
+
+        //variable to store query results//
+        var myFoodDrinkQuery = response.results;
+
+        //loop through each of the Place IDs//
+        for(i=0; i<myFoodDrinkQuery.length; i++) {
+
+            //pull place_id data from query results//
+            var  fdplaceID = myFoodDrinkQuery[i].place_id;
+
+            //call the get PlaceDetails function to make a Place Details query//
+            getPlaceDetails(fdplaceID);
+        }
+    });
+
+}
+
+//get place details function//
+
+function getPlaceDetails(placeID) {
+
+    //define query URL for ajax call to Google Places API for Place Details search//
+    var placesDetailsQueryURL = "https://cors-anywhere.herokuapp.com/https://maps.googleapis.com/maps/api/place/details/json?" + 
+    "&place_id=" + placeID + "&key=AIzaSyB2Ys8ExJDWr3CF94ia0_Oyxm8gBM87udY";
+
+    //ajax call to Google Places API for Place Details search//
+    $.ajax({
+    url: placesDetailsQueryURL,
+    method: "GET"
+    }).then(function(response) {
+
+        //variable to store query results//
+        var myPlaceDetailsQuery = response.result;
+        console.log(myPlaceDetailsQuery);
+
+        //variables to store specific data from query results//
+        var fdlaceLat = myPlaceDetailsQuery.geometry.location.lat;
+        var fdlaceLng = myPlaceDetailsQuery.geometry.location.lng;
+        var fdplaceName = myPlaceDetailsQuery.name;
+        var fdplaceRating = myPlaceDetailsQuery.rating;
+        var fdplacePrice = myPlaceDetailsQuery.price_level;
+        var fdplacePhone = myPlaceDetailsQuery.formatted_phone_number;
+        var fdplaceReviews = myPlaceDetailsQuery.reviews;
+        var fdplacePhotos = myPlaceDetailsQuery.photos;
+        var fdplaceAddress = myPlaceDetailsQuery.vicinity;
+        var website = myPlaceDetailsQuery.website;
+
+        var priceLevel;
+
+        //convert price level to $ symbols//
+        if (fdplacePrice == 1) {
+            priceLevel = "$";
+        } else if (fdplacePrice == 2) {
+            priceLevel = "$$";
+        } else if (fdplacePrice == 3) {
+            priceLevel = "$$$";
+        } else if (fdplacePrice == 4) {
+            priceLevel = "$$$$";
+        } else if (fdplacePrice == 5) {
+            priceLevel = "$$$$$";
+        }
+
+        //create object to store specific data from query results//
+        placeDetailsObject = {
+            name: fdplaceName,
+            rating: fdplaceRating,
+            address: fdplaceAddress,
+            price: priceLevel,
+            place: placeID,
+            lat: fdlaceLat,
+            lng: fdlaceLng,
+            phone: fdplacePhone,
+            reviews: fdplaceReviews,
+            photos: fdplacePhotos,
+            website: website
+        };
+
+        //push object to placeDetails array//
+        placeDetails.push(placeDetailsObject);
+
+        //check to see if results of all 20 AJAX calls have been pushed to array//
+        if(placeDetails.length == 20) {
+
+            //call function to display Places//
+            displayPlaces();
+        } 
+    });
+}
+
+//end get place details function//
+
+//display places function//       
+
+function displayPlaces() {
+
+    //Creating the Google Places Panel//
     var allPlacesPanel = $("<div>").attr("class", "panel panel-default").append($("<div>").attr("class", "panel-heading").attr("id", "places-title").text("Select an Resturant!"));
     var placesPanelBody = $("<div>").attr("class", "panel-body").attr("id","places-output");
     allPlacesPanel.append(placesPanelBody);
 
-    var lat = parseFloat(venueLatitude);
-    var lng = parseFloat(venueLongitude);
+    console.log(placeDetails);
 
-    var foodDrinkQueryURL = "https://cors-anywhere.herokuapp.com/https://maps.googleapis.com/maps/api/place/nearbysearch/json?" + 
-    "location=" + lat + "," + lng + "&radius=500&type=restaurant&key=AIzaSyB2Ys8ExJDWr3CF94ia0_Oyxm8gBM87udY";
-    
-    var foodDrinkID = [];
-    var myFoodDrinkQuery;
+    //loop through each of the place objects in the placeDetails array//
+    for(var i = 0; i < placeDetails.length; i++ ) {
 
-    $.when(
+        //storing search data object to localStorage//
+        var placesLocalStorageKey = "placesSearchResult" + placesLocalStorageCount;
+        localStorage.setItem(placesLocalStorageKey, JSON.stringify(placeDetails[i]));
 
-        $.ajax({
-            url: foodDrinkQueryURL,
-            method: "GET"
-        }).then(function(response) {
-    
-            myFoodDrinkQuery = response.results;
-            console.log(myFoodDrinkQuery);
+        placesLocalStorageCount++;
+
+        var well = $("<div>").attr("class", "well well-lg places-well").attr("data-places-num", i).attr("id", placesLocalStorageKey);
+
+        //creating div w/ place name//
+        var placeTitleDiv = $("<div>").attr("id", placeDetails[i].name);
+        placeTitleDiv.append("<h3>" + placeDetails[i].name + "</h3>");
+
+        //dreating div w/ place info//
+        var placeInfoDiv = $("<div id='placeInfo'" + i + "><span id='rating'>Rating: " + placeDetails[i].rating + "</span><span class='reviews' data-places-reviewNum='" + i +"'>&nbsp;&nbsp;&nbsp;&nbsp;Reviews: (5)</span><span>&nbsp;&nbsp;&nbsp;&nbsp;Price: " + 
+        placeDetails[i].price + "</span></div>");
+
+        //creating div w/ place address//
+        var placeAddressDiv = $("<div><span>" + placeDetails[i].address + "</span><div>");
+
+        //creating div w/ place phone number//
+        var placePhoneDiv = $("<div><span>" + placeDetails[i].phone + "</span><div>");
+
+        //creating div w/ place website//
+        var placeWebsiteDiv = $("<div><a href='" + placeDetails[i].website + "' target='_blank'>" + placeDetails[i].website + "</a><div>");
+
+        //appending place info to place title div//
+        placeTitleDiv.append(placeInfoDiv);
+
+        //appending place address div to place title div//
+        placeTitleDiv.append(placeAddressDiv);
+
+        //appending place address div to place title div//
+        placeTitleDiv.append(placePhoneDiv);
+
+        //appending place address div to place title div//
+        placeTitleDiv.append(placeWebsiteDiv);
+
+        //appending all that to well//
+        well.append(placeTitleDiv);
+
+        selectedPlacesVal = i;
+        placesPanelBody.append(well);
+        allPlacesPanel.append(placesPanelBody);
         
-            for (i=0; i<myFoodDrinkQuery.length; i++) {
-                var  fdplaceID = myFoodDrinkQuery[i].place_id;
-                var fdlaceLat = myFoodDrinkQuery[i].geometry.location.lat;
-                var fdlaceLng = myFoodDrinkQuery[i].geometry.location.lng;
-                var fdplaceName = myFoodDrinkQuery[i].name;
-                var fdplaceRating = myFoodDrinkQuery[i].rating;
-                var fdplacePrice = myFoodDrinkQuery[i].price_level;
-                var fdplaceAddress = myFoodDrinkQuery[i].vicinity;
-
-                var priceLevel;
-
-                if (fdplacePrice == 1) {
-                    priceLevel = "$";
-                } else if (fdplacePrice == 2) {
-                    priceLevel = "$$";
-                } else if (fdplacePrice == 3) {
-                    priceLevel = "$$$";
-                } else if (fdplacePrice == 4) {
-                    priceLevel = "$$$$";
-                } else if (fdplacePrice == 5) {
-                    priceLevel = "$$$$$";
-                }
-
-                foodDrinkID[i] = {
-                    name: fdplaceName,
-                    rating: fdplaceRating,
-                    address: fdplaceAddress,
-                    price: priceLevel,
-                    place: fdplaceID,
-                    lat: fdlaceLat,
-                    lng: fdlaceLng
-                };
-            }
-        }),
-
-
-    ).then(function() {
-
-        var places = foodDrinkID;
-        console.log(places);
-       
-        // initMap(places);
-
-        var placesLength = 20;
-        for(var i = 0; i < placesLength; i++ ) {
-
-            //storing search data object to localStorage//
-            var placesLocalStorageKey = "placesSearchResult" + placesLocalStorageCount;
-            localStorage.setItem(placesLocalStorageKey, JSON.stringify(places[i]));
-
-            placesLocalStorageCount++;
-
-            var well = $("<div>").attr("class", "well well-lg places-well").attr("data-places-num", i).attr("id", placesLocalStorageKey);
-
-            //creating div w/ place name//
-            var placeTitleDiv = $("<div>").attr("id", places.name);
-            placeTitleDiv.append("<h3>" + places[i].name + "</h3>");
-
-            //dreating div w/ placee info//
-            var placeInfoDiv = $("<div><span id='rating'>Rating: " + places[i].rating + "</span><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Price: " + 
-            places[i].price + "</span></div>");
-
-            //creating div w/ place address//
-            var placeAddressDiv = $("<div><span>" + places[i].address + "</span><div>");
-
-            //appending place info to place title div//
-            placeTitleDiv.append(placeInfoDiv);
-
-            //appending place address div to place title div//
-            placeTitleDiv.append(placeAddressDiv);
-
-            //appending all that to well//
-            well.append(placeTitleDiv);
-
-            selectedPlacesVal = i;
-            placesPanelBody.append(well);
-            allPlacesPanel.append(placesPanelBody);
-            
-        }
-        $("#places-div").html(allPlacesPanel);
-
-    });
+    }
+    $("#places-div").html(allPlacesPanel);
 }
+//end display places function//
+
+$(document).on("click", ".reviews", function(){
+
+    $("#placeReviewsDiv").remove();
+
+    var placeNum = $(this).attr("data-places-reviewNum");
+    
+    //creating div w/ place reviews//
+    var placeReviewsDiv = $("<div id='placeReviews'><div>");
+
+    for (i=0; i<5; i++ ) {
+
+        var reviewerImage = placeDetails[placeNum].reviews[i].profile_photo_url;
+        var reviewText = placeDetails[placeNum].reviews[i].text; 
+
+        //creating tag w/ reviewer image//
+        var placeReviewerImg = $("<img id='placeReviewerImg' src='" + reviewerImage + "' alt='Reviewer Image'>");
+
+        //append reviewer image to place reviews div
+        $(placeReviewsDiv).append(placeReviewerImg);
+
+        //creating tag w/ individual review//
+        var placeReviewP = $("<p>" + reviewText + "</p>");
+
+        //append reviewer image to place reviews div
+        $(placeReviewsDiv).append(placeReviewP);
+
+        //append reviewer image to place reviews div
+        $("#placeInfoDiv" + placeNum).append(placeReviewsDiv);
+
+    }
+});
