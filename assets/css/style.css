@@ -136,3 +136,7 @@ input:not([type]):focus:not([readonly]), input[type="text"]:not(.browser-default
     box-shadow: inset 0px 0px 40px 40px #000e26;
     border-top: 3px solid #532ca2;
 }
+
+#rating {
+    color: red;
+}
