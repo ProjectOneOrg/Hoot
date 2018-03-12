@@ -1,13 +1,81 @@
-.page-header{
-    text-align:center;
+body {
+    background-color: black;
+    color:white;
 }
 
-.carousel-inner{
-    text-align:center;
+h1 {
+    color:#fff;
+    font-size: 18px;
+    margin: 0 0 15px;
+    font-family: 'Poiret One', cursive;
+    text-transform: uppercase;
+}
+
+#search-panel .btn {
+    font-size: 20px;
+    background-color: #532ca2;
+    height:46px;
+    padding:0 2.5rem;
+    text-align: center;
+    margin: -20px auto 10px;
+}
+
+#search-panel .btn:hover {
+    background-color: #6927ad;
+}
+
+#search-panel {
+    border-top: 3px solid #532ca2;
+    border-bottom: 3px solid #532ca2;
+    background-color: black;
+    padding:25px 0;
+    color:white;
+}
+
+#search-panel {
+    box-shadow: inset 0px 0px 40px 40px #000e26;
+}
+
+#search-panel h3 {
+    margin:0 0 12px;
+    color:#49C6FD;
+    text-align: center;
+    font-size: 30px;
+}
+
+#search-panel label {
+    font-size: 17px;
+    font-weight: 400;
+    color:#646464;
+    margin: 0;
+}
+
+#search-panel input {
+    background:white;
+    color:#333;
+    font-size: 18px;
+    padding-left:20px;
+    border-radius: 3px;
+    width:95%;
+    height:2.7rem;
+    border:0;
+}
+
+::-ms-input-placeholder, ::placeholder {
+    color:red;
+}
+
+input:not([type]):focus:not([readonly]), input[type="text"]:not(.browser-default):focus:not([readonly]), input[type="password"]:not(.browser-default):focus:not([readonly]), input[type="email"]:not(.browser-default):focus:not([readonly]), input[type="url"]:not(.browser-default):focus:not([readonly]), input[type="time"]:not(.browser-default):focus:not([readonly]), input[type="date"]:not(.browser-default):focus:not([readonly]), input[type="datetime"]:not(.browser-default):focus:not([readonly]), input[type="datetime-local"]:not(.browser-default):focus:not([readonly]), input[type="tel"]:not(.browser-default):focus:not([readonly]), input[type="number"]:not(.browser-default):focus:not([readonly]), input[type="search"]:not(.browser-default):focus:not([readonly]), textarea.materialize-textarea:focus:not([readonly]) {
+    border-bottom: 3px solid #532ca2;
+    -webkit-box-shadow: 0 3px 0 0 #532ca2;
+    box-shadow: 0 3px 0 0 #532ca2;
+}
+
+.logo {
+    width: 650px;
     display: block;
-    margin-left: auto;
-    margin-right: auto;
-    width: 90%;
+    margin: -30px auto 0;
+    padding:10px;
 }
 
 .first-input{
@@ -16,11 +84,57 @@
     
 }
 
-.input-group-addon {
-    min-width:100px;// if you want width please write here //
-    text-align:left;
-    margin-top:10px;
-    margin-bottom:10px;
+.page-header{
+    background: url('../images/header-app-hoot.svg');
+    background-position: center 25%;
+    background-repeat: no-repeat;
+    background-size: 105%;
+}
+
+.tagline {
+    margin-top: -80px;
+    margin-right:-250px;
+    width:70%;
+    z-index:-1;
+}
+
+.tagline:after {
+    clear:both;
+    content:'';
+}
+
+#main {
+    box-shadow: inset 0px 0px 100px 60px black;
+    padding:25px 0;
+    background-image: url('../images/6284.jpg');
+    background-attachment: fixed;
+    background-size: 100% auto;
+    background-repeat: no-repeat;
+    background-position: center bottom;
+}
+
+.carousel {
+    margin-top: -12%;
+    z-index:-1;
+}
+
+.picker__date-display {
+    background-color: #49C6FD;
+}
+
+.picker__close, .picker__today, .picker__clear {
+    color:#532ca2;
+}
+
+.picker--opened .picker__holder {
+    background: rgba(0,0,0,0.6);
+}
+
+.page-footer {
+    background-color: black;
+    padding:5px 0;
+    box-shadow: inset 0px 0px 40px 40px #000e26;
+    border-top: 3px solid #532ca2;
 }
 
 #rating {

@@ -18,7 +18,7 @@ var eventsLength = 5;
 $(document).ready(function(){
 
     //DatePicker functionality
-    var date_input=$('input[name="date"]'); //our date input has the name "date"
+    /* var date_input=$('input[name="date"]'); //our date input has the name "date"
     var container=$('.bootstrap-iso form').length>0 ? $('.bootstrap-iso form').parent() : "body";
     var options={
       format: 'mm/dd/yyyy',
@@ -26,7 +26,7 @@ $(document).ready(function(){
       todayHighlight: true,
       autoclose: true,
     };
-    date_input.datepicker(options);
+    date_input.datepicker(options);*/
 
     var selectedEventVal;
     var selectedPlacesVal;
