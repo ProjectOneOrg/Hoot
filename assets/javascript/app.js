@@ -76,6 +76,9 @@ $(document).ready(function(){
         .then(data => {
             console.log(data);
             for(var i = 0; i < eventsLength; i++) {
+                // if (data.events.event[i].all_day == 2) {
+
+                // } else if (data.events.event[i].all_day !== 2) {
 
                 //getting values from the API for our use//
                title = data.events.event[i].title;
@@ -136,7 +139,9 @@ $(document).ready(function(){
                 eventsDiv.append(eventPanelBody);
                 //eventPanelBody.append(well);
                 //allEventPanel.append(eventPanelBody);
+                // };
             }
+
 
 
         $("#events-div").html(eventsDiv);
@@ -173,7 +178,7 @@ $(document).ready(function(){
             var convertedEventEndDate = "All Day";
         } else if (isAllDay == 2) {
             var convertedEventDate = "No Time Specified";
-            var convertedEventEndDate = "This is a reoccuring event";
+            var convertedEventEndDate = "This is a Reoccurring Event";
         } else {
             var eventDate = recalSearch.eventStart;
             var eventEnd = recalSearch.eventStop;
@@ -194,7 +199,7 @@ $(document).ready(function(){
         selectedEventInfo.append("<h5>" + recalSearch.venueName + ", " + recalSearch.venueLocation + ", " + recalSearch.venueCity + ", " + recalSearch.venueZip + "<br>" + convertedEventDate + " - " + convertedEventEndDate + "</h5>");
         //creating a button that will take a user to the event url//
         // var eventUrlBtn = $("<a href='" + recalSearch.eventUrl + "' class='btn btn-info' target='_blank'>Take Me There!</a>");
-        var eventUrlBtn = $('<a class="waves-effect waves-light btn">Take Me There!</a>')
+        var eventUrlBtn = $('<a href="' + recalSearch.eventUrl + '"class="waves-effect waves-light btn" target="_blank">Take Me There!</a>')
         //A fix Michael worked up to keep the selected event on the page//
         eventUrlBtn.on('click', function(ev) {
             ev.stopPropagation();
