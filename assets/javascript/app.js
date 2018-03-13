@@ -294,6 +294,7 @@ function getPlacesData() {
             place: fdplaceID,
             lat: fdplaceLat,
             lng: fdplaceLng,
+            address: fdplaceAddress
         };
 
         //push object to placeDetails array//
