@@ -174,7 +174,7 @@ $(document).ready(function(){
         //A fix Michael worked up to keep the selected event on the page//
         eventUrlBtn.on('click', function(ev) {
             ev.stopPropagation();
-        })
+        });
         //appending the button to the selected event div//
         selectedEventInfo.append(eventUrlBtn);
         var selectedEvent = $("<div>").attr("class", "well well-lg event-well");
@@ -252,6 +252,7 @@ function getPlacesData() {
         url: foodDrinkQueryURL,
         method: "GET"
     }).then(function(response) {
+        console.log(response);
 
         //variable to store query results//
         var myFoodDrinkQuery = response.results;
