@@ -28,6 +28,8 @@ var venueZip;
 var eventUrl;
 var eventStart;
 var eventDescription;
+var venueLatitude;
+var venueLongitude; 
 
 $("#submit-btn").on("click", function(event) {
 	event.preventDefault();
@@ -50,7 +52,8 @@ $("#submit-btn").on("click", function(event) {
 
 	//"fetch" is a method David recommended to me.  No idea how it works, but it seems to.  And running an AJAX call was giving me fits
 	//I'm leaving the AJAX stuff commented out for now.
-	fetch('https://cors-anywhere.herokuapp.com/http://api.eventful.com/json/events/search?app_key=hqWvGHfDvqhZ62Bm&q=music&l=' + place + '&within=' + milesOf + '&units=miles&page_size=' + pageSize)
+	fetch('https://cors-anywhere.herokuapp.com/http://api.eventful.com/json/events/search?app_key=hqWvGHfDvqhZ62Bm&q=music&l=' + place + 
+		'&within=' + milesOf + '&units=miles&page_size=' + pageSize + '&t=' + dateRange)
 		.then(response => response.json())
 		.then(data => {
 			// Here's a list of repos!
