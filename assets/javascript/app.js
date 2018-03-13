@@ -188,7 +188,7 @@ $(document).ready(function(){
     })
 
 //    When a google places well is clicked
-    $("#places-div").on("click", ".places-well", function(){
+    $("#places-div").on("click", ".places-item", function(){
         event.preventDefault();
         //Empty out the events div
         selectedPlacesVal = $(this).attr("data-places-num");
@@ -239,9 +239,6 @@ function getPlacesData() {
 
     var lat = parseFloat(venueLatitude);
     var lng = parseFloat(venueLongitude);
-
-    // var lat = 35.993248;
-    // var lng = -78.9021923;
 
     //define query URL for ajax call to Google Places API//
     var foodDrinkQueryURL = "https://cors-anywhere.herokuapp.com/https://maps.googleapis.com/maps/api/place/nearbysearch/json?" + 
@@ -301,13 +298,7 @@ function getPlacesData() {
         foodDrinkPlaceData.push(foodDrinkDataObject);
         }
 
-        //check to see if foodDrinkDataObjects for all 20 places have been pushed to array//
-        // if(foodDrinkDataObject.length == 20) {
-
-        //     //call function to display Places//
-        //     displayPlaces(foodDrinkPlaceData);
-        // } 
-
+        //call function to display Places//
         displayPlaces(foodDrinkPlaceData);
 
 
