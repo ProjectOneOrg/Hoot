@@ -203,7 +203,7 @@ $(document).ready(function(){
         //A fix Michael worked up to keep the selected event on the page//
         eventUrlBtn.on('click', function(ev) {
             ev.stopPropagation();
-        })
+        });
         //appending the button to the selected event div//
         selectedEventInfo.append(eventUrlBtn);
         var selectedEvent = $("<div>").attr("class", "well well-lg event-well");
@@ -217,7 +217,7 @@ $(document).ready(function(){
     })
 
 //    When a google places well is clicked
-    $("#places-div").on("click", ".places-well", function(){
+    $("#places-div").on("click", ".places-item", function(){
         event.preventDefault();
         //Empty out the events div
         selectedPlacesVal = $(this).attr("data-places-num");
@@ -268,9 +268,6 @@ function getPlacesData() {
     var lat = parseFloat(venueLatitude);
     var lng = parseFloat(venueLongitude);
 
-    // var lat = 35.993248;
-    // var lng = -78.9021923;
-
     //define query URL for ajax call to Google Places API//
     var foodDrinkQueryURL = "https://cors-anywhere.herokuapp.com/https://maps.googleapis.com/maps/api/place/nearbysearch/json?" + 
     "location=" + lat + "," + lng + "&radius=500&type=restaurant&key=AIzaSyB2Ys8ExJDWr3CF94ia0_Oyxm8gBM87udY";
@@ -283,6 +280,7 @@ function getPlacesData() {
         url: foodDrinkQueryURL,
         method: "GET"
     }).then(function(response) {
+        console.log(response);
 
         //variable to store query results//
         var myFoodDrinkQuery = response.results;
@@ -322,19 +320,14 @@ function getPlacesData() {
             place: fdplaceID,
             lat: fdplaceLat,
             lng: fdplaceLng,
+            address: fdplaceAddress
         };
 
         //push object to placeDetails array//
         foodDrinkPlaceData.push(foodDrinkDataObject);
         }
 
-        //check to see if foodDrinkDataObjects for all 20 places have been pushed to array//
-        // if(foodDrinkDataObject.length == 20) {
-
-        //     //call function to display Places//
-        //     displayPlaces(foodDrinkPlaceData);
-        // } 
-
+        //call function to display Places//
         displayPlaces(foodDrinkPlaceData);
 
 

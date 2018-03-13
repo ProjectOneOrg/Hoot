@@ -145,10 +145,10 @@ input:not([type]):focus:not([readonly]), input[type="text"]:not(.browser-default
     color: red;
 }
 
-.event-item {
+.event-item, .places-item {
     color:black;
 }
 
-#events-header{
+#events-header, #places-header{
     color:black;
 }
