@@ -74,8 +74,11 @@ input:not([type]):focus:not([readonly]), input[type="text"]:not(.browser-default
 .logo {
     width: 650px;
     display: block;
-    margin: -30px auto 0;
-    padding:10px;
+    margin: auto;
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: -20px;
 }
 
 .first-input{
@@ -89,6 +92,7 @@ input:not([type]):focus:not([readonly]), input[type="text"]:not(.browser-default
     background-position: center 25%;
     background-repeat: no-repeat;
     background-size: 105%;
+    padding-bottom:15%;
 }
 
 .tagline {
