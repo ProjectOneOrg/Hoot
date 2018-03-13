@@ -67,7 +67,7 @@ $(document).ready(function(){
         //allEventPanel.append(eventPanelBody);
 
         var eventfulUrl = 'https://cors-anywhere.herokuapp.com/http://api.eventful.com/json/events/search?app_key=hqWvGHfDvqhZ62Bm&q=music&l=' + place + 
-        '&within=' + radius + '&units=miles&page_size=' + eventsLength + '&t=' + dateRange + '00-2018123100&sort_order=date';
+        '&within=' + radius + '&units=miles&page_size=' + eventsLength + '&t=' + dateRange + '00-2018123100&sort_order=date&sort_direction=ascending&change_multi_start_date';
         console.log(eventfulUrl);
 
         //The Eventful API call//
@@ -89,6 +89,7 @@ $(document).ready(function(){
                eventStart = data.events.event[i].start_time;
                eventStop = data.events.event[i].stop_time;
                eventDescription = data.events.event[i].description;
+               eventAllDay = data.events.event[i].all_day;
                console.log(eventStart);
 
                 //setting data to an object for localStorage//
@@ -103,9 +104,8 @@ $(document).ready(function(){
                     "eventUrl": eventUrl,
                     "eventStart": eventStart,
                     "eventStop": eventStop,
-                    "eventDescription": eventDescription
-
-
+                    "eventDescription": eventDescription,
+                    "eventAllDay": eventAllDay
                 };
 
                 //storing search data object to localStorage//
@@ -166,13 +166,26 @@ $(document).ready(function(){
         var recalSearch = JSON.parse(selectedResult);
         console.log(recalSearch);
 
-        var eventDate = recalSearch.eventStart;
-        var eventEnd = recalSearch.eventStop;
-        var eventFormat = "YYYY-MM-DD, HH:mm:ss"
-        var convertedEvent = moment(eventDate, eventFormat);
-        var convertedEventEnd = moment(eventEnd, eventFormat);
-        var convertedEventDate = moment(convertedEvent).format('MMMM Do YYYY, h:mm a');
-        var convertedEventEndDate = moment(convertedEventEnd).format('MMMM Do YYYY, h:mm a');
+        var isAllDay = recalSearch.eventAllDay;
+
+        if (isAllDay == 1) {
+            var convertedEventDate = "All Day";
+            var convertedEventEndDate = "All Day";
+        } else if (isAllDay == 2) {
+            var convertedEventDate = "No Time Specified";
+            var convertedEventEndDate = "This is a reoccuring event";
+        } else {
+            var eventDate = recalSearch.eventStart;
+            var eventEnd = recalSearch.eventStop;
+            var eventFormat = "YYYY-MM-DD, HH:mm:ss"
+            var convertedEvent = moment(eventDate, eventFormat);
+            var convertedEventEnd = moment(eventEnd, eventFormat);
+            var convertedEventDate = moment(convertedEvent).format('MMMM Do YYYY, h:mm a');
+            var convertedEventEndDate = moment(convertedEventEnd).format('MMMM Do YYYY, h:mm a');
+        }
+
+        console.log(convertedEventDate);
+        console.log(convertedEventEndDate);
 
         var selectedEventInfo = $("<div>");
         //appending the title retrieved from localStorage//
