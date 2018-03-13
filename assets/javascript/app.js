@@ -46,7 +46,8 @@ $(document).ready(function(){
         var radius = $("#miles").val().trim();
         //gets date value//
         var date = $("#dates").val().trim();
-        var dateFormat = "MM/DD/YYYY"
+        console.log(date);
+        var dateFormat = "DD MMMM YYYY"
         var convertedDate = moment(date, dateFormat);
         var dateRange = moment(convertedDate).format("YYYYMMDD");
         console.log(dateRange);
@@ -62,7 +63,7 @@ $(document).ready(function(){
         allEventPanel.append(eventPanelBody);
 
         var eventfulUrl = 'https://cors-anywhere.herokuapp.com/http://api.eventful.com/json/events/search?app_key=hqWvGHfDvqhZ62Bm&q=music&l=' + place + 
-        '&within=' + radius + '&units=miles&page_size=' + eventsLength + '&t=' + dateRange + '00-2018123100';
+        '&within=' + radius + '&units=miles&page_size=' + eventsLength + '&t=' + dateRange + '00-2018123100&sort_order=date';
         console.log(eventfulUrl);
 
         //The Eventful API call//
@@ -82,7 +83,9 @@ $(document).ready(function(){
                venueLongitude = data.events.event[i].longitude;
                eventUrl = data.events.event[i].url;
                eventStart = data.events.event[i].start_time;
+               eventStop = data.events.event[i].stop_time;
                eventDescription = data.events.event[i].description;
+               console.log(eventStart);
 
                 //setting data to an object for localStorage//
                 var searchResult = {
@@ -95,6 +98,7 @@ $(document).ready(function(){
                     "venueLongitude": venueLongitude,
                     "eventUrl": eventUrl,
                     "eventStart": eventStart,
+                    "eventStop": eventStop,
                     "eventDescription": eventDescription
 
 
@@ -148,15 +152,18 @@ $(document).ready(function(){
         console.log(recalSearch);
 
         var eventDate = recalSearch.eventStart;
+        var eventEnd = recalSearch.eventStop;
         var eventFormat = "YYYY-MM-DD, HH:mm:ss"
         var convertedEvent = moment(eventDate, eventFormat);
-        var convertedEventDate = moment(convertedEvent).format('MMMM Do YYYY, h:mm:ss a');
+        var convertedEventEnd = moment(eventEnd, eventFormat);
+        var convertedEventDate = moment(convertedEvent).format('MMMM Do YYYY, h:mm a');
+        var convertedEventEndDate = moment(convertedEventEnd).format('MMMM Do YYYY, h:mm a');
 
         var selectedEventInfo = $("<div>");
         //appending the title retrieved from localStorage//
         selectedEventInfo.append("<h3>" + recalSearch.title + "</h3>");
         //appending the venue & event info//
-        selectedEventInfo.append("<h5>" + recalSearch.venueName + ", " + recalSearch.venueLocation + ", " + recalSearch.venueCity + ", " + recalSearch.venueZip + ", " + convertedEventDate + "</h5>");
+        selectedEventInfo.append("<h5>" + recalSearch.venueName + ", " + recalSearch.venueLocation + ", " + recalSearch.venueCity + ", " + recalSearch.venueZip + "<br>" + convertedEventDate + " - " + convertedEventEndDate + "</h5>");
         //creating a button that will take a user to the event url//
         var eventUrlBtn = $("<a href='" + recalSearch.eventUrl + "' class='btn btn-info' target='_blank'>Take Me There!</a>");
         //A fix Michael worked up to keep the selected event on the page//
