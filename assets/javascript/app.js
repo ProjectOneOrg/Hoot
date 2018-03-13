@@ -145,7 +145,7 @@ $(document).ready(function(){
 
     //When an event well is clicked...
     $("#events-div").on("click", ".event-item", function(ev){
-        ev.preventDefault();
+        event.preventDefault();
         console.log('hello')
         //Empty out the events div
         selectedEventVal = $(this).attr("data-event-num");
@@ -295,8 +295,8 @@ function getPlacesData() {
             rating: fdplaceRating,
             price: priceLevel,
             place: fdplaceID,
-            lat: fdlaceLat,
-            lng: fdlaceLng,
+            lat: fdplaceLat,
+            lng: fdplaceLng,
         };
 
         //push object to placeDetails array//
@@ -384,7 +384,7 @@ function displayPlaces(placeData) {
 
         placesLocalStorageCount++;
 
-        var placeListItem = $("<div>").attr("class", "collection-item places-item").attr("data-places-num", i).attr("id", placesLocalStorageKey);
+        var placeListItem = $("<li>").attr("class", "collection-item places-item").attr("data-places-num", i).attr("id", placesLocalStorageKey);
 
         //creating div w/ place name//
         var placeTitleDiv = $("<div>").attr("id", placeData[i].name);
