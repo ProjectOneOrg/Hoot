@@ -58,9 +58,13 @@ $(document).ready(function(){
             eventsLength = 5;
         }
 
-        var allEventPanel = $("<div>").attr("class", "panel panel-default").append($("<div>").attr("class", "panel-heading").attr("id", "events-title").text("Select an Event!"));
-        var eventPanelBody = $("<div>").attr("class", "panel-body").attr("id","event-output");
-        allEventPanel.append(eventPanelBody);
+        //Dont Need
+        //var allEventPanel = $("<div>").attr("class", "panel panel-default").append($("<div>").attr("class", "panel-heading").attr("id", "events-title").text("Select an Event!"));
+        var eventsDiv = $("<ul class = 'collection with-header'>")
+        var eventsHeader = $("<li class='collection-header' id='events-header'>").html("<h4>Pick an Event</h4>");
+        eventsDiv.append(eventsHeader);
+        //var eventPanelBody = $("<div>").attr("class", "panel-body").attr("id","event-output");
+        //allEventPanel.append(eventPanelBody);
 
         var eventfulUrl = 'https://cors-anywhere.herokuapp.com/http://api.eventful.com/json/events/search?app_key=hqWvGHfDvqhZ62Bm&q=music&l=' + place + 
         '&within=' + radius + '&units=miles&page_size=' + eventsLength + '&t=' + dateRange + '00-2018123100&sort_order=date';
@@ -108,8 +112,7 @@ $(document).ready(function(){
                 var localStorageKey = "searchResult" + localStorageCount;
                 localStorage.setItem(localStorageKey, JSON.stringify(searchResult));
 
-
-                var well = $("<div>").attr("class", "well well-lg event-well").attr("data-event-num", i).attr("id", localStorageKey);
+                var eventListItem = $("<li>").attr("class", "collection-item event-item").attr("data-event-num", i).attr("id", localStorageKey);
 
                 localStorageCount++;
                 //creating div w/ event title//
@@ -123,21 +126,23 @@ $(document).ready(function(){
                 //appending venue name to event title divs//
                 eventTitleDiv.append(venueTitleDiv);
                 //appending all that to well//
-                well.append(eventTitleDiv);
+                eventListItem.append(eventTitleDiv);
 
                 selectedEventVal = i;
                 // well.text("Event #" + i);
-                eventPanelBody.append(well);
-                allEventPanel.append(eventPanelBody);
+                
+                eventsDiv.append(eventListItem);
+                //eventPanelBody.append(well);
+                //allEventPanel.append(eventPanelBody);
             }
 
 
-        $("#events-div").html(allEventPanel);
+        $("#events-div").html(eventsDiv);
         });
     })
 
     //When an event well is clicked...
-    $("#events-div").on("click", ".event-well", function(ev){
+    $("#events-div").on("click", ".event-item", function(ev){
         ev.preventDefault();
         console.log('hello')
         //Empty out the events div
@@ -296,11 +301,14 @@ function getPlacesData() {
         }
 
         //check to see if foodDrinkDataObjects for all 20 places have been pushed to array//
-        if(foodDrinkDataObject.length == 20) {
+        // if(foodDrinkDataObject.length == 20) {
 
-            //call function to display Places//
-            displayPlaces(foodDrinkPlaceData);
-        } 
+        //     //call function to display Places//
+        //     displayPlaces(foodDrinkPlaceData);
+        // } 
+
+        displayPlaces(foodDrinkPlaceData);
+
 
     });
 
@@ -354,9 +362,13 @@ function getPlaceDetails(placeID) {
 function displayPlaces(placeData) {
 
     //Creating the Google Places Panel//
-    var allPlacesPanel = $("<div>").attr("class", "panel panel-default").append($("<div>").attr("class", "panel-heading").attr("id", "places-title").text("Select an Resturant!"));
-    var placesPanelBody = $("<div>").attr("class", "panel-body").attr("id","places-output");
-    allPlacesPanel.append(placesPanelBody);
+    //var allPlacesPanel = $("<div>").attr("class", "panel panel-default").append($("<div>").attr("class", "panel-heading").attr("id", "places-title").text("Select an Resturant!"));
+    //var placesPanelBody = $("<div>").attr("class", "panel-body").attr("id","places-output");
+    //allPlacesPanel.append(placesPanelBody);
+
+    var placesDiv = $("<ul class = 'collection with-header'>")
+    var placesHeader = $("<li class='collection-header' id='places-header'>").html("<h4>Pick a Restaurant</h4>");
+    placesDiv.append(placesHeader);
 
     console.log(placeData);
 
@@ -369,7 +381,7 @@ function displayPlaces(placeData) {
 
         placesLocalStorageCount++;
 
-        var well = $("<div>").attr("class", "well well-lg places-well").attr("data-places-num", i).attr("id", placesLocalStorageKey);
+        var placeListItem = $("<div>").attr("class", "collection-item places-item").attr("data-places-num", i).attr("id", placesLocalStorageKey);
 
         //creating div w/ place name//
         var placeTitleDiv = $("<div>").attr("id", placeData[i].name);
@@ -389,13 +401,16 @@ function displayPlaces(placeData) {
         placeTitleDiv.append(placeAddressDiv);
 
         //appending all that to well//
-        well.append(placeTitleDiv);
+        placeListItem.append(placeTitleDiv);
 
         selectedPlacesVal = i;
-        placesPanelBody.append(well);
-        allPlacesPanel.append(placesPanelBody);
+        placesDiv.append(placeListItem);
+
+        
+        //placesPanelBody.append(well);
+        //allPlacesPanel.append(placesPanelBody);
         
     }
-    $("#places-div").html(allPlacesPanel);
+    $("#places-div").html(placesDiv);
 }
 //end display places function//
