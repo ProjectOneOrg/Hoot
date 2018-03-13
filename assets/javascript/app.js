@@ -130,8 +130,10 @@ $(document).ready(function(){
 
                 selectedEventVal = i;
                 // well.text("Event #" + i);
-                
-                eventsDiv.append(eventListItem);
+                var eventPanelBody = $("<div>").attr("class", "panel-body").attr("id","event-output");
+                eventPanelBody.append(eventListItem);
+
+                eventsDiv.append(eventPanelBody);
                 //eventPanelBody.append(well);
                 //allEventPanel.append(eventPanelBody);
             }
@@ -148,7 +150,7 @@ $(document).ready(function(){
         //Empty out the events div
         selectedEventVal = $(this).attr("data-event-num");
         $("#event-output").empty();
-        $("#events-title").text("The event you are attending");
+        $("#events-header").text("The event you are attending");
 
         //getting the localStorage key specific for the clicked item//
         var selectedResult = localStorage.getItem($(this).attr("id"));
@@ -170,7 +172,8 @@ $(document).ready(function(){
         //appending the venue & event info//
         selectedEventInfo.append("<h5>" + recalSearch.venueName + ", " + recalSearch.venueLocation + ", " + recalSearch.venueCity + ", " + recalSearch.venueZip + "<br>" + convertedEventDate + " - " + convertedEventEndDate + "</h5>");
         //creating a button that will take a user to the event url//
-        var eventUrlBtn = $("<a href='" + recalSearch.eventUrl + "' class='btn btn-info' target='_blank'>Take Me There!</a>");
+        // var eventUrlBtn = $("<a href='" + recalSearch.eventUrl + "' class='btn btn-info' target='_blank'>Take Me There!</a>");
+        var eventUrlBtn = $('<a class="waves-effect waves-light btn">Take Me There!</a>')
         //A fix Michael worked up to keep the selected event on the page//
         eventUrlBtn.on('click', function(ev) {
             ev.stopPropagation();
