@@ -149,6 +149,14 @@ $(document).ready(function(){
         console.log('hello')
         //Empty out the events div
         selectedEventVal = $(this).attr("data-event-num");
+
+        var eventsDiv = $("#events-div");
+        eventsDiv.empty();
+        //$("#events-title").text("The event you are attending");
+
+        //eventsDiv = $("<ul class = 'collection with-header'>");
+        //var eventsHeader = $("<li class='collection-header' id='events-header'>").html("<h4>The event you are attending</h4>");
+        //eventsDiv.append(eventsHeader);
         $("#event-output").empty();
         $("#events-header").text("The event you are attending");
 
@@ -184,7 +192,7 @@ $(document).ready(function(){
         //appending all the event info to the appropriate part of the page//
         selectedEvent.append(selectedEventInfo);
 
-        $("#event-output").append(selectedEvent);
+        $("#events-div").append(selectedEvent);
 
         getPlacesData();
         
@@ -195,7 +203,6 @@ $(document).ready(function(){
         event.preventDefault();
         //Empty out the events div
         selectedPlacesVal = $(this).attr("data-places-num");
-        $("#places-output").empty();
         $("#places-title").text("After the event you are going to");
 
         //getting the localStorage key specific for the clicked item//
