@@ -140,3 +140,11 @@ input:not([type]):focus:not([readonly]), input[type="text"]:not(.browser-default
 #rating {
     color: red;
 }
+
+.event-item {
+    color:black;
+}
+
+#events-header{
+    color:black;
+}

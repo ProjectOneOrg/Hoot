@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Night-Out!</title>
+    <link href="https://fonts.googleapis.com/css?family=Poiret+One" rel="stylesheet"> 
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css">
+    <link rel="stylesheet" type="text/css" href="assets/css/style.css">
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>
+
+</head>
+<body>
+
+<div class="section page-header center">
+ <div class="logo"><img src="assets/images/hoot-logo.svg"></div>
+ <h1>Plan Your Night!</h1>
+</div>
+
+<div class="carousel carousel-slider center" data-indicators="true" data-ride="carousel">
+  <div class="carousel-item white-text" href="#one!">
+     <img src="assets/images/carousel-slide-1.jpg" alt="Slide 1">
+  </div>
+  <div class="carousel-item white-text" href="#one!">
+     <img src="assets/images/carousel-slide-2.jpg" alt="Slide 1">
+  </div>
+   <div class="carousel-item white-text" href="#one!">
+     <img src="assets/images/carousel-slide-3.jpg" alt="Slide 1">
+  </div>
+</div>
+
+<div id="search-panel">
+  <div class="container">
+   <h3>Let's Get Started</h3>
+    <div class="row">
+      <div class="col s3">
+        <label class="input-group-addon" id="basic-addon1">Location</label>
+        <input type="text" class="form-control" placeholder="City or Zip Code" aria-describedby="basic-addon1" id="location">
+      </div>
+      <div class="col s3">
+          <label class="input-group-addon" id="basic-addon1">Radius</label>
+          <input type="text" class="form-control" placeholder="in miles" aria-describedby="basic-addon1" id="miles">
+      </div>
+      <div class="col s3">
+        <form method="post" class="input-group">
+            <label class="input-group-addon" id="basic-addon1">Date</label>
+            <div class="form-group">
+              <input type="date" class="form-control datepicker" id="dates" name="date" placeholder="MM/DD/YYY">
+            </div>
+        </form>
+      </div>
+      <div class="col s3">
+          <label class="input-group-addon" id="basic-addon1">Items to Display</label>
+          <input type="text" class="form-control" placeholder="1 - 10" aria-describedby="basic-addon1" id="pageSize">
+      </div> 
+    </div>
+    <div class="btn-group center" role="group" aria-label="...">
+      <button type="button" class="btn btn-default" id="submit-btn">Search for Events!</button>
+    </div> 
+  </div>
+</div>
+
+<div id="main">
+  <div class="container">
+    <div class="row">
+    </div>
+    <!-- Events will be appended to this div -->
+    <div class="row">
+      <div id="events-div"></div>
+    </div>
+    <div class="row">
+      <div id="places-div"></div>
+    </div>
+    <div class="row">
+      <div id="map-output"></div>
+    </div>
+  </div>
+</div>
+
+<script src="assets/javascript/app.js"></script>
+    <script>
+  $('.carousel.carousel-slider').carousel({fullWidth: true});
+  autoplay()   
+  function autoplay() {
+    $('.carousel').carousel('next');
+    setTimeout(autoplay, 6000);
+}
+$('.datepicker').pickadate({
+    selectMonths: true, // Creates a dropdown to control month
+    selectYears: 15 // Creates a dropdown of 15 years to control year
+  });
+</script>
+</body>
+</html>
