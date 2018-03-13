@@ -292,8 +292,8 @@ function getPlacesData() {
             rating: fdplaceRating,
             price: priceLevel,
             place: fdplaceID,
-            lat: fdlaceLat,
-            lng: fdlaceLng,
+            lat: fdplaceLat,
+            lng: fdplaceLng,
         };
 
         //push object to placeDetails array//
