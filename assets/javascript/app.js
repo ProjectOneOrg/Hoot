@@ -38,14 +38,19 @@ $(document).ready(function(){
     //When the submit button is clicked with search parameters
     $("#submit-btn").on("click", function() {
         event.preventDefault();
-
+        localStorage.clear();
+        
         var location = $("#location").val().trim();
         var place = location.replace(new RegExp(" ", "g"), '+');
         //gets area within location value//
         var radius = $("#miles").val().trim();
         //gets date value//
         var date = $("#dates").val().trim();
-        var dateRange = date.replace(new RegExp("/", "g"), "+");
+        var dateFormat = "MM/DD/YYYY"
+        var convertedDate = moment(date, dateFormat);
+        var dateRange = moment(convertedDate).format("YYYYMMDD");
+        console.log(dateRange);
+
         //gets number of results desired//
         eventsLength = $("#pageSize").val().trim();
         if(eventsLength === "") {
@@ -56,12 +61,15 @@ $(document).ready(function(){
         var eventPanelBody = $("<div>").attr("class", "panel-body").attr("id","event-output");
         allEventPanel.append(eventPanelBody);
 
+        var eventfulUrl = 'https://cors-anywhere.herokuapp.com/http://api.eventful.com/json/events/search?app_key=hqWvGHfDvqhZ62Bm&q=music&l=' + place + 
+        '&within=' + radius + '&units=miles&page_size=' + eventsLength + '&t=' + dateRange + '00-2018123100';
+        console.log(eventfulUrl);
+
         //The Eventful API call//
-        fetch('https://cors-anywhere.herokuapp.com/http://api.eventful.com/json/events/search?app_key=hqWvGHfDvqhZ62Bm&q=music&l=' + place + 
-        '&within=' + radius + '&units=miles&page_size=' + eventsLength + '&t=' + dateRange)
+        fetch(eventfulUrl)
         .then(response => response.json())
         .then(data => {
-
+            console.log(data);
             for(var i = 0; i < eventsLength; i++) {
 
                 //getting values from the API for our use//
@@ -125,8 +133,9 @@ $(document).ready(function(){
     })
 
     //When an event well is clicked...
-    $("#events-div").on("click", ".event-well", function(){
-        event.preventDefault();
+    $("#events-div").on("click", ".event-well", function(ev){
+        ev.preventDefault();
+        console.log('hello')
         //Empty out the events div
         selectedEventVal = $(this).attr("data-event-num");
         $("#event-output").empty();
@@ -136,12 +145,28 @@ $(document).ready(function(){
         var selectedResult = localStorage.getItem($(this).attr("id"));
         //turning it back into a JSON object
         var recalSearch = JSON.parse(selectedResult);
+        console.log(recalSearch);
+
+        var eventDate = recalSearch.eventStart;
+        var eventFormat = "YYYY-MM-DD, HH:mm:ss"
+        var convertedEvent = moment(eventDate, eventFormat);
+        var convertedEventDate = moment(convertedEvent).format('MMMM Do YYYY, h:mm:ss a');
 
         var selectedEventInfo = $("<div>");
         //appending the title retrieved from localStorage//
         selectedEventInfo.append("<h3>" + recalSearch.title + "</h3>");
-        selectedEventInfo.append("<h5>" + recalSearch.venueName + ", " + recalSearch.venueLocation + ", " + recalSearch.venueCity + ", " + recalSearch.venueZip + "</h5>");
+        //appending the venue & event info//
+        selectedEventInfo.append("<h5>" + recalSearch.venueName + ", " + recalSearch.venueLocation + ", " + recalSearch.venueCity + ", " + recalSearch.venueZip + ", " + convertedEventDate + "</h5>");
+        //creating a button that will take a user to the event url//
+        var eventUrlBtn = $("<a href='" + recalSearch.eventUrl + "' class='btn btn-info' target='_blank'>Take Me There!</a>");
+        //A fix Michael worked up to keep the selected event on the page//
+        eventUrlBtn.on('click', function(ev) {
+            ev.stopPropagation();
+        })
+        //appending the button to the selected event div//
+        selectedEventInfo.append(eventUrlBtn);
         var selectedEvent = $("<div>").attr("class", "well well-lg event-well");
+        //appending all the event info to the appropriate part of the page//
         selectedEvent.append(selectedEventInfo);
 
         $("#event-output").append(selectedEvent);
