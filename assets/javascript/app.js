@@ -13,9 +13,13 @@ var venueLatitude
 var venueLongitude
 var eventUrl
 var eventStart
+var eventsDiv = $("#events-div");
 var eventDescription
 
-var eventsLength = 5;
+
+var eventsLength = 10;
+var pageNumber = 0;
+var eventsList = [];
 
 $(document).ready(function(){
 
@@ -39,6 +43,7 @@ $(document).ready(function(){
     //When the submit button is clicked with search parameters
     $("#submit-btn").on("click", function() {
         event.preventDefault();
+        var localStorageCount = 0;
         localStorage.clear();
         
         var location = $("#location").val().trim();
@@ -56,41 +61,40 @@ $(document).ready(function(){
         //gets number of results desired//
         eventsLength = $("#pageSize").val().trim();
         if(eventsLength === "") {
-            eventsLength = 5;
+            eventsLength = 10;
         }
 
         //Dont Need
         //var allEventPanel = $("<div>").attr("class", "panel panel-default").append($("<div>").attr("class", "panel-heading").attr("id", "events-title").text("Select an Event!"));
-        var eventsDiv = $("<ul class = 'collection with-header'>")
-        var eventsHeader = $("<li class='collection-header' id='events-header'>").html("<h4>Pick an Event</h4>");
-        eventsDiv.append(eventsHeader);
+        // var eventsDiv = $("<ul class = 'collection with-header'>")
+        // var eventsHeader = $("<li class='collection-header' id='events-header'>").html("<h4>Pick an Event</h4>");
+        // eventsDiv.append(eventsHeader);
         //var eventPanelBody = $("<div>").attr("class", "panel-body").attr("id","event-output");
         //allEventPanel.append(eventPanelBody);
 
-        var eventfulUrl = 'https://cors-anywhere.herokuapp.com/http://api.eventful.com/json/events/search?app_key=hqWvGHfDvqhZ62Bm&q=music&l=' + place + 
-        '&within=' + radius + '&units=miles&page_size=' + eventsLength + '&t=' + dateRange + '00-2018123100&sort_order=date';
-        // console.log(eventfulUrl);
-
+        fetchEvents(place, radius, dateRange);
+    });
         //The Eventful API call//
-        fetch(eventfulUrl)
-        .then(response => response.json())
-        .then(data => {
-            // console.log(data);
-            for(var i = 0; i < eventsLength; i++) {
+        function printEvents() {
+            for (var i = 0; i < eventsList.length; i++){
+
+
+               
 
                 //getting values from the API for our use//
-               title = data.events.event[i].title;
-               venueName = data.events.event[i].venue_name;
-               venueLocation = data.events.event[i].venue_address;
-               venueCity = data.events.event[i].city_name;
-               venueZip = data.events.event[i].postal_code;
-               venueLatitude = data.events.event[i].latitude;
-               venueLongitude = data.events.event[i].longitude;
-               eventUrl = data.events.event[i].url;
-               eventStart = data.events.event[i].start_time;
-               eventStop = data.events.event[i].stop_time;
-               eventDescription = data.events.event[i].description;
-               // console.log(eventStart);
+               title = eventsList[i].title;
+               venueName = eventsList[i].venue_name;
+               venueLocation = eventsList[i].venue_address;
+               venueCity = eventsList[i].city_name;
+               venueZip = eventsList[i].postal_code;
+               venueLatitude = eventsList[i].latitude;
+               venueLongitude = eventsList[i].longitude;
+               eventUrl = eventsList[i].url;
+               eventStart = eventsList[i].start_time;
+               eventStop = eventsList[i].stop_time;
+               eventDescription = eventsList[i].description;
+               eventAllDay = eventsList[i].all_day;
+
 
                 //setting data to an object for localStorage//
                 var searchResult = {
@@ -132,15 +136,47 @@ $(document).ready(function(){
                 selectedEventVal = i;
                 // well.text("Event #" + i);
                 
+              
                 eventsDiv.append(eventListItem);
                 //eventPanelBody.append(well);
                 //allEventPanel.append(eventPanelBody);
+
+
+                } 
+
+
             }
 
+            // if (eventsDiv.is(":empty"))
+ 
 
-        $("#events-div").html(eventsDiv);
-        });
-    })
+        
+function fetchEvents(place, radius, dateRange) {
+        var eventfulUrl = 'https://cors-anywhere.herokuapp.com/http://api.eventful.com/json/events/search?app_key=hqWvGHfDvqhZ62Bm&q=music&l=' + place + 
+        '&within=' + radius + '&units=miles&page_size=' + eventsLength + '&page_number=' + pageNumber + '&t=' + dateRange + '00-2018123100&sort_order=date&sort_direction=ascending&change_multi_day_start=true';
+        console.log(eventfulUrl);
+
+        fetch(eventfulUrl)
+        .then(response => response.json())
+        .then(data => {
+            for(var i = 0; i < data.events.event.length; i++) {
+                if ((data.events.event[i]["all_day"] !== "2") && (eventsList.length != parseInt(eventsLength))) { 
+                    eventsList.push(data.events.event[i]);
+                }
+                if (eventsList.length == eventsLength) {
+                    printEvents();
+                    break;
+                }
+        }
+               if (eventsList.length < eventsLength){
+                pageNumber++;
+                fetchEvents(place, radius, dateRange);
+
+            }
+    });
+         
+    }
+
 
     //When an event well is clicked...
     $("#events-div").on("click", ".event-item", function(ev){
@@ -171,7 +207,9 @@ $(document).ready(function(){
         //appending the venue & event info//
         selectedEventInfo.append("<h5>" + recalSearch.venueName + ", " + recalSearch.venueLocation + ", " + recalSearch.venueCity + ", " + recalSearch.venueZip + "<br>" + convertedEventDate + " - " + convertedEventEndDate + "</h5>");
         //creating a button that will take a user to the event url//
-        var eventUrlBtn = $("<a href='" + recalSearch.eventUrl + "' class='btn btn-info' target='_blank'>Take Me There!</a>");
+        // var eventUrlBtn = $("<a href='" + recalSearch.eventUrl + "' class='btn btn-info' target='_blank'>Take Me There!</a>");
+        var eventUrlBtn = $('<a href="' + recalSearch.eventUrl + '"class="waves-effect waves-light btn" id="takeMe" target="_blank">Take Me There!</a>')
+
         //A fix Michael worked up to keep the selected event on the page//
         eventUrlBtn.on('click', function(ev) {
             ev.stopPropagation();

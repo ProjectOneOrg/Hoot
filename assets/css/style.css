@@ -24,6 +24,20 @@ h1 {
     background-color: #6927ad;
 }
 
+#events-div .btn {
+    font-size: 20px;
+    background-color: #532ca2;
+    height:46px;
+    padding:0 2.5rem;
+    padding-top: 0.4rem;
+    text-align: center;
+/*    margin: -20px auto 10px;
+*/}
+
+#events-div .btn:hover {
+    background-color: #6927ad;
+}
+
 #search-panel {
     border-top: 3px solid #532ca2;
     border-bottom: 3px solid #532ca2;
