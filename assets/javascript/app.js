@@ -65,12 +65,12 @@ $(document).ready(function(){
         }
 
         //Dont Need
-        //var allEventPanel = $("<div>").attr("class", "panel panel-default").append($("<div>").attr("class", "panel-heading").attr("id", "events-title").text("Select an Event!"));
-        // var eventsDiv = $("<ul class = 'collection with-header'>")
-        // var eventsHeader = $("<li class='collection-header' id='events-header'>").html("<h4>Pick an Event</h4>");
-        // eventsDiv.append(eventsHeader);
-        //var eventPanelBody = $("<div>").attr("class", "panel-body").attr("id","event-output");
-        //allEventPanel.append(eventPanelBody);
+        var addedEventsDiv = $("<ul class = 'collection with-header'>")
+        var eventsHeader = $("<li class='collection-header' id='events-header'>").html("<h4>Pick an Event</h4>");
+        addedEventsDiv.append(eventsHeader);
+        var eventPanelBody = $("<div>").attr("class", "panel-body").attr("id","event-output");
+        addedEventsDiv.append(eventPanelBody);
+        eventsDiv.append(addedEventsDiv);
 
         fetchEvents(place, radius, dateRange);
     });
@@ -184,6 +184,7 @@ function fetchEvents(place, radius, dateRange) {
         // console.log('hello')
         //Empty out the events div
         selectedEventVal = $(this).attr("data-event-num");
+        console.log(selectedEventVal);
         $("#event-output").empty();
         $("#events-title").text("The event you are attending");
 
