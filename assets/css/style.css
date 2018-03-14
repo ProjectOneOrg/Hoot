@@ -11,6 +11,13 @@ h1 {
     text-transform: uppercase;
 }
 
+h3 {
+    margin:0 0 12px;
+    color:#49C6FD;
+    text-align: center;
+    font-size: 30px;
+}
+
 #search-panel .btn {
     font-size: 20px;
     background-color: #532ca2;
@@ -48,13 +55,6 @@ h1 {
 
 #search-panel {
     box-shadow: inset 0px 0px 40px 40px #000e26;
-}
-
-#search-panel h3 {
-    margin:0 0 12px;
-    color:#49C6FD;
-    text-align: center;
-    font-size: 30px;
 }
 
 #search-panel label {
@@ -148,13 +148,6 @@ input:not([type]):focus:not([readonly]), input[type="text"]:not(.browser-default
     background: rgba(0,0,0,0.6);
 }
 
-.page-footer {
-    background-color: black;
-    padding:5px 0;
-    box-shadow: inset 0px 0px 40px 40px #000e26;
-    border-top: 3px solid #532ca2;
-}
-
 #rating {
     color: red;
 }
@@ -175,4 +168,41 @@ input:not([type]):focus:not([readonly]), input[type="text"]:not(.browser-default
     text-decoration: underline;
     text-align: right;
     color: black;
+}
+
+/* Footer Styles */
+
+.page-footer {
+    background-color: black;
+    box-shadow: inset 0px 0px 40px 40px #000e26;
+    border-top: 3px solid #532ca2;
+}
+
+.page-footer img {
+    border-radius: 3px;
+    width:100%;
+}
+
+.purple-text {
+    color:#532ca2 !important;
+    font-size: 12px;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    margin-top: -15px;
+}
+
+.about-text {
+    font-size: 21px;
+    color:orange;
+}
+
+.footer-copyright {
+    border-top: 3px solid #532ca2;
+    padding:10px 0;
+    margin-top: 45px;
+}
+
+.page-footer h3 {
+    margin-bottom: 35px;
 }
