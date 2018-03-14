@@ -12,9 +12,13 @@ var venueLatitude
 var venueLongitude
 var eventUrl
 var eventStart
+var eventsDiv = $("#events-div");
 var eventDescription
 
-var eventsLength = 5;
+
+var eventsLength = 10;
+var pageNumber = 0;
+var eventsList = [];
 
 $(document).ready(function(){
 
@@ -38,6 +42,7 @@ $(document).ready(function(){
     //When the submit button is clicked with search parameters
     $("#submit-btn").on("click", function() {
         event.preventDefault();
+        var localStorageCount = 0;
         localStorage.clear();
         
         var location = $("#location").val().trim();
@@ -55,7 +60,7 @@ $(document).ready(function(){
         //gets number of results desired//
         eventsLength = $("#pageSize").val().trim();
         if(eventsLength === "") {
-            eventsLength = 5;
+            eventsLength = 10;
         }
 
         //Dont Need
@@ -66,34 +71,28 @@ $(document).ready(function(){
         //var eventPanelBody = $("<div>").attr("class", "panel-body").attr("id","event-output");
         //allEventPanel.append(eventPanelBody);
 
-        var eventfulUrl = 'https://cors-anywhere.herokuapp.com/http://api.eventful.com/json/events/search?app_key=hqWvGHfDvqhZ62Bm&q=music&l=' + place + 
-        '&within=' + radius + '&units=miles&page_size=' + eventsLength + '&t=' + dateRange + '00-2018123100&sort_order=date&sort_direction=ascending&change_multi_start_date';
-        console.log(eventfulUrl);
-
+        fetchEvents(place, radius, dateRange);
+    });
         //The Eventful API call//
-        fetch(eventfulUrl)
-        .then(response => response.json())
-        .then(data => {
-            console.log(data);
-            for(var i = 0; i < eventsLength; i++) {
-                // if (data.events.event[i].all_day == 2) {
+        function printEvents() {
+            for (var i = 0; i < eventsList.length; i++){
 
-                // } else if (data.events.event[i].all_day !== 2) {
+
+               
 
                 //getting values from the API for our use//
-               title = data.events.event[i].title;
-               venueName = data.events.event[i].venue_name;
-               venueLocation = data.events.event[i].venue_address;
-               venueCity = data.events.event[i].city_name;
-               venueZip = data.events.event[i].postal_code;
-               venueLatitude = data.events.event[i].latitude;
-               venueLongitude = data.events.event[i].longitude;
-               eventUrl = data.events.event[i].url;
-               eventStart = data.events.event[i].start_time;
-               eventStop = data.events.event[i].stop_time;
-               eventDescription = data.events.event[i].description;
-               eventAllDay = data.events.event[i].all_day;
-               console.log(eventStart);
+               title = eventsList[i].title;
+               venueName = eventsList[i].venue_name;
+               venueLocation = eventsList[i].venue_address;
+               venueCity = eventsList[i].city_name;
+               venueZip = eventsList[i].postal_code;
+               venueLatitude = eventsList[i].latitude;
+               venueLongitude = eventsList[i].longitude;
+               eventUrl = eventsList[i].url;
+               eventStart = eventsList[i].start_time;
+               eventStop = eventsList[i].stop_time;
+               eventDescription = eventsList[i].description;
+               eventAllDay = eventsList[i].all_day;
 
                 //setting data to an object for localStorage//
                 var searchResult = {
@@ -139,14 +138,39 @@ $(document).ready(function(){
                 eventsDiv.append(eventPanelBody);
                 //eventPanelBody.append(well);
                 //allEventPanel.append(eventPanelBody);
-                // };
+
+                } 
             }
 
+            // if (eventsDiv.is(":empty"))
+ 
 
+        
+function fetchEvents(place, radius, dateRange) {
+        var eventfulUrl = 'https://cors-anywhere.herokuapp.com/http://api.eventful.com/json/events/search?app_key=hqWvGHfDvqhZ62Bm&q=music&l=' + place + 
+        '&within=' + radius + '&units=miles&page_size=' + eventsLength + '&page_number=' + pageNumber + '&t=' + dateRange + '00-2018123100&sort_order=date&sort_direction=ascending&change_multi_day_start=true';
+        console.log(eventfulUrl);
 
-        $("#events-div").html(eventsDiv);
-        });
-    })
+        fetch(eventfulUrl)
+        .then(response => response.json())
+        .then(data => {
+            for(var i = 0; i < data.events.event.length; i++) {
+                if ((data.events.event[i]["all_day"] !== "2") && (eventsList.length != parseInt(eventsLength))) { 
+                    eventsList.push(data.events.event[i]);
+                }
+                if (eventsList.length == eventsLength) {
+                    printEvents();
+                    break;
+                }
+        }
+               if (eventsList.length < eventsLength){
+                pageNumber++;
+                fetchEvents(place, radius, dateRange);
+
+            }
+    });
+         
+    }
 
     //When an event well is clicked...
     $("#events-div").on("click", ".event-item", function(ev){
