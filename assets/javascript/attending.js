@@ -9,23 +9,25 @@ var config = {
 firebase.initializeApp(config);
 var database = firebase.database();
 
-database.ref().on("child_added", function(childSnapshot) {
-    var userName = childSnapshot.val().attendeeName;
-    
-})
-
-
+var outputDiv = $("#database-output");
 
 $("#submit-btn").on("click", function() {
     event.preventDefault();
     var attendeeName = $("#attendee-name").val().trim();
-    var attedeeEmail =$("#attendee-email").val().trim();
     var eventId = $("#event-id").val().trim();
-    
-    database.ref().push({
-        attendeeName: attendeeName,
-        attedeeEmail:attedeeEmail,
-        eventId:eventId
-    })
+
+    database.ref().once("value")
+      .then(function(snapshot) {
+        var a = snapshot.child(eventId).exists();  
+        if(!a){
+            database.ref("/"+ eventId).push({
+                attendeeName: attendeeName
+            })
+        }
+      });
+
+    // outputDiv.empty();
+  
+    // var ref = firebase.database().ref(eventId);
 
 })
