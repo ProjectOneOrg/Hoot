@@ -15,11 +15,24 @@ var eventUrl
 var eventStart
 var eventsDiv = $("#events-div");
 var eventDescription
+var eventfulID;
 
 
 var eventsLength = 10;
 var pageNumber = 0;
 var eventsList = [];
+
+
+var config = {
+    apiKey: "AIzaSyCwWK4FLeujPsmc4L5KHURfhgRAWVhKvsE",
+    authDomain: "night-out-197223.firebaseapp.com",
+    databaseURL: "https://night-out-197223.firebaseio.com",
+    projectId: "night-out-197223",
+    storageBucket: "night-out-197223.appspot.com",
+    messagingSenderId: "357306478807"
+  }
+firebase.initializeApp(config);
+var database = firebase.database();
 
 $(document).ready(function(){
 
@@ -100,7 +113,8 @@ $(document).ready(function(){
                eventStop = eventsList[i].stop_time;
                eventDescription = eventsList[i].description;
                eventAllDay = eventsList[i].all_day;
-
+               eventfulID = eventsList[i].id;
+               console.log(eventfulID);
 
                 //setting data to an object for localStorage//
                 var searchResult = {
@@ -114,15 +128,18 @@ $(document).ready(function(){
                     "eventUrl": eventUrl,
                     "eventStart": eventStart,
                     "eventStop": eventStop,
-                    "eventDescription": eventDescription
+                    "eventDescription": eventDescription,
+                    "eventfulID": eventfulID
 
 
                 };
 
+
+
                 //storing search data object to localStorage//
                 var localStorageKey = "searchResult" + localStorageCount;
                 localStorage.setItem(localStorageKey, JSON.stringify(searchResult));
-
+                
                 var eventListItem = $("<li>").attr("class", "collection-item event-item").attr("data-event-num", i).attr("id", localStorageKey);
 
                 localStorageCount++;
@@ -149,8 +166,6 @@ $(document).ready(function(){
 
 
                 } 
-
-
             }
 
             // if (eventsDiv.is(":empty"))
@@ -192,7 +207,7 @@ function fetchEvents(place, radius, dateRange) {
         selectedEventVal = $(this).attr("data-event-num");
         console.log(selectedEventVal);
         $("#event-output").empty();
-        $("#events-title").text("The event you are attending");
+        $("#events-header").text("The event you are attending");
 
         //getting the localStorage key specific for the clicked item//
         var selectedResult = localStorage.getItem($(this).attr("id"));
@@ -209,6 +224,20 @@ function fetchEvents(place, radius, dateRange) {
         var convertedEventEndDate = moment(convertedEventEnd).format('MMMM Do YYYY, h:mm a');
         venueLatitude = recalSearch.venueLatitude;
         venueLongitude = recalSearch.venueLongitude;
+        eventfulID = recalSearch.eventfulID;
+
+        database.ref().once("value")
+        .then(function(snapshot) {
+          var a = snapshot.child(eventfulID).exists();
+          console.log(eventfulID);
+          if(!a){
+            console.log("O attending");
+          } else {
+              console.log(snapshot.child(eventfulID).numChildren());
+          }
+        });
+
+
 
         var selectedEventInfo = $("<div>");
         //appending the title retrieved from localStorage//
@@ -218,13 +247,40 @@ function fetchEvents(place, radius, dateRange) {
         //creating a button that will take a user to the event url//
         // var eventUrlBtn = $("<a href='" + recalSearch.eventUrl + "' class='btn btn-info' target='_blank'>Take Me There!</a>");
         var eventUrlBtn = $('<a href="' + recalSearch.eventUrl + '"class="waves-effect waves-light btn" id="takeMe" target="_blank">Take Me There!</a>')
+        var eventAttendingBtn = $('<button class="waves-effect waves-light btn" id="attending-btn" data-eventful-id="'+recalSearch.eventfulID + '" target="_blank">Attending</button>');
 
         //A fix Michael worked up to keep the selected event on the page//
         eventUrlBtn.on('click', function(ev) {
             ev.stopPropagation();
         });
+
+
+        var nameSubmitDiv;
+        $(document).on("click", "#attending-btn", function() {
+            var buttonId = $(this).attr("data-eventful-id");
+            console.log(buttonId);
+
+            var nameForm = $("<input>").attr("id", "attendee-name").attr("type", "text").attr("placeholder", "Name");
+            var nameSubmitBtn = $("<button>").attr("class", "waves-effect waves-light btn").attr("id", "name-submit-btn").text("Submit");
+            nameSubmitDiv = $("<div>").append(nameForm).append(nameSubmitBtn);
+            selectedEventInfo.append(nameSubmitDiv);
+
+            console.log("Attending Bttn Clicked");
+        })
+
+        $(document).on("click", "#name-submit-btn", function() {
+            var attendName = $("#attendee-name").val().trim();
+            database.ref("/"+ eventfulID).push({
+                attendeeName:attendName
+            })  
+            nameSubmitDiv.empty();
+        })
+
+
+
         //appending the button to the selected event div//
         selectedEventInfo.append(eventUrlBtn);
+        selectedEventInfo.append(eventAttendingBtn);
         var selectedEvent = $("<div>").attr("class", "well well-lg event-well");
         //appending all the event info to the appropriate part of the page//
         selectedEvent.append(selectedEventInfo);
