@@ -496,6 +496,7 @@ $(document).on("click", ".placeDirections", function() {
 
 function displayMap(placeId) {
     var mapOutput = $("#map-output");
+    mapOutput.empty();
     var apiKey = "AIzaSyDolYU_CqdXxvNhxq04-ZjcxoiwhV6RiBg";
     var start = venueLatitude + "," + venueLongitude;
     var directionsURL = "https://www.google.com/maps/embed/v1/directions?key=" + apiKey + "&origin=" + start + "&destination=place_id:" + placeId + "&avoid=tolls|highways";
