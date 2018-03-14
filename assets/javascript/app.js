@@ -65,9 +65,9 @@ $(document).ready(function(){
 
         //Dont Need
         //var allEventPanel = $("<div>").attr("class", "panel panel-default").append($("<div>").attr("class", "panel-heading").attr("id", "events-title").text("Select an Event!"));
-        var eventsDiv = $("<ul class = 'collection with-header'>")
-        var eventsHeader = $("<li class='collection-header' id='events-header'>").html("<h4>Pick an Event</h4>");
-        eventsDiv.append(eventsHeader);
+        // var eventsDiv = $("<ul class = 'collection with-header'>")
+        // var eventsHeader = $("<li class='collection-header' id='events-header'>").html("<h4>Pick an Event</h4>");
+        // eventsDiv.append(eventsHeader);
         //var eventPanelBody = $("<div>").attr("class", "panel-body").attr("id","event-output");
         //allEventPanel.append(eventPanelBody);
 
@@ -223,7 +223,7 @@ function fetchEvents(place, radius, dateRange) {
         selectedEventInfo.append("<h5>" + recalSearch.venueName + ", " + recalSearch.venueLocation + ", " + recalSearch.venueCity + ", " + recalSearch.venueZip + "<br>" + convertedEventDate + " - " + convertedEventEndDate + "</h5>");
         //creating a button that will take a user to the event url//
         // var eventUrlBtn = $("<a href='" + recalSearch.eventUrl + "' class='btn btn-info' target='_blank'>Take Me There!</a>");
-        var eventUrlBtn = $('<a href="' + recalSearch.eventUrl + '"class="waves-effect waves-light btn" target="_blank">Take Me There!</a>')
+        var eventUrlBtn = $('<a href="' + recalSearch.eventUrl + '"class="waves-effect waves-light btn" id="takeMe" target="_blank">Take Me There!</a>')
         //A fix Michael worked up to keep the selected event on the page//
         eventUrlBtn.on('click', function(ev) {
             ev.stopPropagation();
