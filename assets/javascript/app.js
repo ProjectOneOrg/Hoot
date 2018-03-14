@@ -65,17 +65,23 @@ $(document).ready(function(){
         }
 
         //Dont Need
+        // var addedEventsDiv = $("<ul class = 'collection with-header'>")
+        // var eventsHeader = $("<li class='collection-header' id='events-header'>").html("<h4>Pick an Event</h4>");
+        // addedEventsDiv.append(eventsHeader);
+        // var eventPanelBody = $("<div>").attr("class", "panel-body").attr("id","event-output");
+        // addedEventsDiv.append(eventPanelBody);
+        // eventsDiv.append(addedEventsDiv);
+
+        fetchEvents(place, radius, dateRange);
+    });
+        //The Eventful API call//
+        function printEvents() {
         var addedEventsDiv = $("<ul class = 'collection with-header'>")
         var eventsHeader = $("<li class='collection-header' id='events-header'>").html("<h4>Pick an Event</h4>");
         addedEventsDiv.append(eventsHeader);
         var eventPanelBody = $("<div>").attr("class", "panel-body").attr("id","event-output");
         addedEventsDiv.append(eventPanelBody);
         eventsDiv.append(addedEventsDiv);
-
-        fetchEvents(place, radius, dateRange);
-    });
-        //The Eventful API call//
-        function printEvents() {
             for (var i = 0; i < eventsList.length; i++){
 
 
@@ -137,7 +143,7 @@ $(document).ready(function(){
                 // well.text("Event #" + i);
                 
               
-                eventsDiv.append(eventListItem);
+                eventPanelBody.append(eventListItem);
                 //eventPanelBody.append(well);
                 //allEventPanel.append(eventPanelBody);
 
