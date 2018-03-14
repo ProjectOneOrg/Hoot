@@ -316,9 +316,28 @@ function getPlacesData() {
             var fdplaceLat = myFoodDrinkQuery[i].geometry.location.lat;
             var fdplaceLng = myFoodDrinkQuery[i].geometry.location.lng;
             var fdplaceName = myFoodDrinkQuery[i].name;
-            var fdplaceRating = myFoodDrinkQuery[i].rating;
-            var fdplacePrice = myFoodDrinkQuery[i].price_level;
             var fdplaceAddress = myFoodDrinkQuery[i].vicinity;
+
+            if (myFoodDrinkQuery[i].photos!=undefined) {
+            var fdplacePhotoReference = myFoodDrinkQuery[i].photos[0].photo_reference;
+            console.log(myFoodDrinkQuery[i].photos[0]);
+            console.log(fdplacePhotoReference);
+            console.log(fdplaceName);
+            } else {
+                fdplacePhotoReference = undefined;
+            }
+
+            if (myFoodDrinkQuery[i].rating!=undefined) {
+                var fdplaceRating = myFoodDrinkQuery[i].rating;
+            } else {
+                fdplaceRating = undefined;
+            }
+
+            if (myFoodDrinkQuery[i].price!=undefined) {
+                var fdplacePrice = myFoodDrinkQuery[i].price_level;
+            } else {
+                fdplacePrice = undefined;
+            }
 
             var priceLevel;
 
@@ -343,7 +362,8 @@ function getPlacesData() {
             place: fdplaceID,
             lat: fdplaceLat,
             lng: fdplaceLng,
-            address: fdplaceAddress
+            address: fdplaceAddress,
+            photo: fdplacePhotoReference
         };
 
         //push object to placeDetails array//
@@ -381,7 +401,6 @@ function getPlaceDetails(placeID) {
         console.log(fdname);
         var fdplacePhone = myPlaceDetailsQuery.formatted_phone_number;
         var fdplaceReviews = myPlaceDetailsQuery.reviews;
-        var fdplacePhotos = myPlaceDetailsQuery.photos;
         var website = myPlaceDetailsQuery.website;
 
         //create object to store specific data from query results//
@@ -389,7 +408,6 @@ function getPlaceDetails(placeID) {
             name: fdname,
             phone: fdplacePhone,
             reviews: fdplaceReviews,
-            photos: fdplacePhotos,
             website: website
         };
         console.log(placeDetailsObject);
@@ -430,9 +448,31 @@ function displayPlaces(placeData) {
         var placeTitleDiv = $("<div>").attr("id", placeData[i].name);
         placeTitleDiv.append("<h3>" + placeData[i].name + "</h3>");
 
+        //creating div w/place photo//
+
+        if (placeData[i].photo!=undefined) {
+        var photoURL = "https://maps.googleapis.com/maps/api/place/photo?maxwidth=200&photoreference=" + placeData[i].photo + 
+        "&key=AIzaSyB2Ys8ExJDWr3CF94ia0_Oyxm8gBM87udY";
+        console.log(photoURL);
+        placeTitleDiv.append("<img src=" + photoURL + " alt='place photo'>"); 
+        console.log(placeTitleDiv);
+        }   
+
+        if (placeData[i].rating == undefined) {
+            var placeRating = "Not Rated";
+        } else {
+            var placeRating = placeData[i].rating;
+        }
+
+        if (placeData[i].price == undefined) {
+            var placePrice = "Not Available";
+        } else {
+            placePrice = placeData[i].price;
+        }
+
         //dreating div w/ place info//
         placeInfoDivId = i.toString();
-        var placeInfoDiv = $("<div id='placeInfo" + placeInfoDivId + "'><span>Rating: " + placeData[i].rating + "</span><span>&nbsp;&nbsp;&nbsp;&nbsp;Price: " + 
+        var placeInfoDiv = $("<div id='placeInfo" + placeInfoDivId + "'><span>Rating: " + placeRating + "</span><span>&nbsp;&nbsp;&nbsp;&nbsp;Price: " + 
         placeData[i].price + "</span></div>");
 
         //creating div w/ place address//
@@ -478,7 +518,7 @@ $(document).on("click", ".placeDetails", function(){
     console.log(selectedPlaceResult);
     var selectedPlaceID = selectedPlaceResult.place;
     $(this).remove();
-    getPlaceDetails(selectedPlaceID);
+    getPlaceDetails(selectedPlaceID, buttonId);
 
 });
 
@@ -506,21 +546,48 @@ function displayMap(placeId) {
     console.log();
 }
 
-function displayDetails(placeDetails) {
+function displayDetails(placeDetails,buttonId) {
 
-        console.log(placeDetails);
+    var placeID = "#" +selectedItem;
 
-        var placePhone = placeDetails.phone;
-        var placePhoneDiv = $("<p>" + placePhone + "</p>");
-        var placeReviews = placeDetails.reviews;
-        var placePhotos = placeDetails.photos;
-        placeWebsiteURL = placeDetails.website;
-        console.log(placeWebsiteURL);
-        var placeWebsiteDiv = $("<a href='" + placeWebsiteURL + "' target='_blank'>" + placeWebsiteURL + "</a>");
-        console.log(placeWebsiteDiv);
-        var placeID = "#" +selectedItem;
-        $(placeID).append (placePhoneDiv);  
-        $(placeID).append (placeWebsiteDiv);  
+    console.log(placeDetails);
+    console.log(buttonId);
 
+    var placePhone = placeDetails.phone;
+    var placePhoneDiv = $("<p id='phone" + buttonId + "'>" + placePhone + "</p>");
 
+    var placeReviews = placeDetails.reviews;
+    var placeReviewsDiv = $("<div id='reviews" + buttonId + "'><h4>Reviews</h4></div>");
+
+    for(i=0; i<placeReviews.length; i++) {
+        var authorProfilePhoto = placeReviews[i].profile_photo_url;
+        console.log(authorProfilePhoto);
+        var reviewText = placeReviews[i].text;
+        var review = $("<p>" + "<img href=" + authorProfilePhoto + " alt='author profile photo'>" + reviewText + "</p>");
+        $(placeReviewsDiv).append(review);  
+    }
+
+    //creating button to click on for place details//
+    var removeDetailsBtn = $("<button type='button' class='btn btn-default removeDetails' id='" + buttonId + "' target='_blank'>Clear Details</button>");
+    
+    var placeWebsiteURL = placeDetails.website;
+
+    var placeWebsiteDiv = $("<a href='" + placeWebsiteURL + "' target='_blank' id='website" + buttonId + "'>" + placeWebsiteURL + "</a>");
+
+    $(placeID).append(placePhoneDiv);  
+    $(placeID).append(placeWebsiteDiv);  
+    $(placeID).append(placeReviewsDiv);
+    $(placeID).append(removeDetailsBtn);
 }
+
+$(document).on("click", ".removeDetails", function(){
+
+    removeId = $(this).attr("id");
+
+    console.log(this);
+
+    $("phone" + removeId).remove();  
+    $("website" + removeId).remove(); 
+    $("reviews" + removeId).remove();
+
+});
