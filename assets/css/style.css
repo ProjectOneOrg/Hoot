@@ -172,7 +172,6 @@ input:not([type]):focus:not([readonly]), input[type="text"]:not(.browser-default
 
 /* Footer Styles */
 
-
 .page-footer {
     background-color: black;
     box-shadow: inset 0px 0px 40px 40px #000e26;
