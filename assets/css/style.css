@@ -148,6 +148,31 @@ input:not([type]):focus:not([readonly]), input[type="text"]:not(.browser-default
     background: rgba(0,0,0,0.6);
 }
 
+#rating {
+    color: red;
+}
+
+.event-item, .places-item {
+    color:black;
+    cursor: pointer;
+}
+
+#events-header, #places-header{
+    color:black;
+}
+
+.placeDetails {
+    background-color: transparent;
+    outline: none;
+    border: none;
+    text-decoration: underline;
+    text-align: right;
+    color: black;
+}
+
+/* Footer Styles */
+
+
 .page-footer {
     background-color: black;
     box-shadow: inset 0px 0px 40px 40px #000e26;
@@ -181,26 +206,4 @@ input:not([type]):focus:not([readonly]), input[type="text"]:not(.browser-default
 
 .page-footer h3 {
     margin-bottom: 35px;
-}
-
-#rating {
-    color: red;
-}
-
-.event-item, .places-item {
-    color:black;
-    cursor: pointer;
-}
-
-#events-header, #places-header{
-    color:black;
-}
-
-.placeDetails {
-    background-color: transparent;
-    outline: none;
-    border: none;
-    text-decoration: underline;
-    text-align: right;
-    color: black;
 }
