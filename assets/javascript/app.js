@@ -433,6 +433,7 @@ function displayPlaces(placeData) {
 
         //creating button to click on for place details//
         var placeDetailsBtn = $("<button type='button' class='btn btn-default placeDetails' id=" + i + " target='_blank'>Get Details!</button>");
+        var placeDirectionsBtn = $("<button type='button' class='btn btn-defualt placeDirections' id=" + i + ">Get Directions</button>");
 
         //appending place info to place title div//
         placeTitleDiv.append(placeInfoDiv);
@@ -442,6 +443,7 @@ function displayPlaces(placeData) {
 
         //appending the place details button to the place title div//
         placeTitleDiv.append(placeDetailsBtn);
+        placeTitleDiv.append(placeDirectionsBtn);
 
         //appending all that to well//
         placeListItem.append(placeTitleDiv);
@@ -472,6 +474,29 @@ $(document).on("click", ".placeDetails", function(){
     getPlaceDetails(selectedPlaceID);
 
 });
+
+$(document).on("click", ".placeDirections", function() {
+    var buttonId = $(this).attr("id");
+    selectedItem = "placesSearchResult" + buttonId;
+
+    var selectedPlaceResult = JSON.parse(localStorage.getItem(selectedItem));
+    var selectedPlaceID = selectedPlaceResult.place;
+    console.log(selectedPlaceID);
+    displayMap(selectedPlaceID);
+
+    
+})
+
+function displayMap(placeId) {
+    var mapOutput = $("#map-output");
+    var apiKey = "AIzaSyDolYU_CqdXxvNhxq04-ZjcxoiwhV6RiBg";
+    var start = venueLocation;
+    var directionsURL = "https://www.google.com/maps/embed/v1/directions?key=" + apiKey + "&origin=" + start + "&destination=place_id:" + placeId + "&avoid=tolls|highways";
+
+    var map = $("<iframe>").attr("width", "900").attr("height", "500").attr("frameborder","0").attr("style", "border:0").attr("src", directionsURL);
+    mapOutput.append(map);
+    console.log();
+}
 
 function displayDetails(placeDetails) {
 
