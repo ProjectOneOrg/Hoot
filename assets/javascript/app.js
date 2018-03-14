@@ -1,4 +1,5 @@
 var placeDetails = [];
+var selectedItem;
 var queryBase = "http://api.eventful.com/json/events/search?app_key=hqWvGHfDvqhZ62Bm&q=music&l=";
 var localStorageCount = 0;
 var placesLocalStorageCount = 0;
@@ -46,11 +47,11 @@ $(document).ready(function(){
         var radius = $("#miles").val().trim();
         //gets date value//
         var date = $("#dates").val().trim();
-        console.log(date);
+        // console.log(date);
         var dateFormat = "DD MMMM YYYY"
         var convertedDate = moment(date, dateFormat);
         var dateRange = moment(convertedDate).format("YYYYMMDD");
-        console.log(dateRange);
+        // console.log(dateRange);
 
         //gets number of results desired//
         eventsLength = $("#pageSize").val().trim();
@@ -67,18 +68,15 @@ $(document).ready(function(){
         //allEventPanel.append(eventPanelBody);
 
         var eventfulUrl = 'https://cors-anywhere.herokuapp.com/http://api.eventful.com/json/events/search?app_key=hqWvGHfDvqhZ62Bm&q=music&l=' + place + 
-        '&within=' + radius + '&units=miles&page_size=' + eventsLength + '&t=' + dateRange + '00-2018123100&sort_order=date&sort_direction=ascending&change_multi_start_date';
-        console.log(eventfulUrl);
+        '&within=' + radius + '&units=miles&page_size=' + eventsLength + '&t=' + dateRange + '00-2018123100&sort_order=date';
+        // console.log(eventfulUrl);
 
         //The Eventful API call//
         fetch(eventfulUrl)
         .then(response => response.json())
         .then(data => {
-            console.log(data);
+            // console.log(data);
             for(var i = 0; i < eventsLength; i++) {
-                // if (data.events.event[i].all_day == 2) {
-
-                // } else if (data.events.event[i].all_day !== 2) {
 
                 //getting values from the API for our use//
                title = data.events.event[i].title;
@@ -92,8 +90,7 @@ $(document).ready(function(){
                eventStart = data.events.event[i].start_time;
                eventStop = data.events.event[i].stop_time;
                eventDescription = data.events.event[i].description;
-               eventAllDay = data.events.event[i].all_day;
-               console.log(eventStart);
+               // console.log(eventStart);
 
                 //setting data to an object for localStorage//
                 var searchResult = {
@@ -107,8 +104,9 @@ $(document).ready(function(){
                     "eventUrl": eventUrl,
                     "eventStart": eventStart,
                     "eventStop": eventStop,
-                    "eventDescription": eventDescription,
-                    "eventAllDay": eventAllDay
+                    "eventDescription": eventDescription
+
+
                 };
 
                 //storing search data object to localStorage//
@@ -133,15 +131,11 @@ $(document).ready(function(){
 
                 selectedEventVal = i;
                 // well.text("Event #" + i);
-                var eventPanelBody = $("<div>").attr("class", "panel-body").attr("id","event-output");
-                eventPanelBody.append(eventListItem);
-
-                eventsDiv.append(eventPanelBody);
+                
+                eventsDiv.append(eventListItem);
                 //eventPanelBody.append(well);
                 //allEventPanel.append(eventPanelBody);
-                // };
             }
-
 
 
         $("#events-div").html(eventsDiv);
@@ -151,46 +145,25 @@ $(document).ready(function(){
     //When an event well is clicked...
     $("#events-div").on("click", ".event-item", function(ev){
         event.preventDefault();
-        console.log('hello')
+        // console.log('hello')
         //Empty out the events div
         selectedEventVal = $(this).attr("data-event-num");
-
-        var eventsDiv = $("#events-div");
-        eventsDiv.empty();
-        //$("#events-title").text("The event you are attending");
-
-        //eventsDiv = $("<ul class = 'collection with-header'>");
-        //var eventsHeader = $("<li class='collection-header' id='events-header'>").html("<h4>The event you are attending</h4>");
-        //eventsDiv.append(eventsHeader);
         $("#event-output").empty();
-        $("#events-header").text("The event you are attending");
+        $("#events-title").text("The event you are attending");
 
         //getting the localStorage key specific for the clicked item//
         var selectedResult = localStorage.getItem($(this).attr("id"));
         //turning it back into a JSON object
         var recalSearch = JSON.parse(selectedResult);
-        console.log(recalSearch);
+        // console.log(recalSearch);
 
-        var isAllDay = recalSearch.eventAllDay;
-
-        if (isAllDay == 1) {
-            var convertedEventDate = "All Day";
-            var convertedEventEndDate = "All Day";
-        } else if (isAllDay == 2) {
-            var convertedEventDate = "No Time Specified";
-            var convertedEventEndDate = "This is a Reoccurring Event";
-        } else {
-            var eventDate = recalSearch.eventStart;
-            var eventEnd = recalSearch.eventStop;
-            var eventFormat = "YYYY-MM-DD, HH:mm:ss"
-            var convertedEvent = moment(eventDate, eventFormat);
-            var convertedEventEnd = moment(eventEnd, eventFormat);
-            var convertedEventDate = moment(convertedEvent).format('MMMM Do YYYY, h:mm a');
-            var convertedEventEndDate = moment(convertedEventEnd).format('MMMM Do YYYY, h:mm a');
-        }
-
-        console.log(convertedEventDate);
-        console.log(convertedEventEndDate);
+        var eventDate = recalSearch.eventStart;
+        var eventEnd = recalSearch.eventStop;
+        var eventFormat = "YYYY-MM-DD, HH:mm:ss"
+        var convertedEvent = moment(eventDate, eventFormat);
+        var convertedEventEnd = moment(eventEnd, eventFormat);
+        var convertedEventDate = moment(convertedEvent).format('MMMM Do YYYY, h:mm a');
+        var convertedEventEndDate = moment(convertedEventEnd).format('MMMM Do YYYY, h:mm a');
 
         var selectedEventInfo = $("<div>");
         //appending the title retrieved from localStorage//
@@ -198,8 +171,7 @@ $(document).ready(function(){
         //appending the venue & event info//
         selectedEventInfo.append("<h5>" + recalSearch.venueName + ", " + recalSearch.venueLocation + ", " + recalSearch.venueCity + ", " + recalSearch.venueZip + "<br>" + convertedEventDate + " - " + convertedEventEndDate + "</h5>");
         //creating a button that will take a user to the event url//
-        // var eventUrlBtn = $("<a href='" + recalSearch.eventUrl + "' class='btn btn-info' target='_blank'>Take Me There!</a>");
-        var eventUrlBtn = $('<a href="' + recalSearch.eventUrl + '"class="waves-effect waves-light btn" target="_blank">Take Me There!</a>')
+        var eventUrlBtn = $("<a href='" + recalSearch.eventUrl + "' class='btn btn-info' target='_blank'>Take Me There!</a>");
         //A fix Michael worked up to keep the selected event on the page//
         eventUrlBtn.on('click', function(ev) {
             ev.stopPropagation();
@@ -210,57 +182,58 @@ $(document).ready(function(){
         //appending all the event info to the appropriate part of the page//
         selectedEvent.append(selectedEventInfo);
 
-        $("#events-div").append(selectedEvent);
+        $("#event-output").append(selectedEvent);
 
         getPlacesData();
         
     })
 
 //    When a google places well is clicked
-    $("#places-div").on("click", ".places-item", function(){
-        event.preventDefault();
-        //Empty out the events div
-        selectedPlacesVal = $(this).attr("data-places-num");
-        $("#places-title").text("After the event you are going to");
+    // $("#places-div").on("click", ".places-item", function(){
+    //     event.preventDefault();
+    //     //Empty out the events div
+    //     selectedPlacesVal = $(this).attr("data-places-num");
+    //     $("#places-output").empty();
+    //     $("#places-title").text("After the event you are going to");
 
-        //getting the localStorage key specific for the clicked item//
-        var selectedPlaceResult = localStorage.getItem($(this).attr("id"));
-        console.log(selectedPlaceResult);
-        //turning it back into a JSON object
-        var recalPlaceSearch = JSON.parse(selectedPlaceResult);
-        console.log(recalPlaceSearch);
+    //     //getting the localStorage key specific for the clicked item//
+    //     var selectedPlaceResult = localStorage.getItem($(this).attr("id"));
+    //     // console.log(selectedPlaceResult);
+    //     //turning it back into a JSON object
+    //     var recalPlaceSearch = JSON.parse(selectedPlaceResult);
+    //     // console.log(recalPlaceSearch);
 
-        var selectedPlaceInfo = $("<div>");
-        //appending the title retrieved from localStorage//
-        selectedPlaceInfo.append("<h3>" + recalPlaceSearch.name + "</h3>");
+    //     var selectedPlaceInfo = $("<div>");
+    //     //appending the title retrieved from localStorage//
+    //     selectedPlaceInfo.append("<h3>" + recalPlaceSearch.name + "</h3>");
 
-       //appending the rating and price from localStorage//
-        var placeInfo = $("<div><span id='rating'>Rating: " + recalPlaceSearch.rating + "</span><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Price: " + 
-        recalPlaceSearch.price + "</span></div>");
+    //    //appending the rating and price from localStorage//
+    //     var placeInfo = $("<div><span id='rating'>Rating: " + recalPlaceSearch.rating + "</span><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Price: " + 
+    //     recalPlaceSearch.price + "</span></div>");
 
-        selectedPlaceInfo.append(placeInfo);
+    //     selectedPlaceInfo.append(placeInfo);
 
-        //creating div w/ place address//
-        var placeAddressDiv = $("<div><span>" + recalPlaceSearch.address + "</span><div>");
+    //     //creating div w/ place address//
+    //     var placeAddressDiv = $("<div><span>" + recalPlaceSearch.address + "</span><div>");
 
-        var selectedPlace = $("<div>").attr("class", "well well-lg event-well");
-        selectedPlace.append(selectedPlaceInfo);
+    //     var selectedPlace = $("<div>").attr("class", "well well-lg event-well");
+    //     selectedPlace.append(selectedPlaceInfo);
 
-        $("#places-output").append(selectedPlace);
+    //     $("#places-output").append(selectedPlace);
 
-        //Google Maps Output
+    //     //Google Maps Output
         
-        var lat = parseFloat(venueLatitude);
-        var lng = parseFloat(venueLongitude);
-        var apiKey = "AIzaSyDolYU_CqdXxvNhxq04-ZjcxoiwhV6RiBg";
-        var start = lat,lng;
-        var destination = recalPlaceSearch.place;
-        var directionsURL = "https://www.google.com/maps/embed/v1/directions?key=" + apiKey + "&origin=" + start + "&destination=place_id:" + destination + "&avoid=tolls|highways";
+    //     var lat = parseFloat(venueLatitude);
+    //     var lng = parseFloat(venueLongitude);
+    //     var apiKey = "AIzaSyDolYU_CqdXxvNhxq04-ZjcxoiwhV6RiBg";
+    //     var start = lat,lng;
+    //     var destination = recalPlaceSearch.place;
+    //     var directionsURL = "https://www.google.com/maps/embed/v1/directions?key=" + apiKey + "&origin=" + start + "&destination=place_id:" + destination + "&avoid=tolls|highways";
 
-        var map = $("<iframe>").attr("width", "900").attr("height", "500").attr("frameborder","0").attr("style", "border:0").attr("src", directionsURL);
-        $("#map-output").append(map);
+    //     var map = $("<iframe>").attr("width", "900").attr("height", "500").attr("frameborder","0").attr("style", "border:0").attr("src", directionsURL);
+    //     $("#map-output").append(map);
 
-    });
+    // });
 })
 
 function getPlacesData() {
@@ -280,7 +253,6 @@ function getPlacesData() {
         url: foodDrinkQueryURL,
         method: "GET"
     }).then(function(response) {
-        console.log(response);
 
         //variable to store query results//
         var myFoodDrinkQuery = response.results;
@@ -351,10 +323,11 @@ function getPlaceDetails(placeID) {
 
         //variable to store query results//
         var myPlaceDetailsQuery = response.result;
-        console.log(myPlaceDetailsQuery);
+        // console.log(myPlaceDetailsQuery);
 
         //variables to store specific data from query results//
-        
+        var fdname = myPlaceDetailsQuery.name;
+        // console.log(fdname);
         var fdplacePhone = myPlaceDetailsQuery.formatted_phone_number;
         var fdplaceReviews = myPlaceDetailsQuery.reviews;
         var fdplacePhotos = myPlaceDetailsQuery.photos;
@@ -362,17 +335,19 @@ function getPlaceDetails(placeID) {
 
         //create object to store specific data from query results//
         placeDetailsObject = {
+            name: fdname,
             phone: fdplacePhone,
             reviews: fdplaceReviews,
             photos: fdplacePhotos,
             website: website
         };
+        // console.log(placeDetailsObject);
 
         //push object to placeDetails array//
-        placeDetails.push(placeDetailsObject);
+        // placeDetails.push(placeDetailsObject);
 
-        //call function to display Places//
-        // displayPlaces();//
+        //call function to display Details//
+        displayDetails(placeDetailsObject);
     });
 }
 
@@ -383,15 +358,11 @@ function getPlaceDetails(placeID) {
 function displayPlaces(placeData) {
 
     //Creating the Google Places Panel//
-    //var allPlacesPanel = $("<div>").attr("class", "panel panel-default").append($("<div>").attr("class", "panel-heading").attr("id", "places-title").text("Select an Resturant!"));
-    //var placesPanelBody = $("<div>").attr("class", "panel-body").attr("id","places-output");
-    //allPlacesPanel.append(placesPanelBody);
-
     var placesDiv = $("<ul class = 'collection with-header'>")
     var placesHeader = $("<li class='collection-header' id='places-header'>").html("<h4>Pick a Restaurant</h4>");
     placesDiv.append(placesHeader);
 
-    console.log(placeData);
+    // console.log(placeData);
 
     //loop through each of the place objects in the placeDetails array//
     for(var i = 0; i < placeData.length; i++ ) {
@@ -409,11 +380,15 @@ function displayPlaces(placeData) {
         placeTitleDiv.append("<h3>" + placeData[i].name + "</h3>");
 
         //dreating div w/ place info//
-        var placeInfoDiv = $("<div id='placeInfo'" + i + "><span>Rating: " + placeData[i].rating + "</span><span>&nbsp;&nbsp;&nbsp;&nbsp;Price: " + 
+        placeInfoDivId = i.toString();
+        var placeInfoDiv = $("<div id='placeInfo" + placeInfoDivId + "'><span>Rating: " + placeData[i].rating + "</span><span>&nbsp;&nbsp;&nbsp;&nbsp;Price: " + 
         placeData[i].price + "</span></div>");
 
         //creating div w/ place address//
-        var placeAddressDiv = $("<div><span>" + placeData[i].address + "</span><div>");
+        var placeAddressDiv = $("<div><span>" + placeData[i].address + "</span></div>");
+
+        //creating button to click on for place details//
+        var placeDetailsBtn = $("<button type='button' class='btn btn-default placeDetails' id=" + i + " target='_blank'>Get Details!</button>");
 
         //appending place info to place title div//
         placeTitleDiv.append(placeInfoDiv);
@@ -421,17 +396,53 @@ function displayPlaces(placeData) {
         //appending place address div to place title div//
         placeTitleDiv.append(placeAddressDiv);
 
+        //appending the place details button to the place title div//
+        placeTitleDiv.append(placeDetailsBtn);
+
         //appending all that to well//
         placeListItem.append(placeTitleDiv);
 
         selectedPlacesVal = i;
         placesDiv.append(placeListItem);
-
-        
-        //placesPanelBody.append(well);
-        //allPlacesPanel.append(placesPanelBody);
-        
     }
     $("#places-div").html(placesDiv);
 }
 //end display places function//
+
+//begin get places details button click function
+
+$(document).on("click", ".placeDetails", function(){
+
+    // console.log(this);
+
+    //getting the localStorage key specific for the clicked item//
+    var buttonId = $(this).attr("id");
+    // console.log(buttonId);
+    selectedItem = "placesSearchResult" + buttonId;
+    // console.log(selectedItem);
+    // console.log(typeof selectedItem);
+    var selectedPlaceResult = JSON.parse(localStorage.getItem(selectedItem));
+    // console.log(selectedPlaceResult);
+    var selectedPlaceID = selectedPlaceResult.place;
+    getPlaceDetails(selectedPlaceID);
+
+});
+
+function displayDetails(placeDetails) {
+
+        console.log(placeDetails);
+
+        var placePhone = placeDetails.phone;
+        var placePhoneDiv = $("<p>" + placePhone + "</p>");
+        var placeReviews = placeDetails.reviews;
+        var placePhotos = placeDetails.photos;
+        placeWebsiteURL = placeDetails.website;
+        // console.log(placeWebsiteURL);
+        var placeWebsiteDiv = $("<a href='" + placeWebsiteURL + "' target='_blank'>" + placeWebsiteURL + "</a>");
+        // console.log(placeWebsiteDiv);
+        var placeID = "#" +selectedItem;
+        $(placeID).append (placePhoneDiv);  
+        $(placeID).append (placeWebsiteDiv);  
+
+
+}
