@@ -65,17 +65,23 @@ $(document).ready(function(){
         }
 
         //Dont Need
-        //var allEventPanel = $("<div>").attr("class", "panel panel-default").append($("<div>").attr("class", "panel-heading").attr("id", "events-title").text("Select an Event!"));
-        // var eventsDiv = $("<ul class = 'collection with-header'>")
+        // var addedEventsDiv = $("<ul class = 'collection with-header'>")
         // var eventsHeader = $("<li class='collection-header' id='events-header'>").html("<h4>Pick an Event</h4>");
-        // eventsDiv.append(eventsHeader);
-        //var eventPanelBody = $("<div>").attr("class", "panel-body").attr("id","event-output");
-        //allEventPanel.append(eventPanelBody);
+        // addedEventsDiv.append(eventsHeader);
+        // var eventPanelBody = $("<div>").attr("class", "panel-body").attr("id","event-output");
+        // addedEventsDiv.append(eventPanelBody);
+        // eventsDiv.append(addedEventsDiv);
 
         fetchEvents(place, radius, dateRange);
     });
         //The Eventful API call//
         function printEvents() {
+        var addedEventsDiv = $("<ul class = 'collection with-header'>")
+        var eventsHeader = $("<li class='collection-header' id='events-header'>").html("<h4>Pick an Event</h4>");
+        addedEventsDiv.append(eventsHeader);
+        var eventPanelBody = $("<div>").attr("class", "panel-body").attr("id","event-output");
+        addedEventsDiv.append(eventPanelBody);
+        eventsDiv.append(addedEventsDiv);
             for (var i = 0; i < eventsList.length; i++){
 
 
@@ -137,7 +143,7 @@ $(document).ready(function(){
                 // well.text("Event #" + i);
                 
               
-                eventsDiv.append(eventListItem);
+                eventPanelBody.append(eventListItem);
                 //eventPanelBody.append(well);
                 //allEventPanel.append(eventPanelBody);
 
@@ -184,6 +190,7 @@ function fetchEvents(place, radius, dateRange) {
         console.log('hello')
         //Empty out the events div
         selectedEventVal = $(this).attr("data-event-num");
+        console.log(selectedEventVal);
         $("#event-output").empty();
         $("#events-title").text("The event you are attending");
 
@@ -473,6 +480,7 @@ function displayPlaces(placeData) {
 
         //creating button to click on for place details//
         var placeDetailsBtn = $("<button type='button' class='btn btn-default placeDetails' id=" + i + " target='_blank'>Get Details!</button>");
+        var placeDirectionsBtn = $("<button type='button' class='btn btn-defualt placeDirections' id=" + i + ">Get Directions</button>");
 
         //appending place info to place title div//
         placeTitleDiv.append(placeInfoDiv);
@@ -482,6 +490,7 @@ function displayPlaces(placeData) {
 
         //appending the place details button to the place title div//
         placeTitleDiv.append(placeDetailsBtn);
+        placeTitleDiv.append(placeDirectionsBtn);
 
         //appending all that to well//
         placeListItem.append(placeTitleDiv);
@@ -512,6 +521,30 @@ $(document).on("click", ".placeDetails", function(){
     getPlaceDetails(selectedPlaceID, buttonId);
 
 });
+
+$(document).on("click", ".placeDirections", function() {
+    var buttonId = $(this).attr("id");
+    selectedItem = "placesSearchResult" + buttonId;
+
+    var selectedPlaceResult = JSON.parse(localStorage.getItem(selectedItem));
+    var selectedPlaceID = selectedPlaceResult.place;
+    console.log(selectedPlaceID);
+    displayMap(selectedPlaceID);
+
+    
+})
+
+function displayMap(placeId) {
+    var mapOutput = $("#map-output");
+    mapOutput.empty();
+    var apiKey = "AIzaSyDolYU_CqdXxvNhxq04-ZjcxoiwhV6RiBg";
+    var start = venueLatitude + "," + venueLongitude;
+    var directionsURL = "https://www.google.com/maps/embed/v1/directions?key=" + apiKey + "&origin=" + start + "&destination=place_id:" + placeId + "&avoid=tolls|highways";
+
+    var map = $("<iframe>").attr("width", "900").attr("height", "500").attr("frameborder","0").attr("style", "border:0").attr("src", directionsURL);
+    mapOutput.append(map);
+    console.log();
+}
 
 function displayDetails(placeDetails,buttonId) {
 
