@@ -161,8 +161,18 @@ input:not([type]):focus:not([readonly]), input[type="text"]:not(.browser-default
 
 .event-item, .places-item {
     color:black;
+    cursor: pointer;
 }
 
 #events-header, #places-header{
     color:black;
+}
+
+.placeDetails {
+    background-color: transparent;
+    outline: none;
+    border: none;
+    text-decoration: underline;
+    text-align: right;
+    color: black;
 }
