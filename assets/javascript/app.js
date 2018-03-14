@@ -52,11 +52,11 @@ $(document).ready(function(){
         var radius = $("#miles").val().trim();
         //gets date value//
         var date = $("#dates").val().trim();
-        // console.log(date);
+        console.log(date);
         var dateFormat = "DD MMMM YYYY"
         var convertedDate = moment(date, dateFormat);
         var dateRange = moment(convertedDate).format("YYYYMMDD");
-        // console.log(dateRange);
+        console.log(dateRange);
 
         //gets number of results desired//
         eventsLength = $("#pageSize").val().trim();
@@ -181,7 +181,7 @@ function fetchEvents(place, radius, dateRange) {
     //When an event well is clicked...
     $("#events-div").on("click", ".event-item", function(ev){
         event.preventDefault();
-        // console.log('hello')
+        console.log('hello')
         //Empty out the events div
         selectedEventVal = $(this).attr("data-event-num");
         $("#event-output").empty();
@@ -191,7 +191,7 @@ function fetchEvents(place, radius, dateRange) {
         var selectedResult = localStorage.getItem($(this).attr("id"));
         //turning it back into a JSON object
         var recalSearch = JSON.parse(selectedResult);
-        // console.log(recalSearch);
+        console.log(recalSearch);
 
         var eventDate = recalSearch.eventStart;
         var eventEnd = recalSearch.eventStop;
@@ -200,6 +200,8 @@ function fetchEvents(place, radius, dateRange) {
         var convertedEventEnd = moment(eventEnd, eventFormat);
         var convertedEventDate = moment(convertedEvent).format('MMMM Do YYYY, h:mm a');
         var convertedEventEndDate = moment(convertedEventEnd).format('MMMM Do YYYY, h:mm a');
+        venueLatitude = recalSearch.venueLatitude;
+        venueLongitude = recalSearch.venueLongitude;
 
         var selectedEventInfo = $("<div>");
         //appending the title retrieved from localStorage//
@@ -236,10 +238,10 @@ function fetchEvents(place, radius, dateRange) {
 
     //     //getting the localStorage key specific for the clicked item//
     //     var selectedPlaceResult = localStorage.getItem($(this).attr("id"));
-    //     // console.log(selectedPlaceResult);
+    //     console.log(selectedPlaceResult);
     //     //turning it back into a JSON object
     //     var recalPlaceSearch = JSON.parse(selectedPlaceResult);
-    //     // console.log(recalPlaceSearch);
+    //     console.log(recalPlaceSearch);
 
     //     var selectedPlaceInfo = $("<div>");
     //     //appending the title retrieved from localStorage//
@@ -279,9 +281,11 @@ function getPlacesData() {
     var lat = parseFloat(venueLatitude);
     var lng = parseFloat(venueLongitude);
 
+    console.log(lat, lng);
+
     //define query URL for ajax call to Google Places API//
     var foodDrinkQueryURL = "https://cors-anywhere.herokuapp.com/https://maps.googleapis.com/maps/api/place/nearbysearch/json?" + 
-    "location=" + lat + "," + lng + "&radius=500&type=restaurant&key=AIzaSyB2Ys8ExJDWr3CF94ia0_Oyxm8gBM87udY";
+    "location=" + lat + "," + lng + "&rankby=distance&type=restaurant&key=AIzaSyB2Ys8ExJDWr3CF94ia0_Oyxm8gBM87udY";
     
     //create variable to store Place Data//
     var foodDrinkPlaceData = [];
@@ -291,6 +295,8 @@ function getPlacesData() {
         url: foodDrinkQueryURL,
         method: "GET"
     }).then(function(response) {
+
+        console.log(response);
 
         //variable to store query results//
         var myFoodDrinkQuery = response.results;
@@ -361,11 +367,11 @@ function getPlaceDetails(placeID) {
 
         //variable to store query results//
         var myPlaceDetailsQuery = response.result;
-        // console.log(myPlaceDetailsQuery);
+        console.log(myPlaceDetailsQuery);
 
         //variables to store specific data from query results//
         var fdname = myPlaceDetailsQuery.name;
-        // console.log(fdname);
+        console.log(fdname);
         var fdplacePhone = myPlaceDetailsQuery.formatted_phone_number;
         var fdplaceReviews = myPlaceDetailsQuery.reviews;
         var fdplacePhotos = myPlaceDetailsQuery.photos;
@@ -379,7 +385,7 @@ function getPlaceDetails(placeID) {
             photos: fdplacePhotos,
             website: website
         };
-        // console.log(placeDetailsObject);
+        console.log(placeDetailsObject);
 
         //push object to placeDetails array//
         // placeDetails.push(placeDetailsObject);
@@ -400,7 +406,7 @@ function displayPlaces(placeData) {
     var placesHeader = $("<li class='collection-header' id='places-header'>").html("<h4>Pick a Restaurant</h4>");
     placesDiv.append(placesHeader);
 
-    // console.log(placeData);
+    console.log(placeData);
 
     //loop through each of the place objects in the placeDetails array//
     for(var i = 0; i < placeData.length; i++ ) {
@@ -451,17 +457,18 @@ function displayPlaces(placeData) {
 
 $(document).on("click", ".placeDetails", function(){
 
-    // console.log(this);
+    console.log(this);
 
     //getting the localStorage key specific for the clicked item//
     var buttonId = $(this).attr("id");
-    // console.log(buttonId);
+    console.log(buttonId);
     selectedItem = "placesSearchResult" + buttonId;
-    // console.log(selectedItem);
-    // console.log(typeof selectedItem);
+    console.log(selectedItem);
+    console.log(typeof selectedItem);
     var selectedPlaceResult = JSON.parse(localStorage.getItem(selectedItem));
-    // console.log(selectedPlaceResult);
+    console.log(selectedPlaceResult);
     var selectedPlaceID = selectedPlaceResult.place;
+    $(this).remove();
     getPlaceDetails(selectedPlaceID);
 
 });
@@ -475,9 +482,9 @@ function displayDetails(placeDetails) {
         var placeReviews = placeDetails.reviews;
         var placePhotos = placeDetails.photos;
         placeWebsiteURL = placeDetails.website;
-        // console.log(placeWebsiteURL);
+        console.log(placeWebsiteURL);
         var placeWebsiteDiv = $("<a href='" + placeWebsiteURL + "' target='_blank'>" + placeWebsiteURL + "</a>");
-        // console.log(placeWebsiteDiv);
+        console.log(placeWebsiteDiv);
         var placeID = "#" +selectedItem;
         $(placeID).append (placePhoneDiv);  
         $(placeID).append (placeWebsiteDiv);  
