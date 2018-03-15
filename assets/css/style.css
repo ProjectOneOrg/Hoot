@@ -299,7 +299,6 @@ input:not([type]):focus:not([readonly]), input[type="text"]:not(.browser-default
 }
 
 #places-div .collection-item > div {
-    border-bottom: 2px dashed grey;
     padding-bottom: 35px;
 }
 
