@@ -18,7 +18,7 @@ h3 {
     font-size: 30px;
 }
 
-h4 {
+h4, .collection-header {
     font-size: 1.9rem !important;
     line-height: 110%;
     margin: 0;
@@ -173,8 +173,8 @@ input:not([type]):focus:not([readonly]), input[type="text"]:not(.browser-default
     outline: none;
     border: none;
     text-decoration: underline;
-    text-align: right;
-    color: black;
+    float: right;
+    color: white;
 }
 
 /* Footer Styles */
@@ -260,4 +260,17 @@ input:not([type]):focus:not([readonly]), input[type="text"]:not(.browser-default
 
 .event-item, .places-item {
     color:white;
+}
+
+#places-div .collection-item > div {
+    border-bottom: 2px dashed grey;
+    padding-bottom: 35px;
+}
+
+.placedirections {
+    margin-top: 20px;
+}
+
+#places-heaader h3:after {
+    content:"";
 }
