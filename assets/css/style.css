@@ -167,13 +167,22 @@ input:not([type]):focus:not([readonly]), input[type="text"]:not(.browser-default
     color: white;
     margin-top: 5px;
     padding: 0;
-    color:orange;
+    color: orange;
 }
 
 .placeDetails:hover {
-    background:rgba(0,0,0,0);
-    float: right;
-    color: white;
+    background-color:transparent;
+    color: orange;
+    float: left;
+    background-color: transparent;
+    outline: none;
+    border: none;
+    text-decoration: underline;
+    float: left;
+    color: #49C6FD;
+    margin-top: 5px;
+    padding: 0;
+    color: orange;
 }
 
 /* Footer Styles */
