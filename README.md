@@ -13,6 +13,8 @@ Spotify List<br>
 ## Tools
 
 Materialize<br>
+Bootstrap<br>
+Moment.js<br>
 jQuery<br>
 Javascript<br>
 HTML/CSS<br>
