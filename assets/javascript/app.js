@@ -422,12 +422,19 @@ function getPlaceDetails(placeID, placeNum) {
 
         //variable to store query results//
         var myPlaceDetailsQuery = response.result;
+        console.log(myPlaceDetailsQuery);
 
         //variables to store specific data from query results//
         var fdname = myPlaceDetailsQuery.name;
         var fdplacePhone = myPlaceDetailsQuery.formatted_phone_number;
-        var fdplaceReviews = myPlaceDetailsQuery.reviews;
         var website = myPlaceDetailsQuery.website;
+
+        if (myPlaceDetailsQuery.reviews===undefined) {
+            console.log("no reviews");
+            var fdplaceReviews = "None Available";
+        } else {
+            var fdplaceReviews = myPlaceDetailsQuery.reviews;
+        }
 
         //create object to store specific data from query results//
         placeDetailsObject = {
@@ -528,14 +535,14 @@ function displayPlaces(placeData) {
 //begin get places details button click function
 
 $(document).on("click", ".placeDetails", function(){
+    console.log($(this));
 
     //getting the localStorage key specific for the clicked item//
     var buttonId = $(this).attr("id");
     var placeNum = buttonId;
+    selectedItem = "placesSearchResult" + buttonId;
     var selectedPlaceResult = JSON.parse(localStorage.getItem(selectedItem));
     var selectedPlaceID = selectedPlaceResult.place;
-
-    selectedItem = "placesSearchResult" + buttonId;
     $(this).remove();
     getPlaceDetails(selectedPlaceID, placeNum);
 
@@ -566,34 +573,54 @@ function displayMap(placeId) {
 }
 
 function displayDetails(placeDetails, placeNum) {
+    //Use Button Id from "Get Details" button for "Clear Details" button
     var clearButtonId = placeNum;
 
+    //define id of list item that individual restaurant data is attached to 
     var placeID = "#" +selectedItem;
 
     //create div for place details
     placeDetailsDiv = $("<div class='placeDetailsDiv'>")
 
+    //create div for phone number
     var placePhone = placeDetails.phone;
     var placePhoneDiv = $("<p>" + placePhone + "</p>");
 
+    //create div for reviews heading
     var placeReviews = placeDetails.reviews;
     var placeReviewsDiv = $("<div><h4>Reviews</h4></div>");
 
-    for(i=0; i<placeReviews.length; i++) {
-        var authorProfilePhoto = placeReviews[i].profile_photo_url;
-        var reviewText = placeReviews[i].text;
-        var review = $("<p>" + "<img src=" + authorProfilePhoto + " alt='author profile photo'>" + reviewText + "</p>");
+    //condition based on whether or not review data is available
+    if (placeReviews == "None Available") {
+        
+        //create paragraph for none available text and append to reviews heading
+        var review = $("<p>None Available</p>");
         $(placeReviewsDiv).append(review);  
+    } else {
+        //loop through review data
+        for(i=0; i<placeReviews.length; i++) {
+            
+            //variable to capture review author profile photo
+            var authorProfilePhoto = placeReviews[i].profile_photo_url;
+
+            //variable to capture review text
+            var reviewText = placeReviews[i].text;
+
+            //create review paragraph and attach to reviews heading
+            var review = $("<p>" + "<img src=" + authorProfilePhoto + " alt='author profile photo'>" + reviewText + "</p>");
+            $(placeReviewsDiv).append(review);  
+        }
     }
 
-    //creating button to click on for place details//
+    //creating button to click on for cleareing place details//
     var clearDetailsBtn = $("<button type='button' class='btn btn-default removeDetails' id='" + clearButtonId + "' target='_blank'>Clear Details</button>");
 
+    //create anchor tag for place website
     placeWebsiteURL = placeDetails.website;
-
     var placeWebsiteDiv = $("<a href='" + placeWebsiteURL + "' target='_blank'>" + placeWebsiteURL + "</a>");
 
-    var placeID = "#" +selectedItem;
+    // var placeID = "#" +selectedItem;
+    //append place details to existing restaurant general information
     $(placeDetailsDiv).append (placePhoneDiv);  
     $(placeDetailsDiv).append (placeWebsiteDiv);  
     $(placeDetailsDiv).append(placeReviewsDiv);
@@ -603,12 +630,15 @@ function displayDetails(placeDetails, placeNum) {
 
 $(document).on("click", ".removeDetails", function(){
 
+    //capture id of remove details button that was clicked
     var button_id = $(this).attr("id");
 
+    //remove the button and all of the place details information
     $(this).closest("div").remove();
 
      //creating button to click on for place details//
      var placeDetailsBtn = $("<button type='button' class='btn btn-default placeDetails' id=" + button_id + " target='_blank'>Get Details!</button>");
 
+     //append place details button to restaurant list item where details were previously displayed.
      $("#placeName" + button_id).append(placeDetailsBtn);
 });
