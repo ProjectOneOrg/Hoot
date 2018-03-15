@@ -241,6 +241,14 @@ input:not([type]):focus:not([readonly]), input[type="text"]:not(.browser-default
     padding-bottom: 35px;
 }
 
+#events-div .collection h5 {
+    border:none;
+}
+
+#events-div .collection .panel-body {
+    padding: 40px 30px;
+}
+
 .collection h3:hover{
     color:orange;
 }
