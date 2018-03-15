@@ -579,7 +579,7 @@ function displayDetails(placeDetails, placeNum) {
     var placeID = "#" +selectedItem;
 
     //create div for place details
-    placeDetailsDiv = $("<div>")
+    placeDetailsDiv = $("<div class='placeDetailsDiv'>")
 
     var placePhone = placeDetails.phone;
     var placePhoneDiv = $("<p>" + placePhone + "</p>");
@@ -590,8 +590,9 @@ function displayDetails(placeDetails, placeNum) {
     for(i=0; i<placeReviews.length; i++) {
         var authorProfilePhoto = placeReviews[i].profile_photo_url;
         console.log(authorProfilePhoto);
+        console.log(typeof authorprofilePhoto);
         var reviewText = placeReviews[i].text;
-        var review = $("<p>" + "<img href=" + authorProfilePhoto + " alt='author profile photo'>" + reviewText + "</p>");
+        var review = $("<p>" + "<img src=" + authorProfilePhoto + " alt='author profile photo'>" + reviewText + "</p>");
         $(placeReviewsDiv).append(review);  
     }
 

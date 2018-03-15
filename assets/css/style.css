@@ -294,6 +294,13 @@ input:not([type]):focus:not([readonly]), input[type="text"]:not(.browser-default
     overflow-y:scroll;
 }
 
+.placeDetailsDiv img {
+    float:left;
+    margin-right: 15px;
+    height: 128px;
+    width: 128px;
+}
+
 .placeDirections {
     margin-top: 0px;
 }
