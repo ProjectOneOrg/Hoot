@@ -281,7 +281,7 @@ input:not([type]):focus:not([readonly]), input[type="text"]:not(.browser-default
 }
 
 #places-div {
-    max-height: 1500;
+    max-height: 1500px;
     overflow-y:scroll;
 }
 
