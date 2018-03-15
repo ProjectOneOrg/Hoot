@@ -216,7 +216,6 @@ input:not([type]):focus:not([readonly]), input[type="text"]:not(.browser-default
 
 /* Collection Styles */
 
-
 .collection.with-header .collection-header {
     background-color:#532ca2;
     color:white !important;
