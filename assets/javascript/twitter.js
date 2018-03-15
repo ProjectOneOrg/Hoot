@@ -1,5 +1,5 @@
 var access_token = '';
-var hashTag = 'marina';
+var hashTag = 'dining';
 
 //run this function on window load
 $.ajax({
