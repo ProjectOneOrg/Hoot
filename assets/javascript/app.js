@@ -477,7 +477,7 @@ function displayPlaces(placeData) {
 
         //creating div w/place photo//
         if (placeData[i].photo==="Photo Unavailable") {
-            placeTitleDiv.append("<img src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMgAAAALCAYAAAA6JMKEAAAAMElEQVR42u3TMQEAAAgDIE1u9Pl6GAE60JVMAa8WBAQBQUAQEAQEAUFAEBAEBAGOBZvoG2v/a2D9AAAAAElFTkSuQmCC'>");
+            placeTitleDiv.append("<img src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMgAAABwCAQAAADxyPcNAAAAr0lEQVR42u3RMQEAAACCMO1f2hoeIwJrdFUtACIgQAQEiIAAERAgAiIgQAQEiIAAERAgAiIgQAQEiIAAERAgAiIgQAQEiIAAERAgAiIgQAQEiIAAERAgAiIgQAQEiIAAERAgAiIgQAQEiIAAERAgAiIgQAQEiIAAERAgAiIgQAQEiIAAERAgAiIgQAQEiIAAERAgAgJEQAQEiIAAERAgAgJEQAQEiIAAERAgAgJEHw1p8QBxL7nm/AAAAABJRU5ErkJggg'>");
         } else {
             var photoURL = "https://maps.googleapis.com/maps/api/place/photo?maxwidth=200&photoreference=" + placeData[i].photo + 
             "&key=AIzaSyB2Ys8ExJDWr3CF94ia0_Oyxm8gBM87udY";
