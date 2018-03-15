@@ -276,6 +276,8 @@ input:not([type]):focus:not([readonly]), input[type="text"]:not(.browser-default
 #places-div img {
     float:left;
     margin-right: 15px;
+    height: 170px;
+    width: 250px;
 }
 
 #places-div {
