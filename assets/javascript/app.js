@@ -323,8 +323,6 @@ function getPlacesData() {
     var lat = parseFloat(venueLatitude);
     var lng = parseFloat(venueLongitude);
 
-    console.log(lat, lng);
-
     //define query URL for ajax call to Google Places API//
     var foodDrinkQueryURL = "https://cors-anywhere.herokuapp.com/https://maps.googleapis.com/maps/api/place/nearbysearch/json?" + 
     "location=" + lat + "," + lng + "&rankby=distance&type=restaurant|bar&key=AIzaSyB2Ys8ExJDWr3CF94ia0_Oyxm8gBM87udY";
@@ -338,8 +336,6 @@ function getPlacesData() {
         method: "GET"
     }).then(function(response) {
 
-        console.log(response);
-
         //variable to store query results//
         var myFoodDrinkQuery = response.results;
 
@@ -351,51 +347,47 @@ function getPlacesData() {
             var fdplaceLat = myFoodDrinkQuery[i].geometry.location.lat;
             var fdplaceLng = myFoodDrinkQuery[i].geometry.location.lng;
             var fdplaceName = myFoodDrinkQuery[i].name;
-            var fdplaceRating = myFoodDrinkQuery[i].rating;
-            var fdplacePrice = myFoodDrinkQuery[i].price_level;
             var fdplaceAddress = myFoodDrinkQuery[i].vicinity;
 
-            if (myFoodDrinkQuery[i].photos!=undefined) {
-                var fdplacePhotoReference = myFoodDrinkQuery[i].photos[0].photo_reference;
-                console.log(myFoodDrinkQuery[i].photos[0]);
-                console.log(fdplacePhotoReference);
-                console.log(fdplaceName);
+            if (myFoodDrinkQuery[i].photos===undefined) {
+                console.log("no photo");
+                var fdplacePhotoReference = "Photo Unavailable";
             } else {
-                fdplacePhotoReference = "undefined";
+                var fdplacePhotoReference = myFoodDrinkQuery[i].photos[0].photo_reference;                
             }
 
-            if (myFoodDrinkQuery[i].rating!=undefined) {
+            if (myFoodDrinkQuery[i].rating===undefined) {
+                console.log("no rating");
+                var fdplaceRating = "Not Rated";
+            } else {
                 var fdplaceRating = myFoodDrinkQuery[i].rating;
-            } else {
-                fdplaceRating = "undefined";
             }
 
-            if (myFoodDrinkQuery[i].price!=undefined) {
+            if (myFoodDrinkQuery[i].price_level===undefined) {
+                console.log("no price");
+                var fdplacePrice = "Not Available";
+            } else {
                 var fdplacePrice = myFoodDrinkQuery[i].price_level;
-            } else {
-                fdplacePrice = "undefined";
             }
-
-            var priceLevel;
 
              //convert price level to $ symbols//
-        if (fdplacePrice == 1) {
-            priceLevel = "$";
-        } else if (fdplacePrice == 2) {
-            priceLevel = "$$";
-        } else if (fdplacePrice == 3) {
-            priceLevel = "$$$";
-        } else if (fdplacePrice == 4) {
-            priceLevel = "$$$$";
-        } else if (fdplacePrice == 5) {
-            priceLevel = "$$$$$";
-        }
+            if (fdplacePrice == 1) {
+                fdplacePrice = "$";
+            } else if (fdplacePrice == 2) {
+                fdplacePrice = "$$";
+            } else if (fdplacePrice == 3) {
+                fdplacePrice = "$$$";
+            } else if (fdplacePrice == 4) {
+                fdplacePrice = "$$$$";
+            } else if (fdplacePrice == 5) {
+                fdplacePrice = "$$$$$";
+            }
 
         //create object to store specific data from query results//
         var foodDrinkDataObject = {
             name: fdplaceName,
             rating: fdplaceRating,
-            price: priceLevel,
+            price: fdplacePrice,
             place: fdplaceID,
             lat: fdplaceLat,
             lng: fdplaceLng,
@@ -430,7 +422,6 @@ function getPlaceDetails(placeID, placeNum) {
 
         //variable to store query results//
         var myPlaceDetailsQuery = response.result;
-        console.log(myPlaceDetailsQuery);
 
         //variables to store specific data from query results//
         var fdname = myPlaceDetailsQuery.name;
@@ -445,7 +436,6 @@ function getPlaceDetails(placeID, placeNum) {
             reviews: fdplaceReviews,
             website: website
         };
-        console.log(placeDetailsObject);
 
         //call function to display Details//
         displayDetails(placeDetailsObject, placeNum);
@@ -479,13 +469,13 @@ function displayPlaces(placeData) {
         placeTitleDiv.append("<h3>" + placeData[i].name + "</h3>");
 
         //creating div w/place photo//
-        if (placeData[i].photo!=undefined) {
+        if (placeData[i].photo==="Photo Unavailable") {
+            placeTitleDiv.append("<img src='assets/images/blank_image_1.jpg'>");
+        } else {
             var photoURL = "https://maps.googleapis.com/maps/api/place/photo?maxwidth=200&photoreference=" + placeData[i].photo + 
             "&key=AIzaSyB2Ys8ExJDWr3CF94ia0_Oyxm8gBM87udY";
-            console.log(photoURL);
             placeTitleDiv.append("<img src=" + photoURL + " alt='place photo'>"); 
-            console.log(placeTitleDiv);
-            }   
+        }   
 
         console.log(placeData[i].rating, placeData[i].price);
         console.log(typeof placeData[i].price, typeof placeData[i].rating);
@@ -539,17 +529,13 @@ function displayPlaces(placeData) {
 
 $(document).on("click", ".placeDetails", function(){
 
-    console.log(this);
-
     //getting the localStorage key specific for the clicked item//
     var buttonId = $(this).attr("id");
     var placeNum = buttonId;
-    selectedItem = "placesSearchResult" + buttonId;
-    console.log(selectedItem);
-    console.log(typeof selectedItem);
     var selectedPlaceResult = JSON.parse(localStorage.getItem(selectedItem));
-    console.log(selectedPlaceResult);
     var selectedPlaceID = selectedPlaceResult.place;
+
+    selectedItem = "placesSearchResult" + buttonId;
     $(this).remove();
     getPlaceDetails(selectedPlaceID, placeNum);
 
@@ -595,8 +581,6 @@ function displayDetails(placeDetails, placeNum) {
 
     for(i=0; i<placeReviews.length; i++) {
         var authorProfilePhoto = placeReviews[i].profile_photo_url;
-        console.log(authorProfilePhoto);
-        console.log(typeof authorprofilePhoto);
         var reviewText = placeReviews[i].text;
         var review = $("<p>" + "<img src=" + authorProfilePhoto + " alt='author profile photo'>" + reviewText + "</p>");
         $(placeReviewsDiv).append(review);  
