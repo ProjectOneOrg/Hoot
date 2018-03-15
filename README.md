@@ -1,6 +1,6 @@
-# Hoot - UNC Coding Bootcamp Group Project
+# HOOT - UNC Coding Bootcamp Group Project
 
-Hoot allows you to find an event in the area of your choice providing information for local dining to help you better plan your night out. #PlanYourNight and have a great time with your friends and family. 
+HOOT allows you to find an event in the area of your choice providing information for local dining to help you better plan your night out. #PlanYourNight and have a great time with your friends and family. 
 
 ## Features
 
