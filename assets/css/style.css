@@ -279,7 +279,7 @@ input:not([type]):focus:not([readonly]), input[type="text"]:not(.browser-default
     margin-top: 20px;
 }
 
-#places-heaader h3:after {
+#places-header h3:after {
     content:"";
 }
 
