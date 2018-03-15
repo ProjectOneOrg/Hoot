@@ -37,6 +37,7 @@ var database = firebase.database();
 $(document).ready(function(){
 
     $("#twitterbox").hide();
+    $("#spotifybox").hide();
 
     //DatePicker functionality
     /* var date_input=$('input[name="date"]'); //our date input has the name "date"
@@ -216,6 +217,7 @@ function fetchEvents(place, radius, dateRange) {
         $("#event-output").empty();
         $("#events-header").text("The event you are attending");
         $("#twitterbox").show();
+        $("#spotifybox").show();
 
         //getting the localStorage key specific for the clicked item//
         var selectedResult = localStorage.getItem($(this).attr("id"));
