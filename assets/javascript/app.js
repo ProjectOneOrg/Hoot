@@ -219,9 +219,13 @@ function fetchEvents(place, radius, dateRange) {
         var eventEnd = recalSearch.eventStop;
         var eventFormat = "YYYY-MM-DD, HH:mm:ss"
         var convertedEvent = moment(eventDate, eventFormat);
-        var convertedEventEnd = moment(eventEnd, eventFormat);
         var convertedEventDate = moment(convertedEvent).format('MMMM Do YYYY, h:mm a');
+        if (eventEnd == null) {
+            convertedEventEndDate = " "
+        } else { 
+        var convertedEventEnd = moment(eventEnd, eventFormat);
         var convertedEventEndDate = moment(convertedEventEnd).format('MMMM Do YYYY, h:mm a');
+        }
         venueLatitude = recalSearch.venueLatitude;
         venueLongitude = recalSearch.venueLongitude;
         eventfulID = recalSearch.eventfulID;
