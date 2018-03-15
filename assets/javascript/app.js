@@ -198,7 +198,6 @@ function fetchEvents(place, radius, dateRange) {
          
     }
 
-
     //When an event well is clicked...
     $("#events-div").on("click", ".event-item", function(ev){
         event.preventDefault();
