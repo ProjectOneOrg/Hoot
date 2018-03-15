@@ -28,25 +28,15 @@ h4, .collection-header {
 #search-panel .btn, .btn {
     font-size: 20px;
     background-color: #532ca2;
-    height:46px;
-    padding:0 2.5rem;
+    height: 46px;
+    padding: 0.3rem 2.5rem;
     text-align: center;
-    margin: -20px auto 10px;
+    margin: -20px 10px 10px auto;
 }
 
-#search-panel .btn:hover {
+#search-panel .btn:hover, .btn:hover {
     background-color: #6927ad;
 }
-
-#events-div .btn {
-    font-size: 20px;
-    background-color: #532ca2;
-    height:46px;
-    padding:0 2.5rem;
-    padding-top: 0.4rem;
-    text-align: center;
-/*    margin: -20px auto 10px;
-*/}
 
 #events-div .btn:hover {
     background-color: #6927ad;
@@ -173,6 +163,15 @@ input:not([type]):focus:not([readonly]), input[type="text"]:not(.browser-default
     outline: none;
     border: none;
     text-decoration: underline;
+    float: left;
+    color: white;
+    margin-top: 5px;
+    padding: 0;
+    color:orange;
+}
+
+.placeDetails:hover {
+    background:rgba(0,0,0,0);
     float: right;
     color: white;
 }
@@ -274,6 +273,28 @@ input:not([type]):focus:not([readonly]), input[type="text"]:not(.browser-default
     padding-bottom: 35px;
 }
 
+#places-div img {
+    float:left;
+    margin-right: 15px;
+}
+
+#places-div {
+    max-height: 1500;
+    overflow-y:scroll;
+}
+
+.placeDirections {
+    margin-top: 0px;
+}
+
+#places-div h3:after {
+    content:none;
+}
+
+#places-div h3:hover {
+    color:#49C6FD;
+}
+
 .placeDirections {
     margin-top: 20px;
 }
@@ -369,3 +390,4 @@ input:not([type]):focus:not([readonly]), input[type="text"]:not(.browser-default
   #widget .btn-o:last-child {
     display:none;
   }
+
