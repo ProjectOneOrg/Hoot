@@ -1,5 +1,5 @@
 var access_token = '';
-var artistName = "Lil Pump";
+var artistName = "Drake";
 
 $.ajax({
   url: 'https://cors-anywhere.herokuapp.com/https://accounts.spotify.com/api/token',
@@ -40,8 +40,14 @@ function getTopTracks(artistId) {
       Authorization: 'Bearer ' + access_token
     }
   }).then(function(response) {
-    console.log(response.tracks[0].name);
-    console.log(response.tracks[0].album.release_date);
+    for (var i=0; i<6; i++) {
+      $('#spotifybox').append('<div class="track">' +
+         '<img id="spotifyimage" src="' + response.tracks[i].album.images[0].url + '">'+
+         '<a href="' + response.tracks[i].album.href + '" target="_blank">' +
+         '<span id="spotifytext"><strong>' + response.tracks[i].name + '</strong></span></a>' +
+         '<p>' + response.tracks[i].album.artists[0].name + 
+         ' - ' + response.tracks[i].album.name + '</p>'
+         + '</div>' );
+    }
   })
 }
-
