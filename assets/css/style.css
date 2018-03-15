@@ -185,6 +185,11 @@ input:not([type]):focus:not([readonly]), input[type="text"]:not(.browser-default
     color: orange;
 }
 
+.placeDetailsDiv p {
+    clear: both;
+    margin-bottom: 40px;
+}
+
 /* Footer Styles */
 
 .page-footer {
@@ -290,8 +295,8 @@ input:not([type]):focus:not([readonly]), input[type="text"]:not(.browser-default
 }
 
 #places-div p img {
-    width: 80px;
-    height: 80px;
+    width: 60px;
+    height: 60px;
 }
 
 #places-div {
