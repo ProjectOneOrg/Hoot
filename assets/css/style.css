@@ -133,7 +133,7 @@ input:not([type]):focus:not([readonly]), input[type="text"]:not(.browser-default
     z-index:-1;
 }
 
-.picker__date-display {
+/* .picker__date-display {
     background-color: #49C6FD;
 }
 
@@ -143,7 +143,7 @@ input:not([type]):focus:not([readonly]), input[type="text"]:not(.browser-default
 
 .picker--opened .picker__holder {
     background: rgba(0,0,0,0.6);
-}
+} */
 
 #rating {
     color: red;
@@ -164,25 +164,46 @@ input:not([type]):focus:not([readonly]), input[type="text"]:not(.browser-default
     border: none;
     text-decoration: underline;
     float: left;
-    color: white;
     margin-top: 5px;
     padding: 0;
-    color: orange;
+    color: #49C6FD;
 }
 
 .placeDetails:hover {
-    background-color:transparent;
-    color: orange;
-    float: left;
     background-color: transparent;
     outline: none;
     border: none;
     text-decoration: underline;
     float: left;
-    color: #49C6FD;
     margin-top: 5px;
     padding: 0;
     color: orange;
+}
+
+
+.removeDetails {
+    background-color: transparent;
+    outline: none;
+    border: none;
+    text-decoration: underline;
+    float: right;
+    padding: 0;
+    color: #49C6FD;
+}
+
+.removeDetails:hover {
+    background-color: transparent;
+    outline: none;
+    border: none;
+    text-decoration: underline;
+    float: right;
+    padding: 0;
+    color: orange;
+}
+
+.placeDetailsDiv p {
+    clear: both;
+    margin-bottom: 40px;
 }
 
 /* Footer Styles */
@@ -285,11 +306,25 @@ input:not([type]):focus:not([readonly]), input[type="text"]:not(.browser-default
 #places-div img {
     float:left;
     margin-right: 15px;
+    height: 170px;
+    width: 250px;
+}
+
+#places-div p img {
+    width: 60px;
+    height: 60px;
 }
 
 #places-div {
-    max-height: 1500;
+    max-height: 1500px;
     overflow-y:scroll;
+}
+
+.placeDetailsDiv img {
+    float:left;
+    margin-right: 15px;
+    height: 128px;
+    width: 128px;
 }
 
 .placeDirections {
@@ -302,6 +337,14 @@ input:not([type]):focus:not([readonly]), input[type="text"]:not(.browser-default
 
 #places-div h3:hover {
     color:#49C6FD;
+}
+
+.placeDirections {
+    margin-top: 20px;
+}
+
+#places-header h3:after {
+    content:"";
 }
 
 /* Twitter API */
