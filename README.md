@@ -4,31 +4,31 @@ Hoot allows you to find an event in the area of your choice providing informatio
 
 ## Features
 
-Local Restaurants
-Google Maps with Directions
-Local Events
-Tweeter Feed
-Spotify List
+Local Restaurants<br>
+Google Maps with Directions<br>
+Local Events<br>
+Tweeter Feed<br>
+Spotify List<br>
 
 ## Tools
 
-Materialize
-jQuery
-Javascript
-HTML/CSS
-Google Places API
-Google Maps API
-Eventful API
-Twitter API
-Spotify API
+Materialize<br>
+jQuery<br>
+Javascript<br>
+HTML/CSS<br>
+Google Places API<br>
+Google Maps API<br>
+Eventful API<br>
+Twitter API<br>
+Spotify API<br>
 
 ## Contributors
 
-Marina Saladukha
-Moe Samara
-Max Faneuff
-Jeff Taylor
-Jamie Keith
+Marina Saladukha<br>
+Moe Samara<br>
+Max Faneuff<br>
+Jeff Taylor<br>
+Jamie Keith<br>
 
 ## Resources
 
