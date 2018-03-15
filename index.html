@@ -74,7 +74,14 @@
       <div id="events-div"></div>
     </div>
     <div class="row">
-      <div id="places-div"></div>
+      <div class="col l8">
+         <div id="places-div"></div>
+      </div>
+      <div class="col l4">
+        <div id="twitterbox">
+          <h3>Twitter Feed</h3>
+        </div>
+      </div>
     </div>
     <div class="row">
       <div id="map-output"></div>
@@ -125,18 +132,19 @@
 </footer>
 
 <script src="assets/javascript/app.js"></script>
-    <script>
-  $('.carousel.carousel-slider').carousel({fullWidth: true});
-  autoplay()   
-  function autoplay() {
-    $('.carousel').carousel('next');
-    setTimeout(autoplay, 6000);
-}
-$('.datepicker').pickadate({
-    selectMonths: true, // Creates a dropdown to control month
-    selectYears: 15 // Creates a dropdown of 15 years to control year
-  });
+<script src="assets/javascript/twitter.js"></script>
 
+<script>
+  $('.carousel.carousel-slider').carousel({fullWidth: true});
+    autoplay()   
+    function autoplay() {
+      $('.carousel').carousel('next');
+      setTimeout(autoplay, 6000);
+  }
+  $('.datepicker').pickadate({
+      selectMonths: true, // Creates a dropdown to control month
+      selectYears: 15 // Creates a dropdown of 15 years to control year
+    });
 </script>
 </body>
 
