@@ -250,7 +250,7 @@ input:not([type]):focus:not([readonly]), input[type="text"]:not(.browser-default
 .collection .collection-item {  
     background-color: transparent;
     padding: 30px 20px 0;
-    border-botton:0;
+    border-bottom:0 !important;
 }
 
 .panel-body li {
