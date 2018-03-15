@@ -368,7 +368,7 @@ function getPlacesData() {
 
     //define query URL for ajax call to Google Places API//
     var foodDrinkQueryURL = "https://cors-anywhere.herokuapp.com/https://maps.googleapis.com/maps/api/place/nearbysearch/json?" + 
-    "location=" + lat + "," + lng + "&rankby=distance&type=restaurant&key=AIzaSyB2Ys8ExJDWr3CF94ia0_Oyxm8gBM87udY";
+    "location=" + lat + "," + lng + "&rankby=distance&type=restaurant|bar&key=AIzaSyB2Ys8ExJDWr3CF94ia0_Oyxm8gBM87udY";
     
     //create variable to store Place Data//
     var foodDrinkPlaceData = [];
@@ -396,6 +396,27 @@ function getPlacesData() {
             var fdplacePrice = myFoodDrinkQuery[i].price_level;
             var fdplaceAddress = myFoodDrinkQuery[i].vicinity;
 
+            if (myFoodDrinkQuery[i].photos!=undefined) {
+                var fdplacePhotoReference = myFoodDrinkQuery[i].photos[0].photo_reference;
+                console.log(myFoodDrinkQuery[i].photos[0]);
+                console.log(fdplacePhotoReference);
+                console.log(fdplaceName);
+                } else {
+                    fdplacePhotoReference = undefined;
+                }
+    
+                if (myFoodDrinkQuery[i].rating!=undefined) {
+                    var fdplaceRating = myFoodDrinkQuery[i].rating;
+                } else {
+                    fdplaceRating = undefined;
+                }
+    
+                if (myFoodDrinkQuery[i].price!=undefined) {
+                    var fdplacePrice = myFoodDrinkQuery[i].price_level;
+                } else {
+                    fdplacePrice = undefined;
+                }
+
             var priceLevel;
 
              //convert price level to $ symbols//
@@ -419,7 +440,8 @@ function getPlacesData() {
             place: fdplaceID,
             lat: fdplaceLat,
             lng: fdplaceLng,
-            address: fdplaceAddress
+            address: fdplaceAddress,
+            photo: fdplacePhotoReference
         };
 
         //push object to placeDetails array//
@@ -435,7 +457,6 @@ function getPlacesData() {
 }
 
 //get place details function//
-
 function getPlaceDetails(placeID) {
 
     //define query URL for ajax call to Google Places API for Place Details search//
@@ -454,10 +475,8 @@ function getPlaceDetails(placeID) {
 
         //variables to store specific data from query results//
         var fdname = myPlaceDetailsQuery.name;
-        console.log(fdname);
         var fdplacePhone = myPlaceDetailsQuery.formatted_phone_number;
         var fdplaceReviews = myPlaceDetailsQuery.reviews;
-        var fdplacePhotos = myPlaceDetailsQuery.photos;
         var website = myPlaceDetailsQuery.website;
 
         //create object to store specific data from query results//
@@ -465,23 +484,17 @@ function getPlaceDetails(placeID) {
             name: fdname,
             phone: fdplacePhone,
             reviews: fdplaceReviews,
-            photos: fdplacePhotos,
             website: website
         };
         console.log(placeDetailsObject);
-
-        //push object to placeDetails array//
-        // placeDetails.push(placeDetailsObject);
 
         //call function to display Details//
         displayDetails(placeDetailsObject);
     });
 }
 
-//end get place details function//
 
 //display places function//       
-
 function displayPlaces(placeData) {
 
     //Creating the Google Places Panel//
@@ -505,6 +518,29 @@ function displayPlaces(placeData) {
         //creating div w/ place name//
         var placeTitleDiv = $("<div>").attr("id", placeData[i].name);
         placeTitleDiv.append("<h3>" + placeData[i].name + "</h3>");
+
+        //creating div w/place photo//
+        if (placeData[i].photo!=undefined) {
+            var photoURL = "https://maps.googleapis.com/maps/api/place/photo?maxwidth=200&photoreference=" + placeData[i].photo + 
+            "&key=AIzaSyB2Ys8ExJDWr3CF94ia0_Oyxm8gBM87udY";
+            console.log(photoURL);
+            placeTitleDiv.append("<img src=" + photoURL + " alt='place photo'>"); 
+            console.log(placeTitleDiv);
+            }   
+    
+        //message to disply if rating info not returned from google places query
+        if (placeData[i].rating == undefined) {
+            var placeRating = "Not Rated";
+        } else {
+            var placeRating = placeData[i].rating;
+        }
+
+        //message to disply if price info not returned from google places query
+        if (placeData[i].price == undefined) {
+            var placePrice = "Not Available";
+        } else {
+            placePrice = placeData[i].price;
+        }
 
         //dreating div w/ place info//
         placeInfoDivId = i.toString();
@@ -536,7 +572,6 @@ function displayPlaces(placeData) {
     }
     $("#places-div").html(placesDiv);
 }
-//end display places function//
 
 //begin get places details button click function
 
@@ -584,19 +619,32 @@ function displayMap(placeId) {
 
 function displayDetails(placeDetails) {
 
-        console.log(placeDetails);
+    var placeID = "#" +selectedItem;
 
-        var placePhone = placeDetails.phone;
-        var placePhoneDiv = $("<p>" + placePhone + "</p>");
-        var placeReviews = placeDetails.reviews;
-        var placePhotos = placeDetails.photos;
-        placeWebsiteURL = placeDetails.website;
-        console.log(placeWebsiteURL);
-        var placeWebsiteDiv = $("<a href='" + placeWebsiteURL + "' target='_blank'>" + placeWebsiteURL + "</a>");
-        console.log(placeWebsiteDiv);
-        var placeID = "#" +selectedItem;
-        $(placeID).append (placePhoneDiv);  
-        $(placeID).append (placeWebsiteDiv);  
+    console.log(placeDetails);
+
+    var placePhone = placeDetails.phone;
+    var placePhoneDiv = $("<p>" + placePhone + "</p>");
+    var placeReviews = placeDetails.reviews;
+    var placeReviewsDiv = $("<div><h4>Reviews</h4></div>");
+
+    for(i=0; i<placeReviews.length; i++) {
+        var authorProfilePhoto = placeReviews[i].profile_photo_url;
+        console.log(authorProfilePhoto);
+        var reviewText = placeReviews[i].text;
+        var review = $("<p>" + "<img href=" + authorProfilePhoto + " alt='author profile photo'>" + reviewText + "</p>");
+        $(placeReviewsDiv).append(review);  
+    }
+
+
+    placeWebsiteURL = placeDetails.website;
+    console.log(placeWebsiteURL);
+    var placeWebsiteDiv = $("<a href='" + placeWebsiteURL + "' target='_blank'>" + placeWebsiteURL + "</a>");
+    console.log(placeWebsiteDiv);
+    var placeID = "#" +selectedItem;
+    $(placeID).append (placePhoneDiv);  
+    $(placeID).append (placeWebsiteDiv);  
+    $(placeID).append(placeReviewsDiv);
 
 
 }
