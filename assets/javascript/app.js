@@ -310,53 +310,6 @@ function fetchEvents(place, radius, dateRange) {
         getPlacesData();
         
     })
-
-//    When a google places well is clicked
-    // $("#places-div").on("click", ".places-item", function(){
-    //     event.preventDefault();
-    //     //Empty out the events div
-    //     selectedPlacesVal = $(this).attr("data-places-num");
-    //     $("#places-output").empty();
-    //     $("#places-title").text("After the event you are going to");
-
-    //     //getting the localStorage key specific for the clicked item//
-    //     var selectedPlaceResult = localStorage.getItem($(this).attr("id"));
-    //     console.log(selectedPlaceResult);
-    //     //turning it back into a JSON object
-    //     var recalPlaceSearch = JSON.parse(selectedPlaceResult);
-    //     console.log(recalPlaceSearch);
-
-    //     var selectedPlaceInfo = $("<div>");
-    //     //appending the title retrieved from localStorage//
-    //     selectedPlaceInfo.append("<h3>" + recalPlaceSearch.name + "</h3>");
-
-    //    //appending the rating and price from localStorage//
-    //     var placeInfo = $("<div><span id='rating'>Rating: " + recalPlaceSearch.rating + "</span><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Price: " + 
-    //     recalPlaceSearch.price + "</span></div>");
-
-    //     selectedPlaceInfo.append(placeInfo);
-
-    //     //creating div w/ place address//
-    //     var placeAddressDiv = $("<div><span>" + recalPlaceSearch.address + "</span><div>");
-
-    //     var selectedPlace = $("<div>").attr("class", "well well-lg event-well");
-    //     selectedPlace.append(selectedPlaceInfo);
-
-    //     $("#places-output").append(selectedPlace);
-
-    //     //Google Maps Output
-        
-    //     var lat = parseFloat(venueLatitude);
-    //     var lng = parseFloat(venueLongitude);
-    //     var apiKey = "AIzaSyDolYU_CqdXxvNhxq04-ZjcxoiwhV6RiBg";
-    //     var start = lat,lng;
-    //     var destination = recalPlaceSearch.place;
-    //     var directionsURL = "https://www.google.com/maps/embed/v1/directions?key=" + apiKey + "&origin=" + start + "&destination=place_id:" + destination + "&avoid=tolls|highways";
-
-    //     var map = $("<iframe>").attr("width", "900").attr("height", "500").attr("frameborder","0").attr("style", "border:0").attr("src", directionsURL);
-    //     $("#map-output").append(map);
-
-    // });
 })
 
 function getPlacesData() {
@@ -401,21 +354,21 @@ function getPlacesData() {
                 console.log(myFoodDrinkQuery[i].photos[0]);
                 console.log(fdplacePhotoReference);
                 console.log(fdplaceName);
-                } else {
-                    fdplacePhotoReference = undefined;
-                }
-    
-                if (myFoodDrinkQuery[i].rating!=undefined) {
-                    var fdplaceRating = myFoodDrinkQuery[i].rating;
-                } else {
-                    fdplaceRating = undefined;
-                }
-    
-                if (myFoodDrinkQuery[i].price!=undefined) {
-                    var fdplacePrice = myFoodDrinkQuery[i].price_level;
-                } else {
-                    fdplacePrice = undefined;
-                }
+            } else {
+                fdplacePhotoReference = "undefined";
+            }
+
+            if (myFoodDrinkQuery[i].rating!=undefined) {
+                var fdplaceRating = myFoodDrinkQuery[i].rating;
+            } else {
+                fdplaceRating = "undefined";
+            }
+
+            if (myFoodDrinkQuery[i].price!=undefined) {
+                var fdplacePrice = myFoodDrinkQuery[i].price_level;
+            } else {
+                fdplacePrice = "undefined";
+            }
 
             var priceLevel;
 
@@ -457,7 +410,7 @@ function getPlacesData() {
 }
 
 //get place details function//
-function getPlaceDetails(placeID) {
+function getPlaceDetails(placeID, placeNum) {
 
     //define query URL for ajax call to Google Places API for Place Details search//
     var placesDetailsQueryURL = "https://cors-anywhere.herokuapp.com/https://maps.googleapis.com/maps/api/place/details/json?" + 
@@ -489,7 +442,7 @@ function getPlaceDetails(placeID) {
         console.log(placeDetailsObject);
 
         //call function to display Details//
-        displayDetails(placeDetailsObject);
+        displayDetails(placeDetailsObject, placeNum);
     });
 }
 
@@ -516,7 +469,7 @@ function displayPlaces(placeData) {
         var placeListItem = $("<li>").attr("class", "collection-item places-item").attr("data-places-num", i).attr("id", placesLocalStorageKey);
 
         //creating div w/ place name//
-        var placeTitleDiv = $("<div>").attr("id", placeData[i].name);
+        var placeTitleDiv = $("<div>").attr("id", "placeName" + i);
         placeTitleDiv.append("<h3>" + placeData[i].name + "</h3>");
 
         //creating div w/place photo//
@@ -527,16 +480,19 @@ function displayPlaces(placeData) {
             placeTitleDiv.append("<img src=" + photoURL + " alt='place photo'>"); 
             console.log(placeTitleDiv);
             }   
+
+        console.log(placeData[i].rating, placeData[i].price);
+        console.log(typeof placeData[i].price, typeof placeData[i].rating);
     
         //message to disply if rating info not returned from google places query
-        if (placeData[i].rating == undefined) {
+        if (placeData[i].rating == "undefined") {
             var placeRating = "Not Rated";
         } else {
             var placeRating = placeData[i].rating;
         }
 
         //message to disply if price info not returned from google places query
-        if (placeData[i].price == undefined) {
+        if (placeData[i].price == "undefined") {
             var placePrice = "Not Available";
         } else {
             placePrice = placeData[i].price;
@@ -581,7 +537,7 @@ $(document).on("click", ".placeDetails", function(){
 
     //getting the localStorage key specific for the clicked item//
     var buttonId = $(this).attr("id");
-    console.log(buttonId);
+    var placeNum = buttonId;
     selectedItem = "placesSearchResult" + buttonId;
     console.log(selectedItem);
     console.log(typeof selectedItem);
@@ -589,7 +545,7 @@ $(document).on("click", ".placeDetails", function(){
     console.log(selectedPlaceResult);
     var selectedPlaceID = selectedPlaceResult.place;
     $(this).remove();
-    getPlaceDetails(selectedPlaceID);
+    getPlaceDetails(selectedPlaceID, placeNum);
 
 });
 
@@ -617,14 +573,17 @@ function displayMap(placeId) {
     console.log();
 }
 
-function displayDetails(placeDetails) {
+function displayDetails(placeDetails, placeNum) {
+    var clearButtonId = placeNum;
 
     var placeID = "#" +selectedItem;
 
-    console.log(placeDetails);
+    //create div for place details
+    placeDetailsDiv = $("<div>")
 
     var placePhone = placeDetails.phone;
     var placePhoneDiv = $("<p>" + placePhone + "</p>");
+
     var placeReviews = placeDetails.reviews;
     var placeReviewsDiv = $("<div><h4>Reviews</h4></div>");
 
@@ -636,15 +595,29 @@ function displayDetails(placeDetails) {
         $(placeReviewsDiv).append(review);  
     }
 
+    //creating button to click on for place details//
+    var clearDetailsBtn = $("<button type='button' class='btn btn-default removeDetails' id='" + clearButtonId + "' target='_blank'>Clear Details</button>");
 
     placeWebsiteURL = placeDetails.website;
-    console.log(placeWebsiteURL);
+
     var placeWebsiteDiv = $("<a href='" + placeWebsiteURL + "' target='_blank'>" + placeWebsiteURL + "</a>");
-    console.log(placeWebsiteDiv);
+
     var placeID = "#" +selectedItem;
-    $(placeID).append (placePhoneDiv);  
-    $(placeID).append (placeWebsiteDiv);  
-    $(placeID).append(placeReviewsDiv);
-
-
+    $(placeDetailsDiv).append (placePhoneDiv);  
+    $(placeDetailsDiv).append (placeWebsiteDiv);  
+    $(placeDetailsDiv).append(placeReviewsDiv);
+    $(placeDetailsDiv).append(clearDetailsBtn);
+    $(placeID).append(placeDetailsDiv);
 }
+
+$(document).on("click", ".removeDetails", function(){
+
+    var button_id = $(this).attr("id");
+
+    $(this).closest("div").remove();
+
+     //creating button to click on for place details//
+     var placeDetailsBtn = $("<button type='button' class='btn btn-default placeDetails' id=" + button_id + " target='_blank'>Get Details!</button>");
+
+     $("#placeName" + button_id).append(placeDetailsBtn);
+});
