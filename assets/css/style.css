@@ -180,6 +180,7 @@ input:not([type]):focus:not([readonly]), input[type="text"]:not(.browser-default
     color: orange;
 }
 
+
 .removeDetails {
     background-color: transparent;
     outline: none;
@@ -198,6 +199,10 @@ input:not([type]):focus:not([readonly]), input[type="text"]:not(.browser-default
     float: right;
     padding: 0;
     color: orange;
+
+.placeDetailsDiv p {
+    clear: both;
+    margin-bottom: 40px;
 }
 
 /* Footer Styles */
@@ -302,6 +307,11 @@ input:not([type]):focus:not([readonly]), input[type="text"]:not(.browser-default
     margin-right: 15px;
     height: 170px;
     width: 250px;
+}
+
+#places-div p img {
+    width: 60px;
+    height: 60px;
 }
 
 #places-div {

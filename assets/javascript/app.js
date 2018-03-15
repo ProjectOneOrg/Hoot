@@ -58,8 +58,12 @@ $(document).ready(function(){
     //When the submit button is clicked with search parameters
     $("#submit-btn").on("click", function() {
         event.preventDefault();
-        var localStorageCount = 0;
+        // var localStorageCount = 0;
         localStorage.clear();
+        $("#events-div").empty();
+        $("#places-div").empty();
+        $("#twitterbox").hide();
+        eventsList = [];
         
         var location = $("#location").val().trim();
         var place = location.replace(new RegExp(" ", "g"), '+');
@@ -97,6 +101,8 @@ $(document).ready(function(){
         var eventPanelBody = $("<div>").attr("class", "panel-body").attr("id","event-output");
         addedEventsDiv.append(eventPanelBody);
         eventsDiv.append(addedEventsDiv);
+        var localStorageCount = 0;
+
             for (var i = 0; i < eventsList.length; i++){
 
 
