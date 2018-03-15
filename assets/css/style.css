@@ -172,6 +172,8 @@ input:not([type]):focus:not([readonly]), input[type="text"]:not(.browser-default
 
 .placeDetails:hover {
     background:rgba(0,0,0,0);
+    float: right;
+    color: white;
 }
 
 /* Footer Styles */
@@ -293,6 +295,14 @@ input:not([type]):focus:not([readonly]), input[type="text"]:not(.browser-default
     color:#49C6FD;
 }
 
+.placeDirections {
+    margin-top: 20px;
+}
+
+#places-header h3:after {
+    content:"";
+}
+
 /* Twitter API */
   #twitterbox {
     font-family: 'Helvetica', sans-serif;
@@ -380,3 +390,4 @@ input:not([type]):focus:not([readonly]), input[type="text"]:not(.browser-default
   #widget .btn-o:last-child {
     display:none;
   }
+
