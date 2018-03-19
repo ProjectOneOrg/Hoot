@@ -626,7 +626,9 @@ function displayDetails(placeDetails, placeNum) {
 
     //create anchor tag for place website
     placeWebsiteURL = placeDetails.website;
-    var placeWebsiteDiv = $("<a href='" + placeWebsiteURL + "' id='placeWebsite" + placeNum + "' target='_blank'>" + placeWebsiteURL + "</a>");
+    if (placeWebsiteURL != undefined) {
+        var placeWebsiteDiv = $("<a href='" + placeWebsiteURL + "' id='placeWebsite" + placeNum + "' target='_blank'>" + placeWebsiteURL + "</a>");
+    }
 
     // var placeID = "#" +selectedItem;
     //append place details to existing restaurant general information
