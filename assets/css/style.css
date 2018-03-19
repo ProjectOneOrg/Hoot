@@ -152,6 +152,7 @@ input:not([type]):focus:not([readonly]), input[type="text"]:not(.browser-default
 .event-item, .places-item {
     color:black;
     cursor: pointer;
+    border-bottom: 2px solid grey;
 }
 
 #events-header, #places-header{
@@ -186,7 +187,8 @@ input:not([type]):focus:not([readonly]), input[type="text"]:not(.browser-default
     outline: none;
     border: none;
     text-decoration: underline;
-    float: right;
+    margin-top: 5px;
+    float: left;
     padding: 0;
     color: #49C6FD;
 }
@@ -196,14 +198,22 @@ input:not([type]):focus:not([readonly]), input[type="text"]:not(.browser-default
     outline: none;
     border: none;
     text-decoration: underline;
-    float: right;
+    margin-top: 5px;
+    float: left;
     padding: 0;
     color: orange;
 }
 
 .placeDetailsDiv p {
     clear: both;
+    margin-bottom: 0;
+    line-height: 45px;
+}
+
+.placeDetailsDiv p.reviewText {
+    clear: both;
     margin-bottom: 40px;
+    line-height: normal;
 }
 
 /* Footer Styles */
@@ -285,8 +295,7 @@ input:not([type]):focus:not([readonly]), input[type="text"]:not(.browser-default
 
 .collection .collection-item {  
     background-color: transparent;
-    padding: 30px 20px 0;
-    border-bottom:0 !important;
+    padding: 30px 20px 30px;
 }
 
 .panel-body li {
@@ -303,27 +312,23 @@ input:not([type]):focus:not([readonly]), input[type="text"]:not(.browser-default
 }
 
 #places-div img {
-    float:left;
-    margin-right: 15px;
+    float:right;
+    margin-left: 15px;
     height: 170px;
     width: 250px;
 }
 
 #places-div p img {
-    width: 60px;
-    height: 60px;
+    width: 45px;
+    height: 45px;
+    float: left;
+    margin-right: 15px;
+    margin-left: 0;
 }
 
 #places-div {
     max-height: 1500px;
     overflow-y:scroll;
-}
-
-.placeDetailsDiv img {
-    float:left;
-    margin-right: 15px;
-    height: 128px;
-    width: 128px;
 }
 
 .placeDirections {

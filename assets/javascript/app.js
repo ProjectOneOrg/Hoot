@@ -483,9 +483,6 @@ function displayPlaces(placeData) {
             "&key=AIzaSyB2Ys8ExJDWr3CF94ia0_Oyxm8gBM87udY";
             placeTitleDiv.append("<img src=" + photoURL + " alt='place photo'>"); 
         }   
-
-        console.log(placeData[i].rating, placeData[i].price);
-        console.log(typeof placeData[i].price, typeof placeData[i].rating);
     
         //message to disply if rating info not returned from google places query
         if (placeData[i].rating == "undefined") {
@@ -502,16 +499,17 @@ function displayPlaces(placeData) {
         }
 
         //dreating div w/ place info//
-        placeInfoDivId = i.toString();
-        var placeInfoDiv = $("<div id='placeInfo" + placeInfoDivId + "'><span>Rating: " + placeData[i].rating + "</span><span>&nbsp;&nbsp;&nbsp;&nbsp;Price: " + 
+        divId = i.toString();
+        var placeInfoDiv = $("<div id='placeInfo" + divId + "'><span>Rating: " + placeData[i].rating + "</span><span>&nbsp;&nbsp;&nbsp;&nbsp;Price: " + 
         placeData[i].price + "</span></div>");
 
         //creating div w/ place address//
-        var placeAddressDiv = $("<div><span>" + placeData[i].address + "</span></div>");
+        var placeAddressDiv = $("<div id='placeAddress" + divId + "'><span>" + placeData[i].address + "</span></div>");
 
         //creating button to click on for place details//
-        var placeDetailsBtn = $("<button type='button' class='btn btn-default placeDetails' id=" + i + " target='_blank'>Get Details!</button>");
         var placeDirectionsBtn = $("<button type='button' class='btn btn-defualt placeDirections' id=" + i + ">Get Directions</button>");
+        var placeDetailsBtn = $("<button type='button' class='btn btn-default placeDetails' id=" + i + " target='_blank'>Get Details</button>");
+        
 
         //appending place info to place title div//
         placeTitleDiv.append(placeInfoDiv);
@@ -520,8 +518,8 @@ function displayPlaces(placeData) {
         placeTitleDiv.append(placeAddressDiv);
 
         //appending the place details button to the place title div//
-        placeTitleDiv.append(placeDetailsBtn);
         placeTitleDiv.append(placeDirectionsBtn);
+        placeTitleDiv.append(placeDetailsBtn);
 
         //appending all that to well//
         placeListItem.append(placeTitleDiv);
@@ -573,6 +571,7 @@ function displayMap(placeId) {
 }
 
 function displayDetails(placeDetails, placeNum) {
+    
     //Use Button Id from "Get Details" button for "Clear Details" button
     var clearButtonId = placeNum;
 
@@ -583,8 +582,9 @@ function displayDetails(placeDetails, placeNum) {
     placeDetailsDiv = $("<div class='placeDetailsDiv'>")
 
     //create div for phone number
+
     var placePhone = placeDetails.phone;
-    var placePhoneDiv = $("<p>" + placePhone + "</p>");
+    var placePhoneDiv = $("<div id='placePhone" + placeNum + "'><span>" + placePhone + "</span></div>");
 
     //create div for reviews heading
     var placeReviews = placeDetails.reviews;
@@ -599,6 +599,9 @@ function displayDetails(placeDetails, placeNum) {
     } else {
         //loop through review data
         for(i=0; i<placeReviews.length; i++) {
+
+            //variable to capture author name
+            var authorName = placeReviews[i].author_name;
             
             //variable to capture review author profile photo
             var authorProfilePhoto = placeReviews[i].profile_photo_url;
@@ -606,8 +609,14 @@ function displayDetails(placeDetails, placeNum) {
             //variable to capture review text
             var reviewText = placeReviews[i].text;
 
+            //creating review Header w/author name and profile photo
+            var reviewHeader = $("<p><img src=" + authorProfilePhoto + " alt='author profile photo'><span>" + authorName + "</span></p>");
+
             //create review paragraph and attach to reviews heading
-            var review = $("<p>" + "<img src=" + authorProfilePhoto + " alt='author profile photo'>" + reviewText + "</p>");
+            var review = $("<p class='reviewText'>" + reviewText + "</p>");
+
+            $(placeReviewsDiv).append(reviewHeader);
+
             $(placeReviewsDiv).append(review);  
         }
     }
@@ -617,12 +626,12 @@ function displayDetails(placeDetails, placeNum) {
 
     //create anchor tag for place website
     placeWebsiteURL = placeDetails.website;
-    var placeWebsiteDiv = $("<a href='" + placeWebsiteURL + "' target='_blank'>" + placeWebsiteURL + "</a>");
+    var placeWebsiteDiv = $("<a href='" + placeWebsiteURL + "' id='placeWebsite" + placeNum + "' target='_blank'>" + placeWebsiteURL + "</a>");
 
     // var placeID = "#" +selectedItem;
     //append place details to existing restaurant general information
-    $(placeDetailsDiv).append (placePhoneDiv);  
-    $(placeDetailsDiv).append (placeWebsiteDiv);  
+    $("#placeAddress" + placeNum).append (placePhoneDiv);  
+    $("#placeAddress" + placeNum).append (placeWebsiteDiv);  
     $(placeDetailsDiv).append(placeReviewsDiv);
     $(placeDetailsDiv).append(clearDetailsBtn);
     $(placeID).append(placeDetailsDiv);
@@ -636,8 +645,11 @@ $(document).on("click", ".removeDetails", function(){
     //remove the button and all of the place details information
     $(this).closest("div").remove();
 
+    $("#placePhone" + button_id).remove();
+    $("#placeWebsite" + button_id).remove();
+
      //creating button to click on for place details//
-     var placeDetailsBtn = $("<button type='button' class='btn btn-default placeDetails' id=" + button_id + " target='_blank'>Get Details!</button>");
+     var placeDetailsBtn = $("<button type='button' class='btn btn-default placeDetails' id=" + button_id + " target='_blank'>Get Details</button>");
 
      //append place details button to restaurant list item where details were previously displayed.
      $("#placeName" + button_id).append(placeDetailsBtn);
