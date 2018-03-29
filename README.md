@@ -1,6 +1,6 @@
 # HOOT - UNC Coding Bootcamp Group Project
 
-HOOT allows you to find an event in the area of your choice providing information for local dining to help you better plan your night out. #PlanYourNight and have a great time with your friends and family. 
+<a href="https://projectoneorg.github.io/ProjectOneRepo/">HOOT</a> allows you to find an event in the area of your choice providing information for local dining to help you better plan your night out. #PlanYourNight and have a great time with your friends and family. 
 
 ## Features
 
