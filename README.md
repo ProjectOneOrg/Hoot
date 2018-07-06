@@ -27,7 +27,7 @@ Spotify API<br>
 ## Contributors
 
 Marina Saladukha<br>
-Moe Samara<br>
+Muhammad Samara<br>
 Max Faneuff<br>
 Jeff Taylor<br>
 Jamie Keith<br>
